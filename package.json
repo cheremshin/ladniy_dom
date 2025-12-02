@@ -1,0 +1,10 @@
+{
+    "name": "ladniy-dom",
+    "version": "1.0.0",
+    "private": true,
+    "workspaces": [
+        "backend",
+        "frontend"
+    ],
+    "packageManager": "yarn@4.10.3"
+}

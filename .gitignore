@@ -1,0 +1,12 @@
+node_modules
+.cursorignore
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+.env
+.DS_Store
+*.log
