@@ -31,6 +31,7 @@ export default [
         commaDangle: 'always-multiline',
         braceStyle: '1tbs',
         jsx: true,
+        arrowParens: true,
         // indent, quotes, semi управляются Prettier
     }),
     {
