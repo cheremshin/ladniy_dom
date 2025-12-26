@@ -7,6 +7,7 @@ export const specificationDefinitions = pgTable(
     {
         id: uuid('id').defaultRandom().primaryKey(),
 
+        productTypeId: uuid('product_type_id').notNull(),
         key: varchar('key', { length: 256 }).notNull(),
         displayName: varchar('display_name', { length: 256 }).notNull(),
         description: text('description'),
