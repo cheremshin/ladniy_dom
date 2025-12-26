@@ -45,6 +45,7 @@ export default [
             '@stylistic/quotes': 'off',
             '@stylistic/semi': 'off',
             '@stylistic/indent': 'off',
+            '@stylistic/member-delimiter-style': 'off',
         },
     },
 ];
