@@ -6,6 +6,7 @@ import { DatabaseModule } from '../database/database.module';
 import { CategoriesModule } from './categories/categories.module';
 import { BrandsModule } from './brands/brands.module';
 import { ProductTypesModule } from './product-types/product-types.module';
+import { SpecificationDefinitionsModule } from './specification-definitions/specification-definitions.module';
 
 @Module({
     imports: [
@@ -13,6 +14,7 @@ import { ProductTypesModule } from './product-types/product-types.module';
         CategoriesModule,
         BrandsModule,
         ProductTypesModule,
+        SpecificationDefinitionsModule,
         GraphQLModule.forRoot<ApolloDriverConfig>({
             driver: ApolloDriver,
             autoSchemaFile: true,
