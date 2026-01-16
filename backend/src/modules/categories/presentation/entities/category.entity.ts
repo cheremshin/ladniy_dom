@@ -29,6 +29,9 @@ export class Category {
     @Field()
     updatedAt: Date;
 
+    @Field(() => String, { nullable: true })
+    deletedAt: string | null;
+
     @Field(() => Category, { nullable: true })
     parent?: Category | null;
 

@@ -1,18 +1,35 @@
 import { DATABASE_CONNECTION } from '@/database/database.provider';
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+    BadRequestException,
+    ConflictException,
+    Inject,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
 import { Database } from '@/database/database.types';
-import { categories } from '@/database/schema';
+import { categories, products } from '@/database/schema';
 import { ListResult } from '@/common/domain/list-result.type';
-import { SQL, isNull, eq, ilike, and, asc, count } from 'drizzle-orm';
+import { SQL, isNull, eq, ilike, and, asc, count, sql } from 'drizzle-orm';
 
 export type CategoryRecord = typeof categories.$inferSelect;
 
-export interface CategoryFilters {
+export type CategoryFilters = {
     parentId?: string;
-    isActive?: boolean;
+    includeInactive?: boolean;
     search?: string;
     rootOnly?: boolean;
-}
+};
+
+export type CreateCategoryData = {
+    title: string;
+    slug: string;
+    parentId?: string | null;
+    imageUrl?: string | null;
+    sortOrder?: number;
+    isActive?: boolean;
+};
+
+export type UpdateCategoryData = Partial<CreateCategoryData>;
 
 @Injectable()
 export class CategoriesService {
@@ -72,11 +89,11 @@ export class CategoriesService {
         return category;
     }
 
-    async findChildren(parentId: string, isActive?: boolean): Promise<CategoryRecord[]> {
+    async findChildren(parentId: string, includeInactive?: boolean): Promise<CategoryRecord[]> {
         const conditions: SQL[] = [eq(categories.parentId, parentId)];
 
-        if (isActive !== undefined) {
-            conditions.push(eq(categories.isActive, isActive));
+        if (includeInactive === false) {
+            conditions.push(eq(categories.isActive, true));
         }
 
         return this.db
@@ -96,6 +113,171 @@ export class CategoriesService {
         return parent || null;
     }
 
+    async create(data: CreateCategoryData): Promise<CategoryRecord> {
+        return this.db.transaction(async (tx) => {
+            const existing = await tx
+                .select({ id: categories.id })
+                .from(categories)
+                .where(eq(categories.slug, data.slug.toLowerCase()))
+                .limit(1);
+
+            if (existing.length > 0) {
+                throw new ConflictException(`Category with slug "${data.slug}" already exists`);
+            }
+
+            if (data.parentId) {
+                await this.findOne(data.parentId);
+            }
+
+            const [created] = await tx
+                .insert(categories)
+                .values({
+                    title: data.title,
+                    slug: data.slug.toLowerCase(),
+                    parentId: data.parentId ?? null,
+                    imageUrl: data.imageUrl ?? null,
+                    sortOrder: data.sortOrder ?? 0,
+                    isActive: data.isActive ?? true,
+                })
+                .returning();
+
+            return created;
+        });
+    }
+
+    async update(id: string, data: UpdateCategoryData): Promise<CategoryRecord> {
+        return this.db.transaction(async (tx) => {
+            await this.findOne(id);
+
+            if (data.slug) {
+                const existing = await tx
+                    .select({ id: categories.id })
+                    .from(categories)
+                    .where(
+                        and(
+                            eq(categories.slug, data.slug.toLowerCase()),
+                            sql`${categories.id} != ${id}`,
+                        ),
+                    )
+                    .limit(1);
+
+                if (existing.length > 0) {
+                    throw new ConflictException(`Category with slug "${data.slug} already exists"`);
+                }
+            }
+
+            if (data.parentId) {
+                if (data.parentId === id) {
+                    throw new BadRequestException('Category cannot be its own parent');
+                }
+
+                await this.findOne(data.parentId);
+            }
+
+            const { slug, parentId, ...rest } = data;
+
+            const updateData: Partial<typeof categories.$inferInsert> = {
+                ...rest,
+                ...(slug !== undefined && { slug: slug.toLowerCase() }),
+                ...(parentId !== undefined && { parentId }),
+            };
+
+            if (Object.keys(updateData).length === 0) {
+                return this.findOne(id);
+            }
+
+            const [updated] = await tx
+                .update(categories)
+                .set(updateData)
+                .where(eq(categories.id, id))
+                .returning();
+
+            return updated;
+        });
+    }
+
+    async softDelete(id: string): Promise<CategoryRecord> {
+        return this.db.transaction(async (tx) => {
+            await this.findOne(id);
+
+            await tx.execute(sql`
+                WITH RECURSIVE category_tree AS (
+                    SELECT id FROM categories WHERE id = ${id}
+                    UNION
+                    SELECT c.id FROM categories c
+                    JOIN category_tree ct ON c.parent_id = ct.id
+                )
+                UPDATE categories
+                SET is_active = false, deleted_at = now(), updated_at = now()
+                WHERE id IN (SELECT id FROM category_tree);
+            `);
+
+            const [updated] = await tx
+                .update(categories)
+                .set({ isActive: false, deletedAt: sql`now()`, updatedAt: sql`now()` })
+                .where(eq(categories.id, id))
+                .returning();
+
+            return updated;
+        });
+    }
+
+    async restore(id: string): Promise<CategoryRecord> {
+        return this.db.transaction(async (tx) => {
+            await this.findOne(id);
+
+            await tx.execute(sql`
+                WITH RECURSIVE category_tree AS (
+                    SELECT id FROM categories WHERE id = ${id}
+                    UNION
+                    SELECT c.id FROM categories c
+                    JOIN category_tree ct ON c.parent_id = ct.id
+                )
+                UPDATE categories
+                SET is_active = true, deleted_at = NULL, updated_at = now()
+                WHERE id IN (SELECT id FROM category_tree);
+            `);
+
+            const [restored] = await tx
+                .update(categories)
+                .set({ isActive: true, deletedAt: null, updatedAt: sql`now()` })
+                .where(eq(categories.id, id))
+                .returning();
+
+            return restored;
+        });
+    }
+
+    async delete(id: string): Promise<CategoryRecord> {
+        return this.db.transaction(async (tx) => {
+            const category = await this.findOne(id);
+
+            const children = await tx
+                .select({ id: categories.id })
+                .from(categories)
+                .where(eq(categories.parentId, id))
+                .limit(1);
+
+            if (children.length > 0) {
+                throw new BadRequestException('Cannot delete category with children.');
+            }
+
+            const productsInCategory = await tx
+                .select({ id: products.id })
+                .from(products)
+                .where(eq(products.categoryId, id))
+                .limit(1);
+
+            if (productsInCategory.length > 0) {
+                throw new BadRequestException('Cannot delete category with products.');
+            }
+
+            await tx.delete(categories).where(eq(categories.id, id));
+
+            return category;
+        });
+    }
+
     private buildFilterConditions(filters: CategoryFilters): SQL[] {
         const conditions: SQL[] = [];
 
@@ -105,11 +287,11 @@ export class CategoriesService {
             conditions.push(eq(categories.parentId, filters.parentId));
         }
 
-        if (filters.isActive !== undefined) {
-            conditions.push(eq(categories.isActive, filters.isActive));
+        if (filters.includeInactive === false) {
+            conditions.push(eq(categories.isActive, true));
         }
 
-        if (filters.search) {
+        if (filters.search && filters.search.trim()) {
             conditions.push(ilike(categories.title, `%${filters.search}%`));
         }
 

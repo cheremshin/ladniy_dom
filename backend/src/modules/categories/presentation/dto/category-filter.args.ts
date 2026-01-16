@@ -5,8 +5,8 @@ export class CategoryFilterArgs {
     @Field(() => ID, { nullable: true, description: 'Фильтр по родительской категории' })
     parentId?: string;
 
-    @Field({ nullable: true, description: 'Фильтр по активности' })
-    isActive?: boolean;
+    @Field({ nullable: true, description: 'Фильтр на удаленные элементы' })
+    includeInactive?: boolean;
 
     @Field({ nullable: true, description: 'Поиск по названию' })
     search?: string;
