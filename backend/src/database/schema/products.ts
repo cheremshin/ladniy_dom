@@ -18,6 +18,7 @@ import { sql } from 'drizzle-orm';
 import { categories } from './categories';
 import { brands } from './brands';
 import { notInFutureCheck, timestampDefaultNow } from '../utils/common-fields';
+import { productTypes } from './product-types';
 
 export const productStatusEnum = pgEnum('product_status', [
     'draft',
@@ -35,6 +36,7 @@ export const products = pgTable(
         slug: varchar('slug', { length: 256 }).notNull(),
 
         categoryId: uuid('category_id').notNull(),
+        productTypeId: uuid('product_type_id'),
         brandId: uuid('brand_id').notNull(),
 
         description: text('description'),
@@ -68,6 +70,12 @@ export const products = pgTable(
             columns: [table.brandId],
             foreignColumns: [brands.id],
             name: 'products_brand_id_fkey',
+        }).onDelete('restrict'),
+
+        foreignKey({
+            columns: [table.productTypeId],
+            foreignColumns: [productTypes.id],
+            name: 'products_product_type_id_fkey',
         }).onDelete('restrict'),
 
         uniqueIndex('products_sku_key').on(table.sku),

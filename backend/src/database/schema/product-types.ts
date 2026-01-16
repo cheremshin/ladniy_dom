@@ -34,7 +34,7 @@ export const productTypes = pgTable(
         }).onDelete('set null'),
 
         uniqueIndex('product_types_title_key').on(sql`lower(title)`),
-        uniqueIndex('product_types_slug_ky').on(sql`lower(slug)`),
+        uniqueIndex('product_types_slug_key').on(sql`lower(slug)`),
 
         check('title_check', sql`(title)::text <> ''::text`),
         check('slug_check', sql`(slug)::text <> ''::text`),
