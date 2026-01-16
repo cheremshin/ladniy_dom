@@ -39,6 +39,7 @@ export class UpdateBrandInput extends PartialType(
     OmitType(CreateBrandInput, ['title', 'slug'] as const),
 ) {
     @Field(() => ID)
+    @IsNotEmpty()
     id: string;
 
     @Field(() => String, { nullable: true })

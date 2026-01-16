@@ -5,12 +5,14 @@ import { AppResolver } from '@/modules/app.resolver';
 import { DatabaseModule } from '../database/database.module';
 import { CategoriesModule } from './categories/categories.module';
 import { BrandsModule } from './brands/brands.module';
+import { ProductTypesModule } from './product-types/product-types.module';
 
 @Module({
     imports: [
         DatabaseModule,
         CategoriesModule,
         BrandsModule,
+        ProductTypesModule,
         GraphQLModule.forRoot<ApolloDriverConfig>({
             driver: ApolloDriver,
             autoSchemaFile: true,

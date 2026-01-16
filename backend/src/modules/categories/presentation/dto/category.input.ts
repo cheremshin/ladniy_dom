@@ -34,6 +34,7 @@ export class UpdateCategoryInput extends PartialType(
     OmitType(CreateCategoryInput, ['title', 'slug'] as const),
 ) {
     @Field(() => ID)
+    @IsNotEmpty()
     id: string;
 
     @Field(() => String, { nullable: true })
