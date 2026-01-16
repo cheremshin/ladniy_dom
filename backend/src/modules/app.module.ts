@@ -4,11 +4,13 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AppResolver } from '@/modules/app.resolver';
 import { DatabaseModule } from '../database/database.module';
 import { CategoriesModule } from './categories/categories.module';
+import { BrandsModule } from './brands/brands.module';
 
 @Module({
     imports: [
         DatabaseModule,
         CategoriesModule,
+        BrandsModule,
         GraphQLModule.forRoot<ApolloDriverConfig>({
             driver: ApolloDriver,
             autoSchemaFile: true,

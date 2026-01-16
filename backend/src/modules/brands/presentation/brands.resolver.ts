@@ -1,0 +1,65 @@
+import { Args, ID, Mutation, ObjectType, Query, Resolver } from '@nestjs/graphql';
+import { Brand } from './entities/brand.entity';
+import { BrandFilters, BrandsService } from '../domain/brands.service';
+import { PaginationArgs } from '@/common/presentation/dto/pagination.args';
+import { BrandFilterArgs } from './dto/brand-filter.args';
+import { CreateBrandInput, UpdateBrandInput } from './dto/brand.input';
+import { buildPaginatedResponse } from '@/common/presentation/utils/pagination.helper';
+import { Paginated } from '@/common/presentation/dto/paginated.response';
+
+@ObjectType()
+class PaginatedBrands extends Paginated(Brand) {}
+
+@Resolver(() => Brand)
+export class BrandsResolver {
+    constructor(private readonly brandsService: BrandsService) {}
+
+    @Query(() => PaginatedBrands, { name: 'brands' })
+    async getBrands(
+        @Args() pagination: PaginationArgs,
+        @Args() filters: BrandFilterArgs,
+    ): Promise<PaginatedBrands> {
+        const { page, limit } = pagination;
+        const offset = (page - 1) * limit;
+
+        const serviceFilters: BrandFilters = { ...filters };
+        const result = await this.brandsService.findAll(serviceFilters, offset, limit);
+        return buildPaginatedResponse<Brand>(result, page, limit);
+    }
+
+    @Query(() => Brand, { name: 'brand' })
+    async getBrand(@Args('id', { type: () => ID }) id: string): Promise<Brand> {
+        return this.brandsService.findOne(id);
+    }
+
+    @Query(() => Brand, { name: 'brandBySlug' })
+    async getBrandBySlug(@Args('slug') slug: string): Promise<Brand> {
+        return this.brandsService.findBySlug(slug);
+    }
+
+    @Mutation(() => Brand)
+    async createBrand(@Args('input') input: CreateBrandInput): Promise<Brand> {
+        return this.brandsService.create(input);
+    }
+
+    @Mutation(() => Brand)
+    async updateBrand(@Args('input') input: UpdateBrandInput): Promise<Brand> {
+        const { id, ...data } = input;
+        return this.brandsService.update(id, data);
+    }
+
+    @Mutation(() => Brand)
+    async hardDeleteBrand(@Args('id', { type: () => ID }) id: string): Promise<Brand> {
+        return this.brandsService.delete(id);
+    }
+
+    @Mutation(() => Brand)
+    async softDeleteBrand(@Args('id', { type: () => ID }) id: string): Promise<Brand> {
+        return this.brandsService.softDelete(id);
+    }
+
+    @Mutation(() => Brand)
+    async restoreBrand(@Args('id', { type: () => ID }) id: string): Promise<Brand> {
+        return this.brandsService.restore(id);
+    }
+}
