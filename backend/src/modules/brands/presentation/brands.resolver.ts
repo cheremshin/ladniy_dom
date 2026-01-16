@@ -1,7 +1,6 @@
 import { Args, ID, Mutation, ObjectType, Query, Resolver } from '@nestjs/graphql';
 import { Brand } from './entities/brand.entity';
-import { BrandFilters, BrandsService } from '../domain/brands.service';
-import { PaginationArgs } from '@/common/presentation/dto/pagination.args';
+import { BrandsService } from '../domain/brands.service';
 import { BrandFilterArgs } from './dto/brand-filter.args';
 import { CreateBrandInput, UpdateBrandInput } from './dto/brand.input';
 import { buildPaginatedResponse } from '@/common/presentation/utils/pagination.helper';
@@ -15,14 +14,10 @@ export class BrandsResolver {
     constructor(private readonly brandsService: BrandsService) {}
 
     @Query(() => PaginatedBrands, { name: 'brands' })
-    async getBrands(
-        @Args() pagination: PaginationArgs,
-        @Args() filters: BrandFilterArgs,
-    ): Promise<PaginatedBrands> {
-        const { page, limit } = pagination;
+    async getBrands(@Args({ nullable: true }) filters?: BrandFilterArgs): Promise<PaginatedBrands> {
+        const { page = 1, limit = 20, ...serviceFilters } = filters || {};
         const offset = (page - 1) * limit;
 
-        const serviceFilters: BrandFilters = { ...filters };
         const result = await this.brandsService.findAll(serviceFilters, offset, limit);
         return buildPaginatedResponse<Brand>(result, page, limit);
     }

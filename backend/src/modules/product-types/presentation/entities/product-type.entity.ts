@@ -21,5 +21,5 @@ export class ProductType {
     updatedAt: Date;
 
     @Field(() => String, { nullable: true })
-    deletedAt: string | null;
+    deletedAt: Date | null;
 }

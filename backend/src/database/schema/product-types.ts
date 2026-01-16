@@ -24,7 +24,7 @@ export const productTypes = pgTable(
 
         createdAt: timestampDefaultNow('created_at'),
         updatedAt: timestampDefaultNow('updated_at'),
-        deletedAt: timestamp('deleted_at', { mode: 'string' }),
+        deletedAt: timestamp('deleted_at', { mode: 'date' }),
     },
     (table) => [
         foreignKey({

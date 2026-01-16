@@ -30,7 +30,7 @@ export class Category {
     updatedAt: Date;
 
     @Field(() => String, { nullable: true })
-    deletedAt: string | null;
+    deletedAt: Date | null;
 
     @Field(() => Category, { nullable: true })
     parent?: Category | null;

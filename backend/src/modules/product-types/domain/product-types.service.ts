@@ -1,4 +1,4 @@
-import { products, productTypes } from '@/database/schema';
+import { products, productTypes, specificationDefinitions } from '@/database/schema';
 import { DATABASE_CONNECTION } from '@/database/database.provider';
 import {
     BadRequestException,
@@ -138,6 +138,18 @@ export class ProductTypesService {
         return this.db.transaction(async (tx) => {
             await this.findOne(id);
 
+            const specificationDefinitionsInProductType = await tx
+                .select({ id: specificationDefinitions.id })
+                .from(specificationDefinitions)
+                .where(eq(specificationDefinitions.productTypeId, id))
+                .limit(1);
+
+            if (specificationDefinitionsInProductType.length > 0) {
+                throw new BadRequestException(
+                    'Cannot delete product type with existing specification definitions.',
+                );
+            }
+
             const productsInProductType = await tx
                 .select({ id: products.id })
                 .from(products)
@@ -150,7 +162,7 @@ export class ProductTypesService {
 
             const [deleted] = await tx
                 .update(productTypes)
-                .set({ deletedAt: sql`now()` })
+                .set({ deletedAt: sql`now()`, updatedAt: sql`now()` })
                 .where(eq(productTypes.id, id))
                 .returning();
 
@@ -175,6 +187,18 @@ export class ProductTypesService {
     async hardDelete(id: string): Promise<ProductTypeRecord> {
         return this.db.transaction(async (tx) => {
             const productType = await this.findOne(id);
+
+            const specificationDefinitionsInProductType = await tx
+                .select({ id: specificationDefinitions.id })
+                .from(specificationDefinitions)
+                .where(eq(specificationDefinitions.productTypeId, id))
+                .limit(1);
+
+            if (specificationDefinitionsInProductType.length > 0) {
+                throw new BadRequestException(
+                    'Cannot delete product type with existing specification definitions.',
+                );
+            }
 
             const productsInProductType = await tx
                 .select({ id: products.id })

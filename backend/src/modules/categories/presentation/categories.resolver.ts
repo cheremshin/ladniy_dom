@@ -9,8 +9,7 @@ import {
     Resolver,
 } from '@nestjs/graphql';
 import { Category } from './entities/category.entity';
-import { CategoriesService, CategoryFilters } from '../domain/categories.service';
-import { PaginationArgs } from '@/common/presentation/dto/pagination.args';
+import { CategoriesService } from '../domain/categories.service';
 import { CategoryFilterArgs } from './dto/category-filter.args';
 import { CreateCategoryInput, UpdateCategoryInput } from './dto/category.input';
 import { buildPaginatedResponse } from '@/common/presentation/utils/pagination.helper';
@@ -25,13 +24,11 @@ export class CategoriesResolver {
 
     @Query(() => PaginatedCategories, { name: 'categories' })
     async getCategories(
-        @Args() pagination: PaginationArgs,
-        @Args() filters: CategoryFilterArgs,
+        @Args({ nullable: true }) filters?: CategoryFilterArgs,
     ): Promise<PaginatedCategories> {
-        const { page, limit } = pagination;
+        const { page = 1, limit = 20, ...serviceFilters } = filters || {};
         const offset = (page - 1) * limit;
 
-        const serviceFilters: CategoryFilters = { ...filters };
         const result = await this.categoriesService.findAll(serviceFilters, offset, limit);
         return buildPaginatedResponse<Category>(result, page, limit);
     }

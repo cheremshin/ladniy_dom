@@ -33,5 +33,5 @@ export class Brand {
     updatedAt: Date;
 
     @Field(() => String, { nullable: true })
-    deletedAt: string | null;
+    deletedAt: Date | null;
 }

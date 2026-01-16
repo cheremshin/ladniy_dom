@@ -1,8 +1,7 @@
 import { Args, ID, Mutation, ObjectType, Query, Resolver } from '@nestjs/graphql';
 import { Paginated } from '@/common/presentation/dto/paginated.response';
 import { ProductType } from './entities/product-type.entity';
-import { ProductTypeFilters, ProductTypesService } from '../domain/product-types.service';
-import { PaginationArgs } from '@/common/presentation/dto/pagination.args';
+import { ProductTypesService } from '../domain/product-types.service';
 import { ProductTypeFilterArgs } from './dto/product-type-filter.args';
 import { buildPaginatedResponse } from '@/common/presentation/utils/pagination.helper';
 import { CreateProductTypeInput, UpdateProductTypeInput } from './dto/product-type.input';
@@ -16,13 +15,11 @@ export class ProductTypesResolver {
 
     @Query(() => PaginatedProductTypes, { name: 'productTypes' })
     async getProductTypes(
-        @Args() pagination: PaginationArgs,
-        @Args() filters: ProductTypeFilterArgs,
+        @Args({ nullable: true }) filters?: ProductTypeFilterArgs,
     ): Promise<PaginatedProductTypes> {
-        const { page, limit } = pagination;
+        const { page = 1, limit = 20, ...serviceFilters } = filters || {};
         const offset = (page - 1) * limit;
 
-        const serviceFilters: ProductTypeFilters = { ...filters };
         const result = await this.productTypesService.findAll(serviceFilters, offset, limit);
         return buildPaginatedResponse<ProductType>(result, page, limit);
     }

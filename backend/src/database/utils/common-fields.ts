@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { check, timestamp } from 'drizzle-orm/pg-core';
 
-export const timestampDefaultNow = (columnName: string, mode: 'string' | 'date' = 'string') => {
+export const timestampDefaultNow = (columnName: string, mode: 'string' | 'date' = 'date') => {
     return timestamp(columnName, { mode: mode }).defaultNow().notNull();
 };
 

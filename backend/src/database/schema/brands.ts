@@ -29,7 +29,7 @@ export const brands = pgTable(
 
         createdAt: timestampDefaultNow('created_at'),
         updatedAt: timestampDefaultNow('updated_at'),
-        deletedAt: timestamp('deleted_at', { mode: 'string' }),
+        deletedAt: timestamp('deleted_at', { mode: 'date' }),
     },
     (table) => [
         uniqueIndex('brands_title_key').on(sql`lower(title)`),

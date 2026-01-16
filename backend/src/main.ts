@@ -6,7 +6,12 @@ import { ValidationPipe } from '@nestjs/common';
 dotenv.config();
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(AppModule, {
+        logger:
+            process.env.NODE_ENV === 'production'
+                ? ['error', 'warn']
+                : ['log', 'debug', 'error', 'warn', 'verbose'],
+    });
 
     app.useGlobalPipes(
         new ValidationPipe({
