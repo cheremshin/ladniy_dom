@@ -1,0 +1,4 @@
+ALTER TABLE "specification_definitions" DROP CONSTRAINT "specification_definitions_key_key";--> statement-breakpoint
+ALTER TABLE "specification_definitions" ADD CONSTRAINT "specification_definitions_product_type_fkey" FOREIGN KEY ("product_type_id") REFERENCES "public"."product_types"("id") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "specification_definitions_product_type_index" ON "specification_definitions" USING btree ("product_type_id");--> statement-breakpoint
+ALTER TABLE "specification_definitions" ADD CONSTRAINT "specification_definitions_product_type_key_key" UNIQUE("product_type_id","key");
