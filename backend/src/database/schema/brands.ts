@@ -4,6 +4,7 @@ import {
     index,
     pgTable,
     text,
+    timestamp,
     uniqueIndex,
     uuid,
     varchar,
@@ -28,6 +29,7 @@ export const brands = pgTable(
 
         createdAt: timestampDefaultNow('created_at'),
         updatedAt: timestampDefaultNow('updated_at'),
+        deletedAt: timestamp('deleted_at', { mode: 'string' }),
     },
     (table) => [
         uniqueIndex('brands_title_key').on(sql`lower(title)`),
@@ -38,9 +40,9 @@ export const brands = pgTable(
         check('slug_lowercase_check', sql`(slug)::text = lower(slug)::text`),
         notInFutureCheck('created_at'),
         notInFutureCheck('updated_at'),
+        notInFutureCheck('deleted_at'),
 
         index('brands_title_index').on(table.title),
-        index('brands_slug_index').on(sql`lower(slug)`),
         index('brands_is_active_index').on(table.isActive),
     ],
 );

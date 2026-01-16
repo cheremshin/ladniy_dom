@@ -6,6 +6,7 @@ import {
     integer,
     pgTable,
     text,
+    timestamp,
     uniqueIndex,
     uuid,
     varchar,
@@ -30,6 +31,7 @@ export const categories = pgTable(
 
         createdAt: timestampDefaultNow('created_at'),
         updatedAt: timestampDefaultNow('updated_at'),
+        deletedAt: timestamp('deleted_at', { mode: 'string' }),
     },
     (table) => [
         foreignKey({
