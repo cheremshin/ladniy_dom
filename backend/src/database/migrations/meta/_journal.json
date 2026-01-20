@@ -29,6 +29,20 @@
       "when": 1768580734732,
       "tag": "0003_high_killmonger",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1768901164570,
+      "tag": "0004_fast_wasp",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1768919424309,
+      "tag": "0005_gorgeous_lady_ursula",
+      "breakpoints": true
     }
   ]
 }
