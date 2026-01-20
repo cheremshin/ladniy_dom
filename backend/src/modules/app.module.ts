@@ -7,10 +7,12 @@ import { CategoriesModule } from './categories/categories.module';
 import { BrandsModule } from './brands/brands.module';
 import { ProductTypesModule } from './product-types/product-types.module';
 import { SpecificationDefinitionsModule } from './specification-definitions/specification-definitions.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
     imports: [
         DatabaseModule,
+        FilesModule,
         CategoriesModule,
         BrandsModule,
         ProductTypesModule,
