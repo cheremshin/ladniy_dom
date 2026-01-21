@@ -37,6 +37,8 @@ export type FileStreamData = {
     stream: Readable;
     name: string;
     mimeType: string;
+    entityType?: string;
+    entityId?: string;
 };
 
 @Injectable()
@@ -227,13 +229,18 @@ export class FilesService {
                 writeStream,
             );
 
-            const fileRecord = await this.create({
-                name: data.name,
-                mimeType: validatedMimeType,
-                size: totalSize,
-                path: this.getRelativePath(filePath),
-                uploadDate,
-            });
+            const [fileRecord] = await this.db
+                .insert(files)
+                .values({
+                    name: data.name,
+                    mimeType: validatedMimeType,
+                    size: totalSize,
+                    path: this.getRelativePath(filePath),
+                    uploadDate,
+                    entityType: data.entityType ?? null,
+                    entityId: data.entityId ?? null,
+                })
+                .returning();
 
             this.logger.log(
                 `File uploaded successfully: ${fileRecord.id} (${data.name}, ${(totalSize / 1024 / 1024).toFixed(2)}MB)`,
@@ -302,5 +309,33 @@ export class FilesService {
         await this.db.delete(files).where(eq(files.id, id));
         this.logger.log(`Deleted file record: ${id}`);
         return file;
+    }
+
+    async attachToEntity(id: string, entityType: string, entityId: string): Promise<FileRecord> {
+        const [updatedFile] = await this.db
+            .update(files)
+            .set({ entityType, entityId })
+            .where(eq(files.id, id))
+            .returning();
+
+        if (!updatedFile) {
+            throw new NotFoundException(`File with ID "${id}" not found`);
+        }
+
+        return updatedFile;
+    }
+
+    async detachFromEntity(id: string): Promise<FileRecord> {
+        const [updatedFile] = await this.db
+            .update(files)
+            .set({ entityType: null, entityId: null })
+            .where(eq(files.id, id))
+            .returning();
+
+        if (!updatedFile) {
+            throw new NotFoundException(`File with ID "${id}" not found`);
+        }
+
+        return updatedFile;
     }
 }

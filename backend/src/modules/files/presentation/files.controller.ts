@@ -1,5 +1,6 @@
 import {
     BadRequestException,
+    Body,
     Controller,
     Delete,
     Get,
@@ -40,15 +41,34 @@ export class FilesController {
     async uploadFile(
         @UploadedFile(new ParseFilePipe({ fileIsRequired: true }))
         file: MulterFile,
+        @Query('entityType') entityType?: string,
+        @Query('entityId') entityId?: string,
     ): Promise<File> {
         const stream = Readable.from(file.buffer);
         const fileRecord = await this.filesService.saveFileFromStream({
             stream,
             name: file.originalname,
             mimeType: file.mimetype,
+            entityType,
+            entityId,
         });
 
         return fileRecord;
+    }
+
+    @Post(':id/attach')
+    @HttpCode(HttpStatus.OK)
+    async attachToEntity(
+        @Param('id', ParseUUIDPipe) id: string,
+        @Body() body: { entityType: string; entityId: string },
+    ): Promise<File> {
+        return await this.filesService.attachToEntity(id, body.entityType, body.entityId);
+    }
+
+    @Post(':id/detach')
+    @HttpCode(HttpStatus.OK)
+    async detachFromEntity(@Param('id', ParseUUIDPipe) id: string): Promise<File> {
+        return await this.filesService.detachFromEntity(id);
     }
 
     @Get('by-url')

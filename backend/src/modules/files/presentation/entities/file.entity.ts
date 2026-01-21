@@ -16,4 +16,10 @@ export class File {
 
     @Field(() => String)
     path: string;
+
+    @Field(() => String, { nullable: true })
+    entityType?: string | null;
+
+    @Field(() => String, { nullable: true })
+    entityId?: string | null;
 }

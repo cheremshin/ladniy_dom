@@ -22,6 +22,8 @@ export const files = pgTable(
         size: integer('size').notNull(),
 
         path: text('path').notNull(),
+        entityType: varchar('entity_type', { length: 64 }),
+        entityId: uuid('entity_id'),
 
         uploadDate: date('upload_date', { mode: 'date' }).notNull().defaultNow(),
 

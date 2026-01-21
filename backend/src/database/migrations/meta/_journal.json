@@ -43,6 +43,13 @@
       "when": 1768919424309,
       "tag": "0005_gorgeous_lady_ursula",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1769002258413,
+      "tag": "0006_sturdy_exiles",
+      "breakpoints": true
     }
   ]
 }
