@@ -1,12 +1,16 @@
 import {
+    BadRequestException,
     Controller,
     Delete,
     Get,
     HttpCode,
     HttpStatus,
+    NotFoundException,
     Param,
     ParseFilePipe,
+    ParseUUIDPipe,
     Post,
+    Query,
     Res,
     UploadedFile,
     UseInterceptors,
@@ -47,20 +51,58 @@ export class FilesController {
         return fileRecord;
     }
 
+    @Get('by-url')
+    async downloadFileByUrl(@Query('url') url: string, @Res() res: Response): Promise<void> {
+        if (!url) {
+            throw new BadRequestException('URL parameter is required');
+        }
+
+        try {
+            const { stream, file } = await this.filesService.getFileStreamByPath(url);
+            const encodedFilename = encodeURIComponent(file.name).replace(/[']/g, '');
+
+            res.setHeader('Content-Type', file.mimeType);
+            res.setHeader('Content-Length', file.size.toString());
+            res.setHeader(
+                'Content-Disposition',
+                `attachment; filename="${encodedFilename}"; filename*=UTF-8''${encodedFilename}`,
+            );
+
+            stream.pipe(res);
+        } catch (error) {
+            if (error instanceof NotFoundException) {
+                throw error;
+            }
+
+            throw new BadRequestException('Failed to download file');
+        }
+    }
+
     @Get(':id')
-    async downloadFile(@Param('id') id: string, @Res() res: Response): Promise<void> {
-        const { stream, file } = await this.filesService.getFileStream(id);
+    async downloadFile(
+        @Param('id', ParseUUIDPipe) id: string,
+        @Res() res: Response,
+    ): Promise<void> {
+        try {
+            const { stream, file } = await this.filesService.getFileStream(id);
 
-        const encodedFilename = encodeURIComponent(file.name).replace(/[']/g, '');
+            const encodedFilename = encodeURIComponent(file.name).replace(/[']/g, '');
 
-        res.setHeader('Content-Type', file.mimeType);
-        res.setHeader('Content-Length', file.size.toString());
-        res.setHeader(
-            'Content-Disposition',
-            `attachment; filename="${encodedFilename}"; filename*=UTF-8''${encodedFilename}`,
-        );
+            res.setHeader('Content-Type', file.mimeType);
+            res.setHeader('Content-Length', file.size.toString());
+            res.setHeader(
+                'Content-Disposition',
+                `attachment; filename="${encodedFilename}"; filename*=UTF-8''${encodedFilename}`,
+            );
 
-        stream.pipe(res);
+            stream.pipe(res);
+        } catch (error) {
+            if (error instanceof NotFoundException) {
+                throw error;
+            }
+
+            throw new BadRequestException('Failed to download file');
+        }
     }
 
     @Delete(':id')

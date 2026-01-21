@@ -155,7 +155,6 @@ export class FilesService {
 
     async findByPath(filePath: string): Promise<FileRecord | null> {
         const [file] = await this.db.select().from(files).where(eq(files.path, filePath)).limit(1);
-
         return file || null;
     }
 
@@ -268,6 +267,24 @@ export class FilesService {
         } catch {
             this.logger.error(`File not found on disk: ${id}`);
             throw new NotFoundException(`File "${id} not found on disk`);
+        }
+    }
+
+    async getFileStreamByPath(url: string): Promise<{ stream: Readable; file: FileRecord }> {
+        const file = await this.findByPath(url);
+
+        if (!file) {
+            throw new NotFoundException(`File "${url}" not found`);
+        }
+
+        const fullPath = path.join(this.uploadsDirectory, file.path);
+        try {
+            await access(fullPath, constants.R_OK);
+            const stream = createReadStream(fullPath);
+            return { stream, file };
+        } catch {
+            this.logger.error(`File not found on disk: ${fullPath}`);
+            throw new NotFoundException(`File "${fullPath}" not found on disk`);
         }
     }
 
