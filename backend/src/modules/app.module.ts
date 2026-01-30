@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AppResolver } from '@/modules/app.resolver';
@@ -8,6 +8,8 @@ import { BrandsModule } from './brands/brands.module';
 import { ProductTypesModule } from './product-types/product-types.module';
 import { SpecificationDefinitionsModule } from './specification-definitions/specification-definitions.module';
 import { FilesModule } from './files/files.module';
+import { ProductsModule } from './products/products.module';
+import { LogginMiddleware } from '@/common/middleware/logging.middleware';
 
 @Module({
     imports: [
@@ -17,6 +19,7 @@ import { FilesModule } from './files/files.module';
         BrandsModule,
         ProductTypesModule,
         SpecificationDefinitionsModule,
+        ProductsModule,
         GraphQLModule.forRoot<ApolloDriverConfig>({
             driver: ApolloDriver,
             autoSchemaFile: true,
@@ -25,4 +28,8 @@ import { FilesModule } from './files/files.module';
     ],
     providers: [AppResolver],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer.apply(LogginMiddleware).forRoutes('*');
+    }
+}
