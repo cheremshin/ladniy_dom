@@ -155,9 +155,13 @@ export class SpecificationDefinitionsService {
                 ...(key !== undefined && { key: key.toLowerCase() }),
             };
 
+            const updatePatch = Object.fromEntries(
+                Object.entries(updateData).filter(([, v]) => v !== undefined),
+            );
+
             const [updated] = await tx
                 .update(specificationDefinitions)
-                .set(updateData)
+                .set(updatePatch)
                 .where(eq(specificationDefinitions.id, id))
                 .returning();
 
@@ -171,7 +175,7 @@ export class SpecificationDefinitionsService {
 
             const [deleted] = await tx
                 .update(specificationDefinitions)
-                .set({ isActive: false, updatedAt: sql`now()` })
+                .set({ isActive: false })
                 .where(eq(specificationDefinitions.id, id))
                 .returning();
 
@@ -185,7 +189,7 @@ export class SpecificationDefinitionsService {
 
             const [restored] = await tx
                 .update(specificationDefinitions)
-                .set({ isActive: true, updatedAt: sql`now()` })
+                .set({ isActive: true })
                 .where(eq(specificationDefinitions.id, id))
                 .returning();
 

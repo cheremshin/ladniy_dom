@@ -50,6 +50,13 @@
       "when": 1769002258413,
       "tag": "0006_sturdy_exiles",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1769764770599,
+      "tag": "0007_upadted_at_triggers",
+      "breakpoints": true
     }
   ]
 }

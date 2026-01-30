@@ -1,4 +1,4 @@
-import { InputType, Field, ID, Int, Float, PartialType } from '@nestjs/graphql';
+import { InputType, Field, ID, Int, Float } from '@nestjs/graphql';
 import {
     IsNotEmpty,
     IsOptional,
@@ -28,7 +28,7 @@ export class SpecificationValueInput {
 
 @InputType()
 export class CreateProductInput {
-    @Field()
+    @Field(() => String)
     @IsNotEmpty()
     title: string;
 
@@ -53,7 +53,7 @@ export class CreateProductInput {
     @IsOptional()
     description?: string;
 
-    @Field()
+    @Field(() => String)
     @IsNotEmpty()
     sku: string;
 
@@ -102,10 +102,93 @@ export class CreateProductInput {
 }
 
 @InputType()
-export class UpdateProductInput extends PartialType(CreateProductInput) {
+export class UpdateProductInput {
     @Field(() => ID)
     @IsUUID()
     id: string;
+
+    @Field(() => String, { nullable: true })
+    @IsOptional()
+    @IsNotEmpty()
+    title?: string;
+
+    @Field(() => String, { nullable: true })
+    @IsOptional()
+    @Matches(/^[a-z0-9-]+$/, { message: 'Slug must be lowercase with hyphens only' })
+    slug?: string;
+
+    @Field(() => ID, { nullable: true })
+    @IsOptional()
+    @IsUUID()
+    categoryId?: string;
+
+    @Field(() => ID, { nullable: true })
+    @IsOptional()
+    @IsUUID()
+    productTypeId?: string;
+
+    @Field(() => ID, { nullable: true })
+    @IsOptional()
+    @IsUUID()
+    brandId?: string;
+
+    @Field(() => String, { nullable: true })
+    @IsOptional()
+    description?: string;
+
+    @Field(() => String, { nullable: true })
+    @IsOptional()
+    @IsNotEmpty()
+    sku?: string;
+
+    @Field(() => ProductStatus, { nullable: true })
+    @IsOptional()
+    @IsEnum(ProductStatus)
+    status?: ProductStatus;
+
+    @Field(() => Float, { nullable: true })
+    @IsOptional()
+    @Min(0)
+    basePrice?: number;
+
+    @Field(() => Float, { nullable: true })
+    @IsOptional()
+    @Min(0)
+    discountPrice?: number;
+
+    @Field(() => Float, { nullable: true })
+    @IsOptional()
+    @Min(0)
+    costPrice?: number;
+
+    @Field(() => [SpecificationValueInput], { nullable: true })
+    @IsOptional()
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => SpecificationValueInput)
+    specifications?: SpecificationValueInput[];
+
+    @Field(() => Int, { nullable: true })
+    @IsOptional()
+    @Min(0)
+    stockQuantity?: number;
+
+    @Field(() => Boolean, { nullable: true })
+    @IsOptional()
+    isFeatured?: boolean;
+
+    @Field(() => Int, { nullable: true })
+    @IsOptional()
+    @Min(0)
+    warrantyMonths?: number;
+
+    @Field(() => String, { nullable: true })
+    @IsOptional()
+    metaTitle?: string;
+
+    @Field(() => String, { nullable: true })
+    @IsOptional()
+    metaDescription?: string;
 }
 
 @InputType()

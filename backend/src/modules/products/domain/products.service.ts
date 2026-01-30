@@ -262,12 +262,19 @@ export class ProductsService {
                 ...(costPrice !== undefined && { costPrice: String(costPrice) }),
                 ...(slug !== undefined && { slug: slug.toLowerCase() }),
                 ...(specifications !== undefined && { specifications: validatedSpecifications }),
-                updatedAt: new Date(),
             };
+
+            const updatePatch = Object.fromEntries(
+                Object.entries(updateData).filter(([, v]) => v !== undefined),
+            );
+
+            if (Object.keys(updatePatch).length === 0) {
+                return this.findOne(id);
+            }
 
             const [updated] = await tx
                 .update(products)
-                .set(updateData)
+                .set(updatePatch)
                 .where(eq(products.id, id))
                 .returning();
 
@@ -281,7 +288,7 @@ export class ProductsService {
 
             const [deleted] = await tx
                 .update(products)
-                .set({ deletedAt: sql`now()`, updatedAt: sql`now()` })
+                .set({ deletedAt: sql`now()` })
                 .where(eq(products.id, id))
                 .returning();
 
@@ -295,7 +302,7 @@ export class ProductsService {
 
             const [restored] = await tx
                 .update(products)
-                .set({ deletedAt: null, updatedAt: sql`now()` })
+                .set({ deletedAt: null })
                 .where(eq(products.id, id))
                 .returning();
 

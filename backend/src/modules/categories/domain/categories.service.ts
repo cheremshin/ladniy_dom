@@ -191,13 +191,17 @@ export class CategoriesService {
                 ...(parentId !== undefined && { parentId }),
             };
 
-            if (Object.keys(updateData).length === 0) {
+            const updatePatch = Object.fromEntries(
+                Object.entries(updateData).filter(([, v]) => v !== undefined),
+            );
+
+            if (Object.keys(updatePatch).length === 0) {
                 return this.findOne(id);
             }
 
             const [updated] = await tx
                 .update(categories)
-                .set(updateData)
+                .set(updatePatch)
                 .where(eq(categories.id, id))
                 .returning();
 
@@ -223,7 +227,7 @@ export class CategoriesService {
 
             const [updated] = await tx
                 .update(categories)
-                .set({ isActive: false, deletedAt: sql`now()`, updatedAt: sql`now()` })
+                .set({ isActive: false, deletedAt: sql`now()` })
                 .where(eq(categories.id, id))
                 .returning();
 
@@ -243,13 +247,13 @@ export class CategoriesService {
                     JOIN category_tree ct ON c.parent_id = ct.id
                 )
                 UPDATE categories
-                SET is_active = true, deleted_at = NULL, updated_at = now()
+                SET is_active = true, deleted_at = NULL
                 WHERE id IN (SELECT id FROM category_tree);
             `);
 
             const [restored] = await tx
                 .update(categories)
-                .set({ isActive: true, deletedAt: null, updatedAt: sql`now()` })
+                .set({ isActive: true, deletedAt: null })
                 .where(eq(categories.id, id))
                 .returning();
 

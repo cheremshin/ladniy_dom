@@ -145,9 +145,13 @@ export class ProductTypesService {
                 ...(slug !== undefined && { slug }),
             };
 
+            const updatePatch = Object.fromEntries(
+                Object.entries(updateData).filter(([, v]) => v !== undefined),
+            );
+
             const [updated] = await tx
                 .update(productTypes)
-                .set(updateData)
+                .set(updatePatch)
                 .where(eq(productTypes.id, id))
                 .returning();
 
@@ -183,7 +187,7 @@ export class ProductTypesService {
 
             const [deleted] = await tx
                 .update(productTypes)
-                .set({ deletedAt: sql`now()`, updatedAt: sql`now()` })
+                .set({ deletedAt: sql`now()` })
                 .where(eq(productTypes.id, id))
                 .returning();
 

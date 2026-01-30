@@ -139,9 +139,17 @@ export class BrandsService {
                 ...(slug !== undefined && { slug }),
             };
 
+            const updatePatch = Object.fromEntries(
+                Object.entries(updateData).filter(([, v]) => v !== undefined),
+            );
+
+            if (Object.keys(updatePatch).length === 0) {
+                return this.findOne(id);
+            }
+
             const [updated] = await tx
                 .update(brands)
-                .set(updateData)
+                .set(updatePatch)
                 .where(eq(brands.id, id))
                 .returning();
 
@@ -175,14 +183,11 @@ export class BrandsService {
 
             const [restored] = await tx
                 .update(brands)
-                .set({ isActive: true, deletedAt: null, updatedAt: sql`now()` })
+                .set({ isActive: true, deletedAt: null })
                 .where(eq(brands.id, id))
                 .returning();
 
-            await tx
-                .update(products)
-                .set({ deletedAt: null, updatedAt: sql`now()` })
-                .where(eq(products.brandId, id));
+            await tx.update(products).set({ deletedAt: null }).where(eq(products.brandId, id));
 
             return restored;
         });
