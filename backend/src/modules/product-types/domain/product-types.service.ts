@@ -11,6 +11,7 @@ import { Database } from '@/database/database.types';
 import { ListResult } from '@/common/domain/list-result.type';
 import { and, count, eq, ilike, isNull, sql, SQL } from 'drizzle-orm';
 import { CategoriesService } from '@/modules/categories/domain/categories.service';
+import { generateSlug } from '@/common/presentation/utils/slug.util';
 
 export type ProductTypeRecord = typeof productTypes.$inferSelect;
 
@@ -22,11 +23,12 @@ export type ProductTypeFilters = {
 
 export type CreateProductTypeData = {
     title: string;
-    slug: string;
     categoryId?: string | null;
 };
 
-export type UpdateProductTypeData = Partial<CreateProductTypeData>;
+export type UpdateProductTypeData = Partial<CreateProductTypeData> & {
+    slug?: string;
+};
 
 @Injectable()
 export class ProductTypesService {
@@ -82,14 +84,16 @@ export class ProductTypesService {
 
     async create(data: CreateProductTypeData): Promise<ProductTypeRecord> {
         return this.db.transaction(async (tx) => {
+            const slug = generateSlug(data.title.trim());
+
             const existing = await tx
                 .select({ id: productTypes.id })
                 .from(productTypes)
-                .where(eq(productTypes.slug, data.slug.toLowerCase()))
+                .where(eq(productTypes.slug, slug))
                 .limit(1);
 
             if (existing.length > 0) {
-                throw new ConflictException(`Product type with slug "${data.slug}" already exists`);
+                throw new ConflictException(`Product type with slug "${slug}" already exists`);
             }
 
             if (data.categoryId !== undefined && data.categoryId !== null) {
@@ -100,7 +104,7 @@ export class ProductTypesService {
                 .insert(productTypes)
                 .values({
                     title: data.title,
-                    slug: data.slug.toLowerCase(),
+                    slug: slug,
                     categoryId: data.categoryId ?? null,
                 })
                 .returning();
@@ -112,16 +116,33 @@ export class ProductTypesService {
     async update(id: string, data: UpdateProductTypeData): Promise<ProductTypeRecord> {
         return this.db.transaction(async (tx) => {
             await this.findOne(id);
+            let slug: string | undefined;
+
+            if (data.slug) {
+                const existing = await tx
+                    .select({ id: productTypes.id })
+                    .from(productTypes)
+                    .where(eq(productTypes.slug, data.slug))
+                    .limit(1);
+
+                if (existing.length > 0) {
+                    throw new ConflictException(
+                        `Product type with slug "${data.slug}" already exists`,
+                    );
+                } else {
+                    slug = data.slug;
+                }
+            } else if (data.title) {
+                slug = generateSlug(data.title.trim());
+            }
 
             if (data.categoryId !== undefined && data.categoryId !== null) {
                 await this.categoriesService.findOne(data.categoryId);
             }
 
-            const { slug, ...rest } = data;
-
             const updateData: Partial<typeof productTypes.$inferInsert> = {
-                ...rest,
-                ...(slug !== undefined && { slug: slug.toLowerCase() }),
+                ...data,
+                ...(slug !== undefined && { slug }),
             };
 
             const [updated] = await tx

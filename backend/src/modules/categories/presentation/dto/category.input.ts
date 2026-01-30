@@ -7,11 +7,6 @@ export class CreateCategoryInput {
     @IsNotEmpty()
     title: string;
 
-    @Field(() => String)
-    @IsNotEmpty()
-    @Matches(/^[a-z0-9-]+$/, { message: 'Slug must be lowercase with hyphens only' })
-    slug: string;
-
     @Field(() => ID, { nullable: true })
     @IsOptional()
     parentId?: string;
@@ -31,7 +26,7 @@ export class CreateCategoryInput {
 
 @InputType()
 export class UpdateCategoryInput extends PartialType(
-    OmitType(CreateCategoryInput, ['title', 'slug'] as const),
+    OmitType(CreateCategoryInput, ['title'] as const),
 ) {
     @Field(() => ID)
     @IsNotEmpty()

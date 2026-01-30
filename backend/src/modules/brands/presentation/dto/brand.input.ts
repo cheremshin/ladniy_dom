@@ -7,11 +7,6 @@ export class CreateBrandInput {
     @IsNotEmpty()
     title: string;
 
-    @Field()
-    @IsNotEmpty()
-    @Matches(/^[a-z0-9-]+$/, { message: 'Slug must be lowercase with hyphens only' })
-    slug: string;
-
     @Field(() => String, { nullable: true })
     @IsOptional()
     description?: string;
@@ -35,9 +30,7 @@ export class CreateBrandInput {
 }
 
 @InputType()
-export class UpdateBrandInput extends PartialType(
-    OmitType(CreateBrandInput, ['title', 'slug'] as const),
-) {
+export class UpdateBrandInput extends PartialType(OmitType(CreateBrandInput, ['title'] as const)) {
     @Field(() => ID)
     @IsNotEmpty()
     id: string;

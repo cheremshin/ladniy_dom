@@ -1,4 +1,5 @@
 import { ListResult } from '@/common/domain/list-result.type';
+import { generateSlug } from '@/common/presentation/utils/slug.util';
 import { DATABASE_CONNECTION } from '@/database/database.provider';
 import { Database } from '@/database/database.types';
 import { brands, products } from '@/database/schema';
@@ -20,7 +21,6 @@ export type BrandFilters = {
 
 export type CreateBrandData = {
     title: string;
-    slug: string;
     description?: string | null;
     logoUrl?: string | null;
     country?: string | null;
@@ -28,7 +28,9 @@ export type CreateBrandData = {
     isActive?: boolean;
 };
 
-export type UpdateBrandData = Partial<CreateBrandData>;
+export type UpdateBrandData = Partial<CreateBrandData> & {
+    slug?: string;
+};
 
 @Injectable()
 export class BrandsService {
@@ -79,21 +81,23 @@ export class BrandsService {
 
     async create(data: CreateBrandData): Promise<BrandRecord> {
         return this.db.transaction(async (tx) => {
+            const slug = generateSlug(data.title.trim());
+
             const existing = await tx
                 .select({ id: brands.id })
                 .from(brands)
-                .where(eq(brands.slug, data.slug.toLowerCase()))
+                .where(eq(brands.slug, slug))
                 .limit(1);
 
             if (existing.length > 0) {
-                throw new ConflictException(`Brand with slug "${data.slug}" already exists`);
+                throw new ConflictException(`Brand with slug "${slug}" already exists`);
             }
 
             const [created] = await tx
                 .insert(brands)
                 .values({
                     title: data.title,
-                    slug: data.slug.toLowerCase(),
+                    slug: slug,
                     description: data.description ?? null,
                     logoUrl: data.logoUrl ?? null,
                     country: data.country ?? null,
@@ -110,6 +114,8 @@ export class BrandsService {
         return this.db.transaction(async (tx) => {
             await this.findOne(id);
 
+            let slug: string | undefined;
+
             if (data.slug) {
                 const existing = await tx
                     .select({ id: brands.id })
@@ -121,14 +127,16 @@ export class BrandsService {
 
                 if (existing.length > 0) {
                     throw new ConflictException(`Brand with slug "${data.slug}" already exists`);
+                } else {
+                    slug = data.slug;
                 }
+            } else if (data.title) {
+                slug = generateSlug(data.title.trim());
             }
 
-            const { slug, ...rest } = data;
-
             const updateData: Partial<typeof brands.$inferInsert> = {
-                ...rest,
-                ...(slug !== undefined && { slug: slug.toLowerCase() }),
+                ...data,
+                ...(slug !== undefined && { slug }),
             };
 
             const [updated] = await tx

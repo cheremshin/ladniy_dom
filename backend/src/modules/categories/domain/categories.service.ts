@@ -10,6 +10,7 @@ import { Database } from '@/database/database.types';
 import { categories, products } from '@/database/schema';
 import { ListResult } from '@/common/domain/list-result.type';
 import { SQL, isNull, eq, ilike, and, asc, count, sql } from 'drizzle-orm';
+import { generateSlug } from '@/common/presentation/utils/slug.util';
 
 export type CategoryRecord = typeof categories.$inferSelect;
 
@@ -22,14 +23,15 @@ export type CategoryFilters = {
 
 export type CreateCategoryData = {
     title: string;
-    slug: string;
     parentId?: string | null;
     imageUrl?: string | null;
     sortOrder?: number;
     isActive?: boolean;
 };
 
-export type UpdateCategoryData = Partial<CreateCategoryData>;
+export type UpdateCategoryData = Partial<CreateCategoryData> & {
+    slug?: string;
+};
 
 @Injectable()
 export class CategoriesService {
@@ -115,14 +117,16 @@ export class CategoriesService {
 
     async create(data: CreateCategoryData): Promise<CategoryRecord> {
         return this.db.transaction(async (tx) => {
+            const slug = generateSlug(data.title.trim());
+
             const existing = await tx
                 .select({ id: categories.id })
                 .from(categories)
-                .where(eq(categories.slug, data.slug.toLowerCase()))
+                .where(eq(categories.slug, slug))
                 .limit(1);
 
             if (existing.length > 0) {
-                throw new ConflictException(`Category with slug "${data.slug}" already exists`);
+                throw new ConflictException(`Category with slug "${slug}" already exists`);
             }
 
             if (data.parentId) {
@@ -133,7 +137,7 @@ export class CategoriesService {
                 .insert(categories)
                 .values({
                     title: data.title,
-                    slug: data.slug.toLowerCase(),
+                    slug: slug,
                     parentId: data.parentId ?? null,
                     imageUrl: data.imageUrl ?? null,
                     sortOrder: data.sortOrder ?? 0,
@@ -148,6 +152,7 @@ export class CategoriesService {
     async update(id: string, data: UpdateCategoryData): Promise<CategoryRecord> {
         return this.db.transaction(async (tx) => {
             await this.findOne(id);
+            let slug: string | undefined;
 
             if (data.slug) {
                 const existing = await tx
@@ -163,7 +168,11 @@ export class CategoriesService {
 
                 if (existing.length > 0) {
                     throw new ConflictException(`Category with slug "${data.slug} already exists"`);
+                } else {
+                    slug = data.slug;
                 }
+            } else if (data.title) {
+                slug = generateSlug(data.title.trim());
             }
 
             if (data.parentId) {
@@ -174,11 +183,11 @@ export class CategoriesService {
                 await this.findOne(data.parentId);
             }
 
-            const { slug, parentId, ...rest } = data;
+            const { parentId, ...rest } = data;
 
             const updateData: Partial<typeof categories.$inferInsert> = {
                 ...rest,
-                ...(slug !== undefined && { slug: slug.toLowerCase() }),
+                ...(slug !== undefined && { slug }),
                 ...(parentId !== undefined && { parentId }),
             };
 
