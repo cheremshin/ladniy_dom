@@ -1,0 +1,75 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+
+    background: var(--color-background-secondary);
+    font-family: 'Inter', sans-serif;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+    color: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    overflow-wrap: break-word;
+}
+
+:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+}
+
+:root {
+    color-scheme: light;
+
+    --color-background-main: #FFFFFF;
+    --color-background-secondary: #F7FAFC;
+
+    --color-text-main: #1C1C1C;
+    --color-text-secondary: #505050;
+    --color-text-tertiary: #8B96A5;
+
+    --color-border: #DEE2E7;
+    --color-border-secondary: #E0E0E0;
+
+    --color-button-main: #FFFFFF;
+    --color-button-foreground-main: #0D6EFD;
+
+    --color-button-hovered: linear-gradient(to bottom, #127FFF, #0067FF);
+    --color-button-foreground-hovered: #FFFFFF;
+}
