@@ -1,4 +1,5 @@
 import { CatalogProductsQuery, Product } from '../api/graphql/__generated__/types';
+import { formatPrice } from '../entities/common.types';
 import { ProductDetails, ProductPreview, ProductSpecification, ProductStatus } from '../entities/product.types';
 import { mapImageUrlValueToRealUrl } from './image-url.mapper';
 
@@ -10,14 +11,8 @@ export function mapProductToProductPreview(product: CatalogProductItem): Product
         slug: product.slug,
         title: product.title,
         pricing: {
-            base: {
-                amount: product.basePrice,
-                currency: 'RUB',
-            },
-            discountPrice: product.discountPrice ? {
-                amount: product.discountPrice,
-                currency: 'RUB',
-            } : undefined,
+            base: formatPrice(product.basePrice),
+            discountPrice: product.discountPrice ? formatPrice(product.discountPrice) : null,
         },
         status: product.status as ProductStatus,
         isFeatured: product.isFeatured,
@@ -29,13 +24,6 @@ export function mapProductToProductPreview(product: CatalogProductItem): Product
             sortOrder: product.primaryImage.sortOrder,
             isPrimary: product.primaryImage.isPrimary,
         } : null,
-        images: product.images ? product.images.map((image) => ({
-            id: image.id,
-            url: mapImageUrlValueToRealUrl(image.url),
-            altText: image.altText ?? null,
-            sortOrder: image.sortOrder,
-            isPrimary: image.isPrimary,
-        })) : [],
     };
 }
 

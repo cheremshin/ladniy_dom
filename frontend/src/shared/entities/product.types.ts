@@ -1,12 +1,12 @@
 import { BrandBase } from './brand.types';
 import { CategoryBase } from './category.types';
-import { Id, Money, Slug } from './common.types';
+import { Id, Price, Slug } from './common.types';
 import { ProductImage } from './product-image.types';
 import { ProductTypeBase } from './product-type.types';
 
 export type ProductPricing = Readonly<{
-    base: Money;
-    discountPrice?: Money | null;
+    base: Price;
+    discountPrice?: Price | null;
 }>;
 
 export enum ProductStatus {
@@ -29,7 +29,6 @@ export type ProductPreview = Readonly<{
     stockQuantity: number;
     
     primaryImage?: ProductImage | null;
-    images?: ProductImage[] | null;
 }>;
 
 export type ProductSpecification = Readonly<Record<string, unknown>>;
