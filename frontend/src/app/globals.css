@@ -31,6 +31,11 @@ svg {
     max-width: 100%;
 }
 
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
 input,
 button,
 textarea,
@@ -64,6 +69,9 @@ h6 {
     --color-text-secondary: #505050;
     --color-text-tertiary: #8B96A5;
 
+    --color-link: #1C1C1C;
+    --color-link-hover: #0D6EFD;
+
     --color-border: #DEE2E7;
     --color-border-secondary: #E0E0E0;
 
@@ -72,4 +80,7 @@ h6 {
 
     --color-button-hovered: linear-gradient(to bottom, #127FFF, #0067FF);
     --color-button-foreground-hovered: #FFFFFF;
+
+    --color-status-featured:rgb(255, 225, 221);
+    --color-status-featured-foreground:rgb(255, 48, 11);
 }
