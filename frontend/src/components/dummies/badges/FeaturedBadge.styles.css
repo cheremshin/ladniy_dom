@@ -1,0 +1,9 @@
+.featured-badge {
+    background: var(--color-status-featured);
+    color: var(--color-status-featured-foreground);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+}
