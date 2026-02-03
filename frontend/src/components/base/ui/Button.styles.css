@@ -3,29 +3,58 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: var(--color-button-main);
-    color: var(--color-button-foreground-main);
-    border: 1px solid var(--color-border);
     border-radius: 6px;
     padding: 10.5px 24px;
     font-weight: 500;
     font-size: 16px;
     white-space: nowrap;
+    border: 0px;
 
     svg {
-        fill: var(--color-button-foreground-main);
         min-width: 24px;
         min-height: 24px;
     }
 }
 
-.base-button:hover,
-.base-button:focus-visible {
-    background: var(--color-button-hovered);
-    color: var(--color-button-foreground-hovered);
-    cursor: pointer;
+.base-button-primary {
+    background: var(--color-action-primary);
+    color: var(--color-action-foreground-primary);
 
     svg {
-        fill: var(--color-button-foreground-hovered);
+        fill: var(--color-action-foreground-primary);
+    }
+}
+
+.base-button-secondary {
+    background: var(--color-action-secondary);
+    color: var(--color-action-foreground-secondary);
+
+    svg {
+        fill: var(--color-action-foreground-secondary);
+    }
+}
+
+.base-button:hover,
+.base-button:focus-visible {
+    cursor: pointer;
+}
+
+.base-button-primary:hover,
+.base-button-primary:focus-visible {
+    background: var(--color-action-primary-hovered);
+    color: var(--color-action-foreground-primary-hovered);
+
+    svg {
+        fill: var(--color-action-foreground-primary-hovered);
+    }
+}
+
+.base-button-secondary:hover,
+.base-button-secondary:focus-visible {
+    background: var(--color-action-secondary-hovered);
+    color: var(--color-action-foreground-secondary-hovered);
+
+    svg {
+        fill: var(--color-action-foreground-secondary-hovered);
     }
 }
