@@ -4,4 +4,5 @@ export type BrandBase = Readonly<{
     id: Id;
     slug: Slug;
     title: string;
+    logoUrl?: string | null;
 }>;

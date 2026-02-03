@@ -29,28 +29,33 @@ export type ProductPreview = Readonly<{
     stockQuantity: number;
     
     primaryImage?: ProductImage | null;
+    images?: ProductImage[] | null;
 }>;
 
-export type ProductSpecification = Readonly<Record<string, unknown>>;
+export type ProductSpecification = Array<{
+    key: string;
+    value: string | number | boolean;
+    displayName: string;
+    description?: string | null;
+    unit?: string | null;
+}>;
 
-export type ProductDetails = Readonly<
-    ProductPreview & {
-        productTypeId?: Id | null;
-        brandId: Id;
-        categoryId: Id;
-        
-        description?: string | null;
+export type ProductOverview = Readonly<{
+    id: Id;
 
-        warrantyMonths: number;
-        specifications?: ProductSpecification | null;
+    title: string;
+    sku: string;
 
-        meta?: {
-            title?: string | null;
-            description?: string | null;
-        };
+    pricing: ProductPricing;
+    status: ProductStatus;
+    stockQuantity: number;
+    brand: BrandBase;
 
-        category: CategoryBase;
-        brand: BrandBase;
-        productType?: ProductTypeBase | null;
-    }
->;
+    images?: ProductImage[] | null;
+}>;
+
+export type ProductDetails = Readonly<{
+    description?: string | null;
+    specifications: ProductSpecification | null;
+    warrantyMonths: number;
+}>;

@@ -32,17 +32,7 @@ export const CATALOG_PRODUCTS = gql`
                 status
                 isFeatured
                 stockQuantity
-                productTypeId
-                brandId
-                categoryId
                 primaryImage {
-                    id
-                    url
-                    altText
-                    sortOrder
-                    isPrimary
-                }
-                images {
                     id
                     url
                     altText
@@ -88,18 +78,7 @@ export const PRODUCT_PAGE = gql`
                 id
                 title
                 slug
-            }
-            productType {
-                id
-                title
-                slug
-            }
-            primaryImage {
-                id
-                url
-                altText
-                sortOrder
-                isPrimary
+                logoUrl
             }
             images {
                 id
@@ -107,6 +86,12 @@ export const PRODUCT_PAGE = gql`
                 altText
                 sortOrder
                 isPrimary
+            }
+            specificationDefinitions {
+                key
+                displayName
+                description
+                unit
             }
         }
     }

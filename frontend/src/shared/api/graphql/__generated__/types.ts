@@ -84,7 +84,6 @@ export type CreateProductInput = {
   metaTitle?: InputMaybe<Scalars['String']['input']>;
   productTypeId: Scalars['ID']['input'];
   sku: Scalars['String']['input'];
-  slug?: InputMaybe<Scalars['String']['input']>;
   specifications?: InputMaybe<Array<SpecificationValueInput>>;
   status?: ProductStatus;
   stockQuantity?: Scalars['Int']['input'];
@@ -94,6 +93,7 @@ export type CreateProductInput = {
 
 export type CreateProductTypeInput = {
   categoryId?: InputMaybe<Scalars['ID']['input']>;
+  plural: Scalars['String']['input'];
   title: Scalars['String']['input'];
 };
 
@@ -341,6 +341,7 @@ export type Product = {
   productTypeId?: Maybe<Scalars['ID']['output']>;
   sku: Scalars['String']['output'];
   slug: Scalars['String']['output'];
+  specificationDefinitions?: Maybe<Array<ProductSpecificationDefinition>>;
   specifications?: Maybe<Scalars['JSON']['output']>;
   status: ProductStatus;
   stockQuantity: Scalars['Int']['output'];
@@ -359,6 +360,16 @@ export type ProductImage = {
   url: Scalars['String']['output'];
 };
 
+export type ProductSpecificationDefinition = {
+  __typename?: 'ProductSpecificationDefinition';
+  description?: Maybe<Scalars['String']['output']>;
+  displayName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  isFilterable: Scalars['Boolean']['output'];
+  key: Scalars['String']['output'];
+  unit?: Maybe<Scalars['String']['output']>;
+};
+
 export type ProductStatus =
   | 'ACTIVE'
   | 'DISCOUNTED'
@@ -372,6 +383,7 @@ export type ProductType = {
   createdAt: Scalars['DateTime']['output'];
   deletedAt?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  plural: Scalars['String']['output'];
   slug: Scalars['String']['output'];
   title: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
@@ -557,6 +569,7 @@ export type UpdateProductInput = {
 export type UpdateProductTypeInput = {
   categoryId?: InputMaybe<Scalars['ID']['input']>;
   id: Scalars['ID']['input'];
+  plural?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -584,14 +597,14 @@ export type CatalogProductsQueryVariables = Exact<{
 }>;
 
 
-export type CatalogProductsQuery = { __typename?: 'Query', products: { __typename?: 'PaginatedProducts', items: Array<{ __typename?: 'Product', id: string, title: string, slug: string, basePrice: number, discountPrice?: number | null, status: ProductStatus, isFeatured: boolean, stockQuantity: number, productTypeId?: string | null, brandId: string, categoryId: string, primaryImage?: { __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean } | null, images?: Array<{ __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean }> | null }>, meta: { __typename?: 'PaginationMeta', total: number, page: number, limit: number, totalPages: number, hasNextPage: boolean, hasPrevPage: boolean } } };
+export type CatalogProductsQuery = { __typename?: 'Query', products: { __typename?: 'PaginatedProducts', items: Array<{ __typename?: 'Product', id: string, title: string, slug: string, basePrice: number, discountPrice?: number | null, status: ProductStatus, isFeatured: boolean, stockQuantity: number, primaryImage?: { __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean } | null }>, meta: { __typename?: 'PaginationMeta', total: number, page: number, limit: number, totalPages: number, hasNextPage: boolean, hasPrevPage: boolean } } };
 
 export type ProductPageQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
 
-export type ProductPageQuery = { __typename?: 'Query', productBySlug: { __typename?: 'Product', id: string, title: string, slug: string, description?: string | null, sku: string, status: ProductStatus, basePrice: number, discountPrice?: number | null, warrantyMonths: number, specifications?: Record<string, unknown> | null, stockQuantity: number, isFeatured: boolean, metaTitle?: string | null, metaDescription?: string | null, category: { __typename?: 'Category', id: string, title: string, slug: string }, brand: { __typename?: 'Brand', id: string, title: string, slug: string }, productType?: { __typename?: 'ProductType', id: string, title: string, slug: string } | null, primaryImage?: { __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean } | null, images?: Array<{ __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean }> | null } };
+export type ProductPageQuery = { __typename?: 'Query', productBySlug: { __typename?: 'Product', id: string, title: string, slug: string, description?: string | null, sku: string, status: ProductStatus, basePrice: number, discountPrice?: number | null, warrantyMonths: number, specifications?: Record<string, unknown> | null, stockQuantity: number, isFeatured: boolean, metaTitle?: string | null, metaDescription?: string | null, category: { __typename?: 'Category', id: string, title: string, slug: string }, brand: { __typename?: 'Brand', id: string, title: string, slug: string, logoUrl?: string | null }, images?: Array<{ __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean }> | null, specificationDefinitions?: Array<{ __typename?: 'ProductSpecificationDefinition', key: string, displayName: string, description?: string | null, unit?: string | null }> | null } };
 
 export type CreateProductMutationVariables = Exact<{
   input: CreateProductInput;
