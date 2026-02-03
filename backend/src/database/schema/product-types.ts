@@ -18,6 +18,7 @@ export const productTypes = pgTable(
         id: uuid('id').defaultRandom().primaryKey(),
 
         title: varchar('title', { length: 128 }).notNull(),
+        plural: varchar('plural', { length: 128 }).notNull(),
         slug: varchar('slug', { length: 128 }).notNull(),
 
         categoryId: uuid('category_id'),

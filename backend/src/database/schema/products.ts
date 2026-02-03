@@ -36,7 +36,7 @@ export const products = pgTable(
         slug: varchar('slug', { length: 256 }).notNull(),
 
         categoryId: uuid('category_id').notNull(),
-        productTypeId: uuid('product_type_id'),
+        productTypeId: uuid('product_type_id').notNull(),
         brandId: uuid('brand_id').notNull(),
 
         description: text('description'),

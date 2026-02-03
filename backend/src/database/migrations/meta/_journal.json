@@ -57,6 +57,13 @@
       "when": 1769764770599,
       "tag": "0007_upadted_at_triggers",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1770050064464,
+      "tag": "0008_outgoing_boom_boom",
+      "breakpoints": true
     }
   ]
 }
