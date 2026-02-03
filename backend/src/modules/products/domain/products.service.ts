@@ -8,6 +8,7 @@ import { BrandsService } from '@/modules/brands/domain/brands.service';
 import { CategoriesService } from '@/modules/categories/domain/categories.service';
 import { FilesService } from '@/modules/files/domain/files.service';
 import { ProductTypesService } from '@/modules/product-types/domain/product-types.service';
+import { SpecificationDefinitionRecord } from '@/modules/specification-definitions/domain/specification-definitions.service';
 import {
     BadRequestException,
     ConflictException,
@@ -48,7 +49,7 @@ export type CreateProductData = {
     sku: string;
     status: ProductStatus;
     basePrice: number;
-    discountPrice?: number;
+    discountPrice?: number | null;
     costPrice: number;
     specifications?: SpecificationValue[];
     stockQuantity?: number;
@@ -134,7 +135,8 @@ export class ProductsService {
             await this.brandsService.findOne(data.brandId);
             await this.productTypesService.findOne(data.productTypeId);
 
-            const slug = generateSlug(data.title.trim());
+            const normalizedTitle = data.title.trim();
+            const slug = generateSlug(normalizedTitle);
 
             // Проверка уникальности slug
             const existingSlug = await tx
@@ -147,15 +149,17 @@ export class ProductsService {
                 throw new ConflictException(`Product with slug "${slug}" already exists`);
             }
 
+            const normalizedSku = data.sku.trim();
+
             // Проверка уникальности SKU
             const existingSku = await tx
                 .select({ id: products.id })
                 .from(products)
-                .where(eq(products.sku, data.sku))
+                .where(eq(products.sku, normalizedSku))
                 .limit(1);
 
             if (existingSku.length > 0) {
-                throw new ConflictException(`Product with SKU "${data.sku}" already exists`);
+                throw new ConflictException(`Product with SKU "${normalizedSku}" already exists`);
             }
 
             // Валидация спецификаций
@@ -171,16 +175,19 @@ export class ProductsService {
             const [created] = await tx
                 .insert(products)
                 .values({
-                    title: data.title.trim(),
+                    title: normalizedTitle,
                     slug,
                     categoryId: data.categoryId,
                     productTypeId: data.productTypeId,
                     brandId: data.brandId,
                     description: data.description ?? null,
-                    sku: data.sku?.trim(),
+                    sku: normalizedSku,
                     status: data.status,
                     basePrice: String(data.basePrice),
-                    discountPrice: data.discountPrice ? String(data.discountPrice) : null,
+                    discountPrice:
+                        data.discountPrice !== undefined && data.discountPrice !== null
+                            ? String(data.discountPrice)
+                            : null,
                     costPrice: String(data.costPrice),
                     specifications: validatedSpecifications,
                     stockQuantity: data.stockQuantity ?? 0,
@@ -229,20 +236,25 @@ export class ProductsService {
 
             // Проверка уникальности SKU
             if (data.sku) {
+                const normalizedSku = data.sku.trim();
                 const existingSku = await tx
                     .select({ id: products.id })
                     .from(products)
-                    .where(and(eq(products.sku, data.sku.trim()), sql`${products.id} != ${id}`))
+                    .where(and(eq(products.sku, normalizedSku), sql`${products.id} != ${id}`))
                     .limit(1);
 
                 if (existingSku.length > 0) {
-                    throw new ConflictException(`Product with SKU "${data.sku}" already exists`);
+                    throw new ConflictException(
+                        `Product with SKU "${normalizedSku}" already exists`,
+                    );
                 }
             }
 
             // Валидация спецификаций
             const productTypeId = data.productTypeId ?? existing.productTypeId;
-            let validatedSpecifications = existing.specifications;
+            // eslint-disable-next-line prettier/prettier
+            const productTypeChanged = data.productTypeId !== undefined && productTypeId !== existing.productTypeId;
+            let validatedSpecifications = productTypeChanged ? null : existing.specifications;
             if (data.specifications && productTypeId) {
                 validatedSpecifications = await this.validateSpecifications(
                     productTypeId,
@@ -252,16 +264,18 @@ export class ProductsService {
             }
 
             const { slug, specifications, basePrice, discountPrice, costPrice, ...rest } = data;
+            const shouldUpdateSpecifications = specifications !== undefined || productTypeChanged;
 
             const updateData: Partial<typeof products.$inferInsert> = {
                 ...rest,
                 ...(basePrice !== undefined && { basePrice: String(basePrice) }),
                 ...(discountPrice !== undefined && {
-                    discountPrice: String(discountPrice),
+                    discountPrice: discountPrice === null ? null : String(discountPrice),
                 }),
                 ...(costPrice !== undefined && { costPrice: String(costPrice) }),
                 ...(slug !== undefined && { slug: slug.toLowerCase() }),
-                ...(specifications !== undefined && { specifications: validatedSpecifications }),
+                ...(data.sku !== undefined && { sku: data.sku.trim() }),
+                ...(shouldUpdateSpecifications && { specifications: validatedSpecifications }),
             };
 
             const updatePatch = Object.fromEntries(
@@ -316,6 +330,33 @@ export class ProductsService {
             await tx.delete(products).where(eq(products.id, id));
             return product;
         });
+    }
+
+    async getSpecificationDefinitions(
+        productTypeId: string,
+    ): Promise<
+        Pick<
+            SpecificationDefinitionRecord,
+            'id' | 'key' | 'displayName' | 'description' | 'unit' | 'isFilterable'
+        >[]
+    > {
+        return this.db
+            .select({
+                id: specificationDefinitions.id,
+                key: specificationDefinitions.key,
+                displayName: specificationDefinitions.displayName,
+                description: specificationDefinitions.description,
+                unit: specificationDefinitions.unit,
+                isFilterable: specificationDefinitions.isFilterable,
+            })
+            .from(specificationDefinitions)
+            .where(
+                and(
+                    eq(specificationDefinitions.productTypeId, productTypeId),
+                    eq(specificationDefinitions.isActive, true),
+                ),
+            )
+            .orderBy(asc(specificationDefinitions.createdAt));
     }
 
     async getImagesForProducts(productIds: string[]): Promise<Map<string, ProductImageRecord[]>> {
@@ -503,12 +544,15 @@ export class ProductsService {
         }
 
         if (filters.minPrice !== undefined) {
-            conditions.push(sql`${products.basePrice} >= ${filters.minPrice}`);
+            conditions.push(
+                sql`COALESCE(${products.discountPrice}, ${products.basePrice}) >= ${filters.minPrice}`,
+            );
         }
 
         if (filters.maxPrice !== undefined) {
-            conditions.push(sql`${products.basePrice} <= ${filters.maxPrice}`);
-            conditions.push(sql`${products.discountPrice} <= ${filters.maxPrice}`);
+            conditions.push(
+                sql`COALESCE(${products.discountPrice}, ${products.basePrice}) <= ${filters.maxPrice}`,
+            );
         }
 
         return conditions;

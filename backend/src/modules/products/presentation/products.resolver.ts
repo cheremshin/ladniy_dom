@@ -8,7 +8,12 @@ import {
     ResolveField,
     Resolver,
 } from '@nestjs/graphql';
-import { Product, ProductImage, ProductStatus } from './entities/product.entity';
+import {
+    Product,
+    ProductImage,
+    ProductSpecificationDefinition,
+    ProductStatus,
+} from './entities/product.entity';
 import { ProductImageRecord, ProductRecord, ProductsService } from '../domain/products.service';
 import { ProductFilterArgs } from './dto/product-filter.args';
 import { CreateProductInput, UpdateProductInput, AttachImageInput } from './dto/product.input';
@@ -86,9 +91,15 @@ export class ProductsResolver {
         return this.productTypesService.findOne(product.productTypeId);
     }
 
-    @ResolveField(() => [ProductImage])
-    async images(@Parent() product: Product): Promise<ProductImage[]> {
-        return this.productsService.getImages(product.id);
+    @ResolveField(() => [ProductSpecificationDefinition], { nullable: true })
+    async specificationDefinitions(
+        @Parent() product: Product,
+    ): Promise<ProductSpecificationDefinition[] | null> {
+        if (!product.productTypeId) {
+            return null;
+        }
+
+        return this.productsService.getSpecificationDefinitions(product.productTypeId);
     }
 
     @Mutation(() => Product)
@@ -96,7 +107,10 @@ export class ProductsResolver {
         const product = await this.productsService.create({
             ...input,
             basePrice: Number(input.basePrice),
-            discountPrice: input.discountPrice ? Number(input.discountPrice) : undefined,
+            discountPrice:
+                input.discountPrice === null || input.discountPrice === undefined
+                    ? input.discountPrice
+                    : Number(input.discountPrice),
             costPrice: Number(input.costPrice),
         });
         return this.mapToEntity(product);
@@ -107,9 +121,12 @@ export class ProductsResolver {
         const { id, ...data } = input;
         const product = await this.productsService.update(id, {
             ...data,
-            basePrice: data.basePrice ? Number(data.basePrice) : undefined,
-            discountPrice: data.discountPrice ? Number(data.discountPrice) : undefined,
-            costPrice: data.costPrice ? Number(data.costPrice) : undefined,
+            basePrice: data.basePrice !== undefined ? Number(data.basePrice) : undefined,
+            discountPrice:
+                data.discountPrice === null || data.discountPrice === undefined
+                    ? data.discountPrice
+                    : Number(data.discountPrice),
+            costPrice: data.costPrice !== undefined ? Number(data.costPrice) : undefined,
         });
         return this.mapToEntity(product);
     }

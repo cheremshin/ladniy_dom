@@ -32,6 +32,27 @@ export class ProductImage {
 }
 
 @ObjectType()
+export class ProductSpecificationDefinition {
+    @Field(() => ID)
+    id: string;
+
+    @Field(() => String)
+    key: string;
+
+    @Field(() => String)
+    displayName: string;
+
+    @Field(() => String, { nullable: true })
+    description: string | null;
+
+    @Field(() => String, { nullable: true })
+    unit: string | null;
+
+    @Field(() => Boolean)
+    isFilterable: boolean;
+}
+
+@ObjectType()
 export class Product {
     @Field(() => ID)
     id: string;
@@ -71,6 +92,9 @@ export class Product {
 
     @Field(() => GraphQLJSON, { nullable: true })
     specifications: Record<string, unknown> | null;
+
+    @Field(() => [ProductSpecificationDefinition], { nullable: true })
+    specificationDefinitions?: ProductSpecificationDefinition[] | null;
 
     @Field(() => Int)
     stockQuantity: number;

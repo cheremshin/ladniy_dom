@@ -23,6 +23,7 @@ export type ProductTypeFilters = {
 
 export type CreateProductTypeData = {
     title: string;
+    plural: string;
     categoryId?: string | null;
 };
 
@@ -105,6 +106,7 @@ export class ProductTypesService {
                 .values({
                     title: data.title,
                     slug: slug,
+                    plural: data.plural,
                     categoryId: data.categoryId ?? null,
                 })
                 .returning();

@@ -7,6 +7,10 @@ export class CreateProductTypeInput {
     @IsNotEmpty()
     title: string;
 
+    @Field(() => String)
+    @IsNotEmpty()
+    plural: string;
+
     @Field(() => ID, { nullable: true })
     @IsOptional()
     categoryId?: string | null;
@@ -14,7 +18,7 @@ export class CreateProductTypeInput {
 
 @InputType()
 export class UpdateProductTypeInput extends PartialType(
-    OmitType(CreateProductTypeInput, ['title'] as const),
+    OmitType(CreateProductTypeInput, ['title', 'plural'] as const),
 ) {
     @Field(() => ID)
     @IsNotEmpty()
@@ -23,6 +27,10 @@ export class UpdateProductTypeInput extends PartialType(
     @Field(() => String, { nullable: true })
     @IsOptional()
     title?: string;
+
+    @Field(() => String, { nullable: true })
+    @IsOptional()
+    plural?: string;
 
     @Field(() => String, { nullable: true })
     @IsOptional()

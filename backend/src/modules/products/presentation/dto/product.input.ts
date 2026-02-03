@@ -32,11 +32,6 @@ export class CreateProductInput {
     @IsNotEmpty()
     title: string;
 
-    @Field(() => String, { nullable: true })
-    @IsOptional()
-    @Matches(/^[a-z0-9-]+$/, { message: 'Slug must be lowercase with hyphens only' })
-    slug?: string;
-
     @Field(() => ID)
     @IsUUID()
     categoryId: string;
@@ -68,7 +63,7 @@ export class CreateProductInput {
     @Field(() => Float, { nullable: true })
     @IsOptional()
     @Min(0)
-    discountPrice?: number;
+    discountPrice?: number | null;
 
     @Field(() => Float)
     @Min(0)
@@ -154,7 +149,7 @@ export class UpdateProductInput {
     @Field(() => Float, { nullable: true })
     @IsOptional()
     @Min(0)
-    discountPrice?: number;
+    discountPrice?: number | null;
 
     @Field(() => Float, { nullable: true })
     @IsOptional()

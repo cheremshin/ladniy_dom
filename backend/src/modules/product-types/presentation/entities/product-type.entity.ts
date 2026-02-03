@@ -9,6 +9,9 @@ export class ProductType {
     title: string;
 
     @Field(() => String)
+    plural: string;
+
+    @Field(() => String)
     slug: string;
 
     @Field(() => ID, { nullable: true })
