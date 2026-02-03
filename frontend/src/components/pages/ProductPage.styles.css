@@ -1,0 +1,11 @@
+.product-page {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-container {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
