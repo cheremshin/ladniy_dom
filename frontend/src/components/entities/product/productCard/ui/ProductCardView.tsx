@@ -1,38 +1,31 @@
-'use client';
-
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import Link from 'next/link';
-
 import { FeaturedBadge } from '@/components/dummies/badges/FeaturedBadge';
-import { Button } from '@/components/base/ui/Button';
-import { FavouriteIcon } from '@/components/dummies/icons/FavouriteIcon';
-import { ProductPreview } from '@/shared/entities/product.types';
-import { getPrices } from '@/components/entities/product/model/pricing';
+import { ProductStatus } from '@/shared/entities/product.types';
+import { ProductImage } from '@/shared/entities/product-image.types';
+import { PricingT } from '@/components/entities/product/model/pricing';
 
 import './ProductCardView.styles.css';
 
-type PropsT = Omit<ProductPreview, 'id'> & {
+type PropsT = {
+    title: string;
+    pricing: PricingT;
+    status: ProductStatus;
+    isFeatured: boolean;
+    primaryImage?: ProductImage | null;
     productPageUrl: string;
-    buyButtonLabel: string;
-    onBuyButtonClick: (slug: string) => void;
-    onFavouriteButtonClick: (slug: string) => void;
-    isFavourite: boolean;
-};
+    children?: ReactNode; // Слот для Actions
+}
 
-export const ProductCardView: FC<PropsT> = ({
+export async function ProductCardView({
     title,
-    slug,
     pricing,
-    status,
     isFeatured,
     primaryImage,
     productPageUrl,
-    buyButtonLabel,
-    onBuyButtonClick,
-    onFavouriteButtonClick,
-    isFavourite,
-}) => {
-    const { currentPrice, oldPrice } = getPrices(pricing);
+    children,
+}: PropsT) {
+    const { currentPrice, oldPrice } = pricing;
 
     return (
         <div className='product-card'>
@@ -52,7 +45,9 @@ export const ProductCardView: FC<PropsT> = ({
             </div>
             <div className='product-card__info'>
                 <div>
-                    <Link href={productPageUrl} className='product-card__title'>{title}</Link>
+                    <Link href={productPageUrl} className='product-card__title'>
+                        {title}
+                    </Link>
                     <span className='product-card__pricing-block'>
                         <span className='product-card__price'>{currentPrice}</span>
                         {oldPrice && (
@@ -66,13 +61,8 @@ export const ProductCardView: FC<PropsT> = ({
                 </div>
             </div>
             <div className='product-card__buttons'>
-                <Button onClick={() => onBuyButtonClick(slug)}>
-                    {buyButtonLabel}
-                </Button>
-                <Button onClick={() => onFavouriteButtonClick(slug)}>
-                    <FavouriteIcon className={isFavourite ? 'favourite-icon--active' : ''} />
-                </Button>
+                {children}
             </div>
         </div>
     );
-};
+}

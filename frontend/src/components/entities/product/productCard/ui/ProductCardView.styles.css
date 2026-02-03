@@ -86,3 +86,19 @@
     gap: 8px;
     align-items: flex-start;
 }
+
+.product-card__buttons .favourite-icon--active {
+    background: var(--color-action-secondary-hovered);
+
+    svg {
+        fill: var(--color-action-foreground-secondary-active);
+    }
+}
+
+.product-card__buttons .favourite-icon--active:hover {
+    background: var(--color-action-secondary-active-hovered);
+
+    svg {
+        fill: var(--color-action-foreground-secondary-active);
+    }
+}
