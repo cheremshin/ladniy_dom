@@ -54,9 +54,9 @@ h6 {
     overflow-wrap: break-word;
 }
 
-:focus-visible {
-    outline: 2px solid var(--color-focus);
-    outline-offset: 2px;
+.page {
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 :root {
@@ -68,6 +68,7 @@ h6 {
     --color-text-main: #1C1C1C;
     --color-text-secondary: #505050;
     --color-text-tertiary: #8B96A5;
+    --color-text-accent: rgb(255, 48, 11);
 
     --color-link: #1C1C1C;
     --color-link-hover: #0D6EFD;
@@ -75,12 +76,20 @@ h6 {
     --color-border: #DEE2E7;
     --color-border-secondary: #E0E0E0;
 
-    --color-button-main: #FFFFFF;
-    --color-button-foreground-main: #0D6EFD;
+    --color-action-primary: #127FFF;
+    --color-action-foreground-primary: #FFFFFF;
+    --color-action-primary-hovered: #3593ff;
+    --color-action-foreground-primary-hovered: #FFFFFF;
 
-    --color-button-hovered: linear-gradient(to bottom, #127FFF, #0067FF);
-    --color-button-foreground-hovered: #FFFFFF;
+    --color-action-secondary: rgba(127, 186, 255, 0.19);
+    --color-action-foreground-secondary: #298dff;
+    --color-action-secondary-hovered: rgba(127, 187, 255, 0.38);
+    --color-action-foreground-secondary-hovered: #1368c9;
+    --color-action-secondary-active-hovered:rgba(255, 17, 88, 0.21);
+    --color-action-foreground-secondary-active: #ff1159;
 
     --color-status-featured:rgb(255, 225, 221);
     --color-status-featured-foreground:rgb(255, 48, 11);
+
+    --color-accept: #4bae4f;
 }
