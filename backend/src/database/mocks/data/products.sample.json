@@ -1,0 +1,507 @@
+{
+    "products": [
+        {
+            "title": "Мультиварка POLARIS PMC 0589AD черная",
+            "productTypeTitle": "Мультиварка",
+            "brandIndex": 1,
+            "description": "Компактная мультиварка с быстрым нагревом и набором базовых программ.",
+            "sku": "MC-PMC-0589AD",
+            "status": "active",
+            "basePrice": "5990",
+            "costPrice": "3600",
+            "stockQuantity": 12,
+            "isFeatured": false,
+            "warrantyMonths": 12,
+            "specifications": {
+                "power": 860,
+                "volume": 4,
+                "bowl_material": "алюминий",
+                "bowl_coating": "керамика",
+                "programs_count": 14,
+                "body_material": "пластик",
+                "heating_type": "ТЭН",
+                "control_type": "электронное",
+                "delayed_start": true,
+                "keep_warm": true
+            }
+        },
+        {
+            "title": "Мультиварка REDMOND RMC-M90 серебристая",
+            "productTypeTitle": "Мультиварка",
+            "brandIndex": 0,
+            "description": "Модель с большой чашей и расширенным набором программ приготовления.",
+            "sku": "MC-RMC-M90",
+            "status": "active",
+            "basePrice": "10990",
+            "discountPrice": "9990",
+            "costPrice": "6400",
+            "stockQuantity": 8,
+            "isFeatured": true,
+            "warrantyMonths": 24,
+            "specifications": {
+                "power": 1000,
+                "volume": 5,
+                "bowl_material": "алюминий",
+                "bowl_coating": "тефлон",
+                "programs_count": 45,
+                "body_material": "металл/пластик",
+                "heating_type": "3D-нагрев",
+                "control_type": "сенсорное",
+                "delayed_start": true,
+                "keep_warm": true
+            }
+        },
+        {
+            "title": "Мультиварка ZUGEL RK321A32 белая",
+            "productTypeTitle": "Мультиварка",
+            "brandIndex": 2,
+            "description": "Удобная мультиварка с интуитивным управлением и компактным корпусом.",
+            "sku": "MC-RK321A32",
+            "status": "active",
+            "basePrice": "7390",
+            "costPrice": "4300",
+            "stockQuantity": 15,
+            "isFeatured": false,
+            "warrantyMonths": 12,
+            "specifications": {
+                "power": 750,
+                "volume": 4,
+                "bowl_material": "алюминий",
+                "bowl_coating": "антипригарное",
+                "programs_count": 14,
+                "body_material": "пластик",
+                "heating_type": "ТЭН",
+                "control_type": "кнопочное",
+                "delayed_start": false,
+                "keep_warm": true
+            }
+        },
+        {
+            "title": "Мультиварка HIBERG KT-2028 черная",
+            "productTypeTitle": "Мультиварка",
+            "brandIndex": 3,
+            "description": "Модель с повышенной мощностью и быстрым приготовлением.",
+            "sku": "MC-KT-2028",
+            "status": "active",
+            "basePrice": "8290",
+            "costPrice": "4900",
+            "stockQuantity": 10,
+            "isFeatured": false,
+            "warrantyMonths": 18,
+            "specifications": {
+                "power": 1200,
+                "volume": 5,
+                "bowl_material": "сталь",
+                "bowl_coating": "керамика",
+                "programs_count": 30,
+                "body_material": "металл/пластик",
+                "heating_type": "индукционный",
+                "control_type": "сенсорное",
+                "delayed_start": true,
+                "keep_warm": true
+            }
+        },
+        {
+            "title": "Мультиварка Bork MK622132 красная",
+            "productTypeTitle": "Мультиварка",
+            "brandIndex": 4,
+            "description": "Яркий дизайн и оптимальный набор режимов для ежедневной готовки.",
+            "sku": "MC-MK622132",
+            "status": "active",
+            "basePrice": "6990",
+            "costPrice": "4200",
+            "stockQuantity": 6,
+            "isFeatured": false,
+            "warrantyMonths": 12,
+            "specifications": {
+                "power": 900,
+                "volume": 5,
+                "bowl_material": "алюминий",
+                "bowl_coating": "тефлон",
+                "programs_count": 20,
+                "body_material": "пластик",
+                "heating_type": "ТЭН",
+                "control_type": "электронное",
+                "delayed_start": true,
+                "keep_warm": false
+            }
+        },
+        {
+            "title": "Блендер POLARIS MSM66110 белый",
+            "productTypeTitle": "Блендер",
+            "brandIndex": 1,
+            "description": "Погружной блендер для ежедневных задач с базовым набором насадок.",
+            "sku": "BL-MSM-66110",
+            "status": "active",
+            "basePrice": "2990",
+            "costPrice": "1700",
+            "stockQuantity": 20,
+            "isFeatured": false,
+            "warrantyMonths": 12,
+            "specifications": {
+                "power": 600,
+                "speeds_count": 1,
+                "type": "погружной",
+                "bowl_volume": 0.6,
+                "immersion_material": "пластик",
+                "attachments": [
+                    "измельчитель"
+                ],
+                "turbo_mode": false,
+                "impulse_mode": false,
+                "body_material": "пластик"
+            }
+        },
+        {
+            "title": "Блендер REDMOND HR2657/90 черный",
+            "productTypeTitle": "Блендер",
+            "brandIndex": 0,
+            "description": "Мощный блендер с турборежимом и расширенным комплектом.",
+            "sku": "BL-HR2657",
+            "status": "active",
+            "basePrice": "6990",
+            "discountPrice": "6290",
+            "costPrice": "4100",
+            "stockQuantity": 11,
+            "isFeatured": true,
+            "warrantyMonths": 24,
+            "specifications": {
+                "power": 800,
+                "speeds_count": 2,
+                "type": "погружной",
+                "bowl_volume": 1,
+                "immersion_material": "металл",
+                "attachments": [
+                    "венчик",
+                    "измельчитель",
+                    "мерный стакан"
+                ],
+                "turbo_mode": true,
+                "impulse_mode": true,
+                "body_material": "пластик"
+            }
+        },
+        {
+            "title": "Блендер ZUGEL JB3060 стальной",
+            "productTypeTitle": "Блендер",
+            "brandIndex": 2,
+            "description": "Стационарный блендер с большой чашей и импульсным режимом.",
+            "sku": "BL-JB3060",
+            "status": "active",
+            "basePrice": "5590",
+            "costPrice": "3200",
+            "stockQuantity": 9,
+            "isFeatured": false,
+            "warrantyMonths": 12,
+            "specifications": {
+                "power": 800,
+                "speeds_count": 5,
+                "type": "стационарный",
+                "bowl_volume": 1.5,
+                "immersion_material": "металл",
+                "attachments": [
+                    "измельчитель",
+                    "мерный стакан"
+                ],
+                "turbo_mode": false,
+                "impulse_mode": true,
+                "body_material": "металл"
+            }
+        },
+        {
+            "title": "Блендер Scarlett SC-HB42F86 черный",
+            "productTypeTitle": "Блендер",
+            "brandIndex": 6,
+            "description": "Доступный вариант для смузи и супов-пюре.",
+            "sku": "BL-HB42F86",
+            "status": "active",
+            "basePrice": "2190",
+            "costPrice": "1200",
+            "stockQuantity": 25,
+            "isFeatured": false,
+            "warrantyMonths": 12,
+            "specifications": {
+                "power": 500,
+                "speeds_count": 1,
+                "type": "погружной",
+                "bowl_volume": 0.5,
+                "immersion_material": "пластик",
+                "attachments": [
+                    "мерный стакан"
+                ],
+                "turbo_mode": false,
+                "impulse_mode": false,
+                "body_material": "пластик"
+            }
+        },
+        {
+            "title": "Блендер Gemlux KT-1365 красный",
+            "productTypeTitle": "Блендер",
+            "brandIndex": 5,
+            "description": "Стационарный блендер с удобной регулировкой скоростей.",
+            "sku": "BL-KT-1365",
+            "status": "active",
+            "basePrice": "3890",
+            "costPrice": "2400",
+            "stockQuantity": 14,
+            "isFeatured": false,
+            "warrantyMonths": 18,
+            "specifications": {
+                "power": 700,
+                "speeds_count": 3,
+                "type": "стационарный",
+                "bowl_volume": 1.2,
+                "immersion_material": "металл",
+                "attachments": [
+                    "измельчитель"
+                ],
+                "turbo_mode": false,
+                "impulse_mode": true,
+                "body_material": "пластик"
+            }
+        },
+        {
+            "title": "Чайник Bork KO260130 черный",
+            "productTypeTitle": "Чайник",
+            "brandIndex": 4,
+            "description": "Электрический чайник с быстрым кипячением и защитой от перегрева.",
+            "sku": "KT-KO260130",
+            "status": "discounted",
+            "basePrice": "2690",
+            "discountPrice": "2290",
+            "costPrice": "1500",
+            "stockQuantity": 18,
+            "isFeatured": false,
+            "warrantyMonths": 12,
+            "specifications": {
+                "power": 2200,
+                "volume": 1.7,
+                "body_material": "пластик",
+                "filter": true,
+                "auto_off": true,
+                "temp_control": false,
+                "keep_warm": false,
+                "indicator": true
+            }
+        },
+        {
+            "title": "Чайник Scarlett TWK7603 белый",
+            "productTypeTitle": "Чайник",
+            "brandIndex": 6,
+            "description": "Чайник с регулировкой температуры и поддержанием тепла.",
+            "sku": "KT-TWK7603",
+            "status": "active",
+            "basePrice": "4490",
+            "costPrice": "2600",
+            "stockQuantity": 9,
+            "isFeatured": true,
+            "warrantyMonths": 24,
+            "specifications": {
+                "power": 2400,
+                "volume": 1.5,
+                "body_material": "металл",
+                "filter": true,
+                "auto_off": true,
+                "temp_control": true,
+                "keep_warm": true,
+                "indicator": true
+            }
+        },
+        {
+            "title": "Пылесос ZUGEL VC18M21A0SB серый",
+            "productTypeTitle": "Пылесос",
+            "brandIndex": 2,
+            "description": "Контейнерный пылесос с циклонной системой фильтрации.",
+            "sku": "VC-18M21A0SB",
+            "status": "out_of_stock",
+            "basePrice": "9990",
+            "costPrice": "6200",
+            "stockQuantity": 0,
+            "isFeatured": false,
+            "warrantyMonths": 24,
+            "specifications": {
+                "power_consumption": 1800,
+                "suction_power": 380,
+                "dust_collector_type": "контейнер",
+                "dust_collector_volume": 1.5,
+                "noise_level": 82,
+                "filter_type": "HEPA",
+                "cord_length": 6,
+                "attachments": [
+                    "щелевая",
+                    "для мебели"
+                ]
+            }
+        },
+        {
+            "title": "Пылесос POLARIS BGS05A220 красный",
+            "productTypeTitle": "Пылесос",
+            "brandIndex": 1,
+            "description": "Компактный пылесос с мешком и базовым комплектом насадок.",
+            "sku": "VC-BGS05A220",
+            "status": "active",
+            "basePrice": "8990",
+            "costPrice": "5400",
+            "stockQuantity": 7,
+            "isFeatured": false,
+            "warrantyMonths": 12,
+            "specifications": {
+                "power_consumption": 1400,
+                "suction_power": 300,
+                "dust_collector_type": "мешок",
+                "dust_collector_volume": 2.5,
+                "noise_level": 78,
+                "filter_type": "циклонный",
+                "cord_length": 5,
+                "attachments": [
+                    "универсальная"
+                ]
+            }
+        },
+        {
+            "title": "Фен REDMOND HP8233 синий",
+            "productTypeTitle": "Фен",
+            "brandIndex": 0,
+            "description": "Фен с ионизацией и режимом холодного обдува.",
+            "sku": "DR-HP8233",
+            "status": "draft",
+            "basePrice": "3290",
+            "costPrice": "1900",
+            "stockQuantity": 0,
+            "isFeatured": false,
+            "warrantyMonths": 12,
+            "specifications": {
+                "power": 2200,
+                "speeds_count": 2,
+                "temp_modes": 3,
+                "ionization": true,
+                "cold_air": true,
+                "attachments": [
+                    "концентратор",
+                    "диффузор"
+                ],
+                "cord_length": 1.8,
+                "overheat_protection": true
+            }
+        },
+        {
+            "title": "Весы LEX Smart Scale 2 белые",
+            "productTypeTitle": "Весы",
+            "brandIndex": 7,
+            "description": "Напольные весы с автоотключением и функцией тарокомпенсации.",
+            "sku": "SC-MI-S2",
+            "status": "active",
+            "basePrice": "1890",
+            "costPrice": "1100",
+            "stockQuantity": 22,
+            "isFeatured": false,
+            "warrantyMonths": 12,
+            "specifications": {
+                "max_weight": 150,
+                "accuracy": 100,
+                "platform_material": "стекло",
+                "type": "напольные",
+                "auto_off": true,
+                "tare_function": true,
+                "power_source": "батарейки"
+            }
+        },
+        {
+            "title": "Сковорода Bork Unlimited 28 см",
+            "productTypeTitle": "Сковорода",
+            "brandIndex": 4,
+            "description": "Сковорода с антипригарным покрытием и совместимостью с индукцией.",
+            "sku": "PN-UNL-28",
+            "status": "active",
+            "basePrice": "3490",
+            "costPrice": "2000",
+            "stockQuantity": 13,
+            "isFeatured": false,
+            "warrantyMonths": 6,
+            "specifications": {
+                "diameter": 28,
+                "bottom_diameter": 23,
+                "material": "алюминий",
+                "coating": "антипригарное",
+                "compatible_stoves": "газ/электрика/индукция",
+                "handle_material": "бакелит",
+                "lid_included": false,
+                "bottom_thickness": 4
+            }
+        },
+        {
+            "title": "Кастрюля HIBERG Flamme 4 л",
+            "productTypeTitle": "Кастрюля",
+            "brandIndex": 3,
+            "description": "Кастрюля из нержавеющей стали с прозрачной крышкой.",
+            "sku": "PT-FLAM-4L",
+            "status": "active",
+            "basePrice": "3790",
+            "costPrice": "2300",
+            "stockQuantity": 10,
+            "isFeatured": false,
+            "warrantyMonths": 12,
+            "specifications": {
+                "volume": 4,
+                "diameter": 22,
+                "material": "нержавеющая сталь",
+                "coating": "без покрытия",
+                "lid_included": true,
+                "compatible_stoves": "газ/электрика/индукция",
+                "handle_material": "нержавеющая сталь",
+                "bottom_thickness": 5
+            }
+        },
+        {
+            "title": "Холодильник ZUGEL GA-B459CLSL серебристый",
+            "productTypeTitle": "Холодильник",
+            "brandIndex": 2,
+            "description": "Двухкамерный холодильник с No Frost и зоной свежести.",
+            "sku": "FR-GA-B459CLSL",
+            "status": "discounted",
+            "basePrice": "58990",
+            "discountPrice": "52990",
+            "costPrice": "42000",
+            "stockQuantity": 4,
+            "isFeatured": true,
+            "warrantyMonths": 24,
+            "specifications": {
+                "total_volume": 360,
+                "fridge_volume": 250,
+                "freezer_volume": 110,
+                "energy_class": "A+",
+                "defrost_system": "No Frost",
+                "noise_level": 39,
+                "height": 186,
+                "width": 60,
+                "depth": 68,
+                "fresh_zone": true
+            }
+        },
+        {
+            "title": "Стиральная машина POLARIS WAN24260OE белая",
+            "productTypeTitle": "Стиральная машина",
+            "brandIndex": 1,
+            "description": "Фронтальная стиральная машина с инверторным мотором.",
+            "sku": "WM-WAN24260OE",
+            "status": "active",
+            "basePrice": "44990",
+            "costPrice": "33000",
+            "stockQuantity": 5,
+            "isFeatured": false,
+            "warrantyMonths": 24,
+            "specifications": {
+                "load_capacity": 8,
+                "spin_speed": 1200,
+                "energy_class": "A",
+                "wash_class": "A",
+                "spin_class": "B",
+                "motor_type": "инверторный",
+                "load_type": "фронтальная",
+                "programs_count": 15,
+                "noise_level": 74,
+                "depth": 60
+            }
+        }
+    ]
+}

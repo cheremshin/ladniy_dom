@@ -1,157 +1,97 @@
 import * as dotenv from 'dotenv';
-import { AppModule } from '@/modules/app.module';
-import { NestFactory } from '@nestjs/core';
-import { hash } from 'bcrypt';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
+import * as schema from '../schema';
+import {
+    brands,
+    categories,
+    productTypes,
+    specificationDefinitions,
+    users,
+    products,
+} from '../schema';
 import { Database } from '../database.types';
-import { DATABASE_CONNECTION } from '../database.provider';
-import { brands, categories, products, productTypes, users } from '../schema';
+import { generateSlug } from '@/common/presentation/utils/slug.util';
+import { hash } from 'bcrypt';
+
+import brandsJson from './data/brands.sample.json';
+import categoriesJson from './data/categories.sample.json';
+import specificationDefinitionsJson from './data/specification-defitions.sample.json';
+import productsJson from './data/products.sample.json';
 
 dotenv.config();
 
-async function generateTestData() {
-    console.log('Запуск скрипта генерации тестовых данных');
+type CategoryRecord = typeof categories.$inferSelect;
+type ProductTypeRecord = typeof productTypes.$inferSelect;
+type BrandRecord = typeof brands.$inferSelect;
+type SpecificationDefinitionRecord = typeof specificationDefinitions.$inferSelect;
+type ProductInsert = typeof products.$inferInsert;
 
-    const app = await NestFactory.createApplicationContext(AppModule);
-    const db = app.get<Database>(DATABASE_CONNECTION);
+async function seedBrands(db: Database) {
+    const data = brandsJson.brands.map((b) => ({
+        title: b.title,
+        slug: generateSlug(b.title),
+        description: b.description,
+        country: b.country,
+        website: b.website,
+    }));
 
-    console.log('Создание категорий...');
-    const parentCategories = [
-        { title: 'Крупная бытовая техника', slug: 'krypnaya-bitovaya-tehnika' },
-        { title: 'Приготовление блюд', slug: 'prigotovlenie-blud' },
-        { title: 'Блендеры, миксеры, измельчители', slug: 'blendery-miksery-izmelchiteli' },
-        { title: 'Кофемашины, кофеварки', slug: 'kofemachiny-kofevarki' },
-    ];
+    return await db.insert(brands).values(data).returning();
+}
 
-    const insertedParentCategories = await db
-        .insert(categories)
-        .values(
-            parentCategories.map((category, index) => ({
-                title: category.title,
-                slug: category.slug,
-                sortOrder: index,
-                isActive: true,
-            })),
-        )
-        .returning();
+async function seedCategories(db: Database) {
+    const data = categoriesJson.categories.map((c) => ({
+        title: c.title,
+        slug: generateSlug(c.title),
+        sortOrder: c.sortOrder,
+        isActive: true,
+    }));
 
-    console.log(`Создано ${insertedParentCategories.length} родительских категорий`);
+    return await db.insert(categories).values(data).returning();
+}
 
-    const subCategories = [
-        {
-            title: 'Холодильники',
-            slug: 'holodilniki',
-            parentId: insertedParentCategories[0].id,
-        },
-        {
-            title: 'Посудомоечные машины',
-            slug: 'posudomoechnie-machiny',
-            parentId: insertedParentCategories[0].id,
-        },
-        {
-            title: 'Стиральные машины',
-            slug: 'stiralnie-machiny',
-            parentId: insertedParentCategories[0].id,
-        },
-        {
-            title: 'Микроволновые печи',
-            slug: 'mikrovolnovie-pechi',
-            parentId: insertedParentCategories[1].id,
-        },
-        {
-            title: 'Мультиварки',
-            slug: 'multivarki',
-            parentId: insertedParentCategories[1].id,
-        },
-        {
-            title: 'Блендеры',
-            slug: 'blendery',
-            parentId: insertedParentCategories[2].id,
-        },
-        {
-            title: 'Мясорубки',
-            slug: 'myasorubki',
-            parentId: insertedParentCategories[2].id,
-        },
-        {
-            title: 'Миксеры',
-            slug: 'miksery',
-            parentId: insertedParentCategories[2].id,
-        },
-        {
-            title: 'Кофемашины',
-            slug: 'kofemachiny',
-            parentId: insertedParentCategories[3].id,
-        },
-        {
-            title: 'Кофеварки',
-            slug: 'kofevarki',
-            parentId: insertedParentCategories[3].id,
-        },
-    ];
+async function seedProductTypes(db: Database, categories: CategoryRecord[]) {
+    const data = categoriesJson.productTypes.map((pt) => {
+        const category = categories[pt.categoryId];
 
-    const insertedSubCategories = await db
-        .insert(categories)
-        .values(
-            subCategories.map((category, index) => ({
-                title: category.title,
-                parentId: category.parentId,
-                slug: category.slug,
-                sortOrder: index,
-                isActive: true,
-            })),
-        )
-        .returning();
+        if (!category) {
+            throw new Error(`Category with id ${pt.categoryId} not found`);
+        }
 
-    console.log(`Создано ${insertedSubCategories.length} подкатегорий`);
+        return {
+            title: pt.title,
+            slug: generateSlug(pt.title),
+            plural: pt.plural,
+            categoryId: category?.id,
+        };
+    });
 
-    const brandsData = [
-        {
-            title: 'Bosch',
-            slug: 'bosch',
-            country: 'Германия',
-        },
-        {
-            title: 'Samsung',
-            slug: 'samsung',
-            country: 'Южная Корея',
-        },
-        {
-            title: 'Redmond',
-            slug: 'redmond',
-            country: 'Россия',
-        },
-        {
-            title: 'Vitek',
-            slug: 'vitek',
-            country: 'Россия',
-        },
-        {
-            title: 'Polaris',
-            slug: 'polaris',
-            country: 'Великобритания',
-        },
-    ];
+    return await db.insert(productTypes).values(data).returning();
+}
 
-    const insertedBrands = await db.insert(brands).values(brandsData).returning();
-    console.log(`Создано ${insertedBrands.length} брендов`);
+async function seedSpecificationDefinitions(db: Database, productTypes: ProductTypeRecord[]) {
+    const data = specificationDefinitionsJson.specificationDefinitions.map((sd) => {
+        const productType = productTypes[Number(sd.productTypeId)];
 
-    const productTypesData = [
-        {
-            title: 'холодильник',
-            slug: 'holodilnik',
-            categoryId: insertedSubCategories[0].id,
-        },
-        {
-            title: 'мультиварка',
-            slug: 'multivarka',
-            categoryId: insertedSubCategories[5].id,
-        },
-    ];
+        if (!productType) {
+            throw new Error(`Product type with id ${sd.productTypeId} not found`);
+        }
 
-    const insertedProductTypes = await db.insert(productTypes).values(productTypesData).returning();
-    console.log(`Создано ${insertedProductTypes.length} типов товаров`);
+        return {
+            productTypeId: productType.id,
+            key: sd.key,
+            displayName: sd.displayName,
+            description: sd.description,
+            unit: sd.unit,
+            isFilterable: sd.isFilterable,
+        };
+    });
 
-    const usersData = [
+    return await db.insert(specificationDefinitions).values(data).returning();
+}
+
+async function seedUsers(db: Database) {
+    const data = [
         {
             email: 'admin@yandex.ru',
             passwordHash: await hash('admin123', 12),
@@ -168,96 +108,114 @@ async function generateTestData() {
         },
     ];
 
-    const insertedUsers = await db.insert(users).values(usersData).returning();
-    console.log(`Создано ${insertedUsers.length} пользователей`);
-
-    const productsData = [
-        {
-            title: 'Холодильник двухкамерный Bosch KGN86AW32U белый',
-            slug: 'holodilnik-dvuhkamernyi-bosch-kgn86aw32u-belyi',
-            categoryId: insertedSubCategories[0].id,
-            brandId: insertedBrands[0].id,
-            description:
-                'Холодильник с морозильником Bosch KGN86AW32U белого цвета имеет увеличенную холодильную и морозильную камеру, где можно хранить продукты для семьи из 3-5 человек.',
-            sku: 'KGN86AW32U',
-            status: 'active' as const,
-            basePrice: '138999',
-            costPrice: '80000',
-            stockQuantity: 4,
-            isFeatured: false,
-            warrantyMonths: 12,
-            specifications: {
-                productType: 'холодильник',
-                model: 'Bosch KGN86AW32U',
-                color: 'белый',
-                numberOfCameras: 'двухкамерный',
-                volume: '682 л',
-                energyConsumption: '378 кВтч/год',
-                maxFreezerTemperature: '-16 °C',
-            },
-        },
-        {
-            title: 'Холодильник двухкамерный Samsung RB33J3515WW/EF инвенторный белый',
-            slug: 'holodilnik-samsung-rb34j3515ww-ef-2-hkamern-belyi',
-            categoryId: insertedSubCategories[0].id,
-            brandId: insertedBrands[1].id,
-            description:
-                'Зона Cool Select+ позволяет вам настроить холодильник в соответствии с вашими текущими потребностями, регулируя температуру морозильника для определенного типа продуктов.',
-            sku: 'RB33J3515WW',
-            status: 'active' as const,
-            basePrice: '75250',
-            costPrice: '47600',
-            stockQuantity: 7,
-            isFeatured: false,
-            warrantyMonths: 12,
-            specifications: {
-                productType: 'холодильник',
-                model: 'Samsung RB33J3515WW/EF',
-                color: 'белый',
-                numberOfCameras: 'двухкамерный',
-                volume: '339 л',
-                energyConsumption: '253 кВтч/год',
-            },
-        },
-        {
-            title: 'Мультварка Redmond RMC-M95 черный',
-            slug: 'multivarka-redmond-rmc-m95-cerniy',
-            categoryId: insertedSubCategories[5].id,
-            brandId: insertedBrands[2].id,
-            description:
-                'Мультиварка Redmond RMC-M95 станет отличным приобретением для пользователей, не располагающих большим количеством свободного места на кухне, ведь это устройство смогло объединить в себе функционал сразу нескольких представителей кухонной техники.',
-            sku: 'RMC-M95',
-            status: 'active' as const,
-            basePrice: '7399',
-            costPrice: '3500',
-            stockQuantity: 30,
-            isFeatured: true,
-            warrantyMonths: 12,
-            specifications: {
-                productType: 'мультиварка',
-                model: 'Redmond RMC-M95',
-                color: 'черный',
-                power: '1000 Вт',
-                maxVolume: '5 л',
-                usefulVolume: '3.5 л',
-                material: ['металл', 'пластик'],
-                nonStickBowlCoating: 'керамика',
-                modes: ['выпечка', 'десерт', 'жарка', 'йогурт'],
-            },
-        },
-    ];
-
-    const insertedProducts = await db.insert(products).values(productsData).returning();
-    console.log(`Создано ${insertedProducts.length} товаров`);
-
-    await app.close();
+    return await db.insert(users).values(data).returning();
 }
 
-generateTestData()
-    .then(() => {
-        process.exit(0);
-    })
-    .catch((error: any) => {
-        console.log(`Генерация данных прервана ошибкой: ${error}`);
-        process.exit(1);
+function buildSpecifications(
+    productTypeId: string,
+    definitions: SpecificationDefinitionRecord[],
+    values: Record<string, unknown>,
+) {
+    const typeDefinitions = definitions.filter(
+        (definition) => definition.productTypeId === productTypeId,
+    );
+
+    const missingKeys = typeDefinitions
+        .map((definition) => definition.key)
+        .filter((key) => !(key in values));
+
+    if (missingKeys.length > 0) {
+        throw new Error(`Missing specification values for keys: ${missingKeys.join(', ')}`);
+    }
+
+    return typeDefinitions.reduce<Record<string, unknown>>((result, definition) => {
+        result[definition.key] = values[definition.key];
+        return result;
+    }, {});
+}
+
+async function seedProducts(
+    db: Database,
+    productTypes: ProductTypeRecord[],
+    brands: BrandRecord[],
+    specificationDefinitions: SpecificationDefinitionRecord[],
+) {
+    const data = productsJson.products.map((product) => {
+        const productType = productTypes.find((type) => type.title === product.productTypeTitle);
+
+        if (!productType) {
+            throw new Error(`Product type not found: ${product.productTypeTitle}`);
+        }
+
+        if (!productType.categoryId) {
+            throw new Error(`Product type categoryId is missing: ${product.productTypeTitle}`);
+        }
+
+        const brand = brands[product.brandIndex];
+
+        if (!brand) {
+            throw new Error(`Brand with index ${product.brandIndex} not found`);
+        }
+
+        return {
+            title: product.title,
+            slug: generateSlug(product.title),
+            categoryId: productType.categoryId,
+            productTypeId: productType.id,
+            brandId: brand.id,
+            description: product.description,
+            sku: product.sku,
+            status: product.status as ProductInsert['status'],
+            basePrice: product.basePrice,
+            discountPrice: product.discountPrice ?? null,
+            costPrice: product.costPrice,
+            stockQuantity: product.stockQuantity,
+            isFeatured: product.isFeatured,
+            warrantyMonths: product.warrantyMonths,
+            specifications: buildSpecifications(
+                productType.id,
+                specificationDefinitions,
+                product.specifications,
+            ),
+        };
     });
+
+    return await db.insert(products).values(data).returning();
+}
+
+async function generateTestData() {
+    console.log('Запуск скрипта генерации тестовых данных');
+
+    const connectionString = `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
+
+    const client = postgres(connectionString, {
+        ssl: false,
+    });
+    const db = drizzle(client, { schema });
+
+    const categories = await seedCategories(db);
+    console.log(`Создано ${categories.length} категорий`);
+
+    const productTypes = await seedProductTypes(db, categories);
+    console.log(`Создано ${productTypes.length} типов продуктов`);
+
+    const brands = await seedBrands(db);
+    console.log(`Создано ${brands.length} брендов`);
+
+    const specificationDefinitions = await seedSpecificationDefinitions(db, productTypes);
+    console.log(`Создано ${specificationDefinitions.length} определений спецификаций`);
+
+    const users = await seedUsers(db);
+    console.log(`Создано ${users.length} пользователей`);
+
+    const seededProducts = await seedProducts(db, productTypes, brands, specificationDefinitions);
+    console.log(`Создано ${seededProducts.length} товаров`);
+
+    await client.end();
+    console.log('Генерация данных завершена');
+}
+
+generateTestData().catch((error) => {
+    console.error('Ошибка при генерации данных:', error);
+    process.exit(1);
+});
