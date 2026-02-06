@@ -10,6 +10,6 @@ export const apolloBrowserClient = new ApolloClient({
     defaultOptions: {
         query: {
             fetchPolicy: 'cache-first',
-        }
-    }
+        },
+    },
 });

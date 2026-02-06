@@ -5,11 +5,9 @@ import { print } from 'graphql';
 
 const GRAPHQL_URL = process.env.GRAPHQL_API ?? 'http://localhost:3000/graphql';
 
-console.log(GRAPHQL_URL);
-
-export async function graphqlFetch<TData, TVars = Record<string, unknown>> (
+export async function graphqlFetch<TData, TVars = Record<string, unknown>>(
     query: DocumentNode,
-    variables: TVars,
+    variables?: TVars,
 ): Promise<TData> {
     const response = await fetch(GRAPHQL_URL, {
         method: 'POST',
