@@ -6,6 +6,7 @@ export const CATALOG_PRODUCTS = gql`
         $limit: Int
         $categoryId: ID
         $brandId: ID
+        $productTypeId: ID
         $minPrice: Float
         $maxPrice: Float
         $search: String
@@ -17,6 +18,7 @@ export const CATALOG_PRODUCTS = gql`
             limit: $limit
             categoryId: $categoryId
             brandId: $brandId
+            productTypeId: $productTypeId
             minPrice: $minPrice
             maxPrice: $maxPrice
             search: $search

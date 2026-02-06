@@ -8,7 +8,7 @@ const priceFormatter = new Intl.NumberFormat(
         style: 'currency',
         currency: 'RUB',
         maximumFractionDigits: 0,
-    }
+    },
 );
 
 export type Price = Readonly<string>;

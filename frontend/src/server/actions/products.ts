@@ -10,7 +10,7 @@ export async function getCatalogProducts(variables?: CatalogProductsQueryVariabl
         variables ?? {},
     );
 
-    return data;
+    return data?.products ?? null;
 }
 
 export async function getProductBySlug(slug: string) {

@@ -49,6 +49,7 @@ export type Category = {
   isActive: Scalars['Boolean']['output'];
   parent?: Maybe<Category>;
   parentId?: Maybe<Scalars['ID']['output']>;
+  productTypes: Array<ProductType>;
   slug: Scalars['String']['output'];
   sortOrder: Scalars['Int']['output'];
   title: Scalars['String']['output'];
@@ -92,7 +93,7 @@ export type CreateProductInput = {
 };
 
 export type CreateProductTypeInput = {
-  categoryId?: InputMaybe<Scalars['ID']['input']>;
+  categoryId: Scalars['ID']['input'];
   plural: Scalars['String']['input'];
   title: Scalars['String']['input'];
 };
@@ -379,7 +380,7 @@ export type ProductStatus =
 
 export type ProductType = {
   __typename?: 'ProductType';
-  categoryId?: Maybe<Scalars['ID']['output']>;
+  categoryId: Scalars['ID']['output'];
   createdAt: Scalars['DateTime']['output'];
   deletedAt?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
@@ -421,7 +422,7 @@ export type QueryBrandBySlugArgs = {
 
 export type QueryBrandsArgs = {
   includeInactive?: InputMaybe<Scalars['Boolean']['input']>;
-  limit?: Scalars['Int']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
   page?: Scalars['Int']['input'];
   search?: InputMaybe<Scalars['String']['input']>;
 };
@@ -429,7 +430,7 @@ export type QueryBrandsArgs = {
 
 export type QueryCategoriesArgs = {
   includeInactive?: InputMaybe<Scalars['Boolean']['input']>;
-  limit?: Scalars['Int']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
   page?: Scalars['Int']['input'];
   parentId?: InputMaybe<Scalars['ID']['input']>;
   rootOnly?: InputMaybe<Scalars['Boolean']['input']>;
@@ -470,7 +471,7 @@ export type QueryProductTypeBySlugArgs = {
 export type QueryProductTypesArgs = {
   categoryId?: InputMaybe<Scalars['ID']['input']>;
   includeInactive?: InputMaybe<Scalars['Boolean']['input']>;
-  limit?: Scalars['Int']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
   page?: Scalars['Int']['input'];
   search?: InputMaybe<Scalars['String']['input']>;
 };
@@ -481,7 +482,7 @@ export type QueryProductsArgs = {
   categoryId?: InputMaybe<Scalars['ID']['input']>;
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   isFeatured?: InputMaybe<Scalars['Boolean']['input']>;
-  limit?: Scalars['Int']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
   maxPrice?: InputMaybe<Scalars['Float']['input']>;
   minPrice?: InputMaybe<Scalars['Float']['input']>;
   page?: Scalars['Int']['input'];
@@ -499,7 +500,7 @@ export type QuerySpecificationDefinitionArgs = {
 export type QuerySpecificationDefinitionsArgs = {
   displayNameSearch?: InputMaybe<Scalars['String']['input']>;
   includeInactive?: InputMaybe<Scalars['Boolean']['input']>;
-  limit?: Scalars['Int']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
   page?: Scalars['Int']['input'];
   productTypeId?: InputMaybe<Scalars['ID']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;
@@ -584,11 +585,31 @@ export type UpdateSpecificationDefinitionInput = {
   unit?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type CategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CategoriesQuery = { __typename?: 'Query', categories: { __typename?: 'PaginatedCategories', items: Array<{ __typename?: 'Category', id: string, title: string, slug: string, imageUrl?: string | null, sortOrder: number }> } };
+
+export type CategoryBySlugQueryVariables = Exact<{
+  slug: Scalars['String']['input'];
+}>;
+
+
+export type CategoryBySlugQuery = { __typename?: 'Query', categoryBySlug: { __typename?: 'Category', title: string, imageUrl?: string | null, productTypes: Array<{ __typename?: 'ProductType', id: string, plural: string }> } };
+
+export type ProductTypesQueryVariables = Exact<{
+  categoryId?: InputMaybe<Scalars['ID']['input']>;
+}>;
+
+
+export type ProductTypesQuery = { __typename?: 'Query', productTypes: { __typename?: 'PaginatedProductTypes', items: Array<{ __typename?: 'ProductType', id: string, slug: string, title: string, plural: string, categoryId: string }> } };
+
 export type CatalogProductsQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   categoryId?: InputMaybe<Scalars['ID']['input']>;
   brandId?: InputMaybe<Scalars['ID']['input']>;
+  productTypeId?: InputMaybe<Scalars['ID']['input']>;
   minPrice?: InputMaybe<Scalars['Float']['input']>;
   maxPrice?: InputMaybe<Scalars['Float']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;

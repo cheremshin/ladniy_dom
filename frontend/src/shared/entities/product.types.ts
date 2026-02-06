@@ -1,8 +1,9 @@
 import { BrandBase } from './brand.types';
-import { CategoryBase } from './category.types';
 import { Id, Price, Slug } from './common.types';
 import { ProductImage } from './product-image.types';
-import { ProductTypeBase } from './product-type.types';
+import { type ProductTypesQuery } from '../api/graphql/__generated__/types';
+
+export type ProductTypeDTO = ProductTypesQuery['productTypes']['items'][number];
 
 export type ProductPricing = Readonly<{
     base: Price;
@@ -19,7 +20,7 @@ export enum ProductStatus {
 export type ProductPreview = Readonly<{
     id: Id;
     slug: Slug;
-    
+
     title: string;
 
     pricing: ProductPricing;
@@ -27,7 +28,7 @@ export type ProductPreview = Readonly<{
 
     isFeatured: boolean;
     stockQuantity: number;
-    
+
     primaryImage?: ProductImage | null;
     images?: ProductImage[] | null;
 }>;
@@ -55,7 +56,7 @@ export type ProductOverview = Readonly<{
 }>;
 
 export type ProductDetails = Readonly<{
-    description?: string | null;
-    specifications: ProductSpecification | null;
+    description: string;
+    specifications: ProductSpecification;
     warrantyMonths: number;
 }>;

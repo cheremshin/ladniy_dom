@@ -1,4 +1,4 @@
-import { CatalogProductsQuery, Product, ProductPageQuery } from '../api/graphql/__generated__/types';
+import { CatalogProductsQuery, ProductPageQuery } from '../api/graphql/__generated__/types';
 import { formatPrice } from '../entities/common.types';
 import { ProductDetails, ProductOverview, ProductPreview, ProductSpecification, ProductStatus } from '../entities/product.types';
 import { mapImageUrlValueToRealUrl } from './image-url.mapper';
@@ -15,9 +15,9 @@ function mapRawSpecsToProductSpecification(
     const specDefMap = new Map((specificationDefinitions ?? []).map(def => [def.key, def]));
 
     Object.entries(specifications ?? {}).forEach(([key, value]) => {
-        const isAllowedType = typeof value === 'string' ||
-                              typeof value === 'number' ||
-                              typeof value === 'boolean';
+        const isAllowedType = typeof value === 'string'
+            || typeof value === 'number'
+            || typeof value === 'boolean';
 
         if (!isAllowedType) return;
 
@@ -91,8 +91,8 @@ export function mapProductToProductOverview(product: ProductPageItem): ProductOv
 
 export function mapProductToProductDetails(product: ProductPageItem): ProductDetails {
     return {
-        description: product.description,
+        description: product.description ?? '',
         specifications: mapRawSpecsToProductSpecification(product.specifications, product.specificationDefinitions),
         warrantyMonths: product.warrantyMonths,
-    }
+    };
 }
