@@ -20,6 +20,7 @@ body {
 
     background: var(--color-background-secondary);
     font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
 }
 
 img,
@@ -64,14 +65,15 @@ h6 {
 
     --color-background-main: #FFFFFF;
     --color-background-secondary: #F7FAFC;
+    --color-background-tertiary:#e9ebed;
 
     --color-text-main: #1C1C1C;
     --color-text-secondary: #505050;
     --color-text-tertiary: #8B96A5;
-    --color-text-accent: rgb(255, 48, 11);
+    --color-text-accent: #0D6EFD;
 
     --color-link: #1C1C1C;
-    --color-link-hover: #0D6EFD;
+    --color-link-hover:rgb(44, 114, 220);
 
     --color-border: #DEE2E7;
     --color-border-secondary: #E0E0E0;
