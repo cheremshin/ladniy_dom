@@ -1,0 +1,45 @@
+.category-card {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+    padding: 20px 40px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.category-card__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: linear-gradient(to right, #FFFFFF 30%,rgba(48, 48, 48, 0.37));
+}
+
+.category-card__overlay::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, #FFFFFF 50%, rgba(48, 48, 48, 0.37));
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.category-card__cover {
+    position: absolute;
+    z-index: -2;
+}
+
+.category-card__title {
+    color: var(--color-link);
+    font-size: 30px;
+    line-height: 22px;
+    transition: color 0.3s ease;
+}
