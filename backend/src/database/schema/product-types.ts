@@ -21,7 +21,7 @@ export const productTypes = pgTable(
         plural: varchar('plural', { length: 128 }).notNull(),
         slug: varchar('slug', { length: 128 }).notNull(),
 
-        categoryId: uuid('category_id'),
+        categoryId: uuid('category_id').notNull(),
 
         createdAt: timestampDefaultNow('created_at'),
         updatedAt: timestampDefaultNow('updated_at'),
@@ -32,7 +32,7 @@ export const productTypes = pgTable(
             columns: [table.categoryId],
             foreignColumns: [categories.id],
             name: 'product_types_category_fkey',
-        }).onDelete('set null'),
+        }).onDelete('restrict'),
 
         uniqueIndex('product_types_title_key').on(sql`lower(title)`),
         uniqueIndex('product_types_slug_key').on(sql`lower(slug)`),

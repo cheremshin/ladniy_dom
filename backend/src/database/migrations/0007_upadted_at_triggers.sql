@@ -12,7 +12,7 @@ DROP FUNCTION IF EXISTS set_updated_at();
 CREATE OR REPLACE FUNCTION set_updated_at()
 RETURNS trigger AS $$
 BEGIN
-    NEW.updated_at = clock_timestamp();
+    NEW.updated_at = CURRENT_TIMESTAMP;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
