@@ -16,7 +16,7 @@ export const Button: FC<PropsT> = ({
 }) => (
     <button
         className={clsx('base-button', `base-button-${variant}`, className)}
-        type='button'
+        type="button"
         {...props}
     >
         {children}
