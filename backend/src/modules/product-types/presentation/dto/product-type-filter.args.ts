@@ -7,7 +7,7 @@ export class ProductTypeFilterArgs extends PaginationArgs {
     @Field(() => ID, { nullable: true, description: 'Фильтр по категории' })
     @IsOptional()
     @IsUUID()
-    categoryId?: string | null;
+    categoryId?: string;
 
     @Field({ nullable: true, description: 'Фильтр на удаленные элементы' })
     @IsOptional()

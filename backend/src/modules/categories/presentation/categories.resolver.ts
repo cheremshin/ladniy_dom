@@ -14,6 +14,7 @@ import { CategoryFilterArgs } from './dto/category-filter.args';
 import { CreateCategoryInput, UpdateCategoryInput } from './dto/category.input';
 import { buildPaginatedResponse } from '@/common/presentation/utils/pagination.helper';
 import { Paginated } from '@/common/presentation/dto/paginated.response';
+import { ProductType } from '@/modules/product-types/presentation/entities/product-type.entity';
 
 @ObjectType()
 class PaginatedCategories extends Paginated(Category) {}
@@ -26,9 +27,25 @@ export class CategoriesResolver {
     async getCategories(
         @Args({ nullable: true }) filters?: CategoryFilterArgs,
     ): Promise<PaginatedCategories> {
-        const { page = 1, limit = 20, ...serviceFilters } = filters || {};
-        const offset = (page - 1) * limit;
+        const { page = 1, limit, ...serviceFilters } = filters || {};
 
+        if (limit == null) {
+            const result = await this.categoriesService.findAll(serviceFilters);
+            const total = result.total;
+            return {
+                items: result.items,
+                meta: {
+                    total,
+                    page: 1,
+                    limit: total,
+                    totalPages: total > 0 ? 1 : 0,
+                    hasNextPage: false,
+                    hasPrevPage: false,
+                },
+            };
+        }
+
+        const offset = (page - 1) * limit;
         const result = await this.categoriesService.findAll(serviceFilters, offset, limit);
         return buildPaginatedResponse<Category>(result, page, limit);
     }
@@ -52,6 +69,11 @@ export class CategoriesResolver {
     @ResolveField(() => [Category])
     async children(@Parent() category: Category): Promise<Category[]> {
         return this.categoriesService.findChildren(category.id, true);
+    }
+
+    @ResolveField(() => [ProductType])
+    async productTypes(@Parent() category: Category): Promise<ProductType[]> {
+        return this.categoriesService.findProductTypes(category.id);
     }
 
     @Mutation(() => Category)

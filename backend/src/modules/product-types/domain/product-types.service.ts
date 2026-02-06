@@ -3,6 +3,7 @@ import { DATABASE_CONNECTION } from '@/database/database.provider';
 import {
     BadRequestException,
     ConflictException,
+    forwardRef,
     Inject,
     Injectable,
     NotFoundException,
@@ -16,7 +17,7 @@ import { generateSlug } from '@/common/presentation/utils/slug.util';
 export type ProductTypeRecord = typeof productTypes.$inferSelect;
 
 export type ProductTypeFilters = {
-    categoryId?: string | null;
+    categoryId?: string;
     includeInactive?: boolean;
     search?: string;
 };
@@ -24,7 +25,7 @@ export type ProductTypeFilters = {
 export type CreateProductTypeData = {
     title: string;
     plural: string;
-    categoryId?: string | null;
+    categoryId: string;
 };
 
 export type UpdateProductTypeData = Partial<CreateProductTypeData> & {
@@ -36,6 +37,7 @@ export class ProductTypesService {
     constructor(
         @Inject(DATABASE_CONNECTION)
         private readonly db: Database,
+        @Inject(forwardRef(() => CategoriesService))
         private readonly categoriesService: CategoriesService,
     ) {}
 
@@ -97,7 +99,7 @@ export class ProductTypesService {
                 throw new ConflictException(`Product type with slug "${slug}" already exists`);
             }
 
-            if (data.categoryId !== undefined && data.categoryId !== null) {
+            if (data.categoryId !== undefined) {
                 await this.categoriesService.findOne(data.categoryId);
             }
 
@@ -107,7 +109,7 @@ export class ProductTypesService {
                     title: data.title,
                     slug: slug,
                     plural: data.plural,
-                    categoryId: data.categoryId ?? null,
+                    categoryId: data.categoryId,
                 })
                 .returning();
 
@@ -138,7 +140,7 @@ export class ProductTypesService {
                 slug = generateSlug(data.title.trim());
             }
 
-            if (data.categoryId !== undefined && data.categoryId !== null) {
+            if (data.categoryId !== undefined) {
                 await this.categoriesService.findOne(data.categoryId);
             }
 
@@ -247,11 +249,7 @@ export class ProductTypesService {
         const conditions: SQL[] = [];
 
         if (filters.categoryId !== undefined) {
-            if (filters.categoryId === null) {
-                conditions.push(isNull(productTypes.categoryId));
-            } else {
-                conditions.push(eq(productTypes.categoryId, filters.categoryId));
-            }
+            conditions.push(eq(productTypes.categoryId, filters.categoryId));
         }
 
         if (filters.search && filters.search.trim()) {

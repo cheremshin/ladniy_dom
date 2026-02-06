@@ -2,6 +2,7 @@ import { DATABASE_CONNECTION } from '@/database/database.provider';
 import {
     BadRequestException,
     ConflictException,
+    forwardRef,
     Inject,
     Injectable,
     NotFoundException,
@@ -11,6 +12,11 @@ import { categories, products } from '@/database/schema';
 import { ListResult } from '@/common/domain/list-result.type';
 import { SQL, isNull, eq, ilike, and, asc, count, sql } from 'drizzle-orm';
 import { generateSlug } from '@/common/presentation/utils/slug.util';
+import { FilesService } from '@/modules/files/domain/files.service';
+import {
+    type ProductTypeRecord,
+    ProductTypesService,
+} from '@/modules/product-types/domain/product-types.service';
 
 export type CategoryRecord = typeof categories.$inferSelect;
 
@@ -38,24 +44,33 @@ export class CategoriesService {
     constructor(
         @Inject(DATABASE_CONNECTION)
         private readonly db: Database,
+        @Inject(forwardRef(() => ProductTypesService))
+        private readonly productTypesService: ProductTypesService,
+        private readonly filesService: FilesService,
     ) {}
 
     async findAll(
         filters: CategoryFilters,
         offset: number = 0,
-        limit: number = 20,
+        limit?: number,
     ): Promise<ListResult<CategoryRecord>> {
         const conditions = this.buildFilterConditions(filters);
         const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
         const [items, [{ total }]] = await Promise.all([
-            this.db
-                .select()
-                .from(categories)
-                .where(whereClause)
-                .orderBy(asc(categories.sortOrder), asc(categories.title))
-                .limit(limit)
-                .offset(offset),
+            (() => {
+                const query = this.db
+                    .select()
+                    .from(categories)
+                    .where(whereClause)
+                    .orderBy(asc(categories.sortOrder), asc(categories.title));
+
+                if (limit !== undefined) {
+                    return query.limit(limit).offset(offset);
+                }
+
+                return query;
+            })(),
 
             this.db.select({ total: count() }).from(categories).where(whereClause),
         ]);
@@ -103,6 +118,10 @@ export class CategoriesService {
             .from(categories)
             .where(and(...conditions))
             .orderBy(asc(categories.sortOrder), asc(categories.title));
+    }
+
+    async findProductTypes(categoryId: string): Promise<ProductTypeRecord[]> {
+        return (await this.productTypesService.findAll({ categoryId })).items;
     }
 
     async findParent(parentId: string): Promise<CategoryRecord | null> {
@@ -183,6 +202,15 @@ export class CategoriesService {
                 await this.findOne(data.parentId);
             }
 
+            if (data.imageUrl) {
+                const file = await this.filesService.findByPath(data.imageUrl);
+                if (!file) {
+                    throw new BadRequestException('No such image');
+                }
+            }
+
+            console.log(data);
+
             const { parentId, ...rest } = data;
 
             const updateData: Partial<typeof categories.$inferInsert> = {
@@ -198,6 +226,8 @@ export class CategoriesService {
             if (Object.keys(updatePatch).length === 0) {
                 return this.findOne(id);
             }
+
+            console.log(updatePatch);
 
             const [updated] = await tx
                 .update(categories)

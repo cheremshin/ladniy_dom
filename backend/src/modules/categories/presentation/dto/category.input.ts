@@ -1,5 +1,5 @@
 import { InputType, Field, ID, Int, PartialType, OmitType } from '@nestjs/graphql';
-import { IsNotEmpty, IsOptional, IsUrl, Min, Matches } from 'class-validator';
+import { IsNotEmpty, IsOptional, Min, Matches } from 'class-validator';
 
 @InputType()
 export class CreateCategoryInput {
@@ -13,7 +13,6 @@ export class CreateCategoryInput {
 
     @Field(() => String, { nullable: true })
     @IsOptional()
-    @IsUrl()
     imageUrl?: string;
 
     @Field(() => Int, { defaultValue: 0 })

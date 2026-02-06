@@ -11,9 +11,9 @@ export class CreateProductTypeInput {
     @IsNotEmpty()
     plural: string;
 
-    @Field(() => ID, { nullable: true })
-    @IsOptional()
-    categoryId?: string | null;
+    @Field(() => ID)
+    @IsNotEmpty()
+    categoryId: string;
 }
 
 @InputType()

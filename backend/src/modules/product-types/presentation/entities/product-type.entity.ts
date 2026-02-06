@@ -14,8 +14,8 @@ export class ProductType {
     @Field(() => String)
     slug: string;
 
-    @Field(() => ID, { nullable: true })
-    categoryId: string | null;
+    @Field(() => ID)
+    categoryId: string;
 
     @Field(() => Date)
     createdAt: Date;
