@@ -55,13 +55,14 @@ h6 {
     overflow-wrap: break-word;
 }
 
-.page {
-    max-width: 1200px;
-    margin: 0 auto;
+main {
+    margin: 40px calc(var(--spacing) * 8);
 }
 
 :root {
     color-scheme: light;
+
+    --spacing: 16px;
 
     --color-background-main: #FFFFFF;
     --color-background-secondary: #F7FAFC;

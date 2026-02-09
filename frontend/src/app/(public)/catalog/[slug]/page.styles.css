@@ -1,0 +1,12 @@
+.catalog-page {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.catalog-page__header {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}

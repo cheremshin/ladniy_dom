@@ -1,6 +1,7 @@
 import { Providers } from './providers';
 import type { Metadata } from 'next';
-import { Header } from '@/components/entities/header/server/Header';
+import { Header } from '@/components/widgets/header';
+
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -14,9 +15,7 @@ export default function RootLayout({ children }: Readonly<LayoutProps<'/'>>) {
             <body>
                 <Providers>
                     <Header />
-                    <div className='page'>
-                        {children}
-                    </div>
+                    {children}
                 </Providers>
             </body>
         </html>
