@@ -104,30 +104,15 @@
 .product-overview-card__buttons {
     margin-top: 100px;
     display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
     gap: 8px;
-    justify-content: flex-end;
-
-    .base-button {
-        height: 60px;
-    }
-
-    .base-button-primary {
-        width: 300px;
-    }
 }
 
-.product-overview-card__buttons .favourite-icon--active {
-    background: var(--color-action-secondary-hovered);
-
-    svg {
-        fill: var(--color-action-foreground-secondary-active);
-    }
+.product-overview-card__buttons .base-button {
+    padding: 18px 30px;
 }
 
-.product-overview-card__buttons .favourite-icon--active:hover {
-    background: var(--color-action-secondary-active-hovered);
-
-    svg {
-        fill: var(--color-action-foreground-secondary-active);
-    }
+.product-overview-card__buttons .base-button:first-child {
+    width: 300px;
 }
