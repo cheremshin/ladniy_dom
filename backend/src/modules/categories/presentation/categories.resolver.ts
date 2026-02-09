@@ -15,6 +15,7 @@ import { CreateCategoryInput, UpdateCategoryInput } from './dto/category.input';
 import { buildPaginatedResponse } from '@/common/presentation/utils/pagination.helper';
 import { Paginated } from '@/common/presentation/dto/paginated.response';
 import { ProductType } from '@/modules/product-types/presentation/entities/product-type.entity';
+import { RequireAdmin } from '@/modules/auth/decorators/require-admin.decorator';
 
 @ObjectType()
 class PaginatedCategories extends Paginated(Category) {}
@@ -77,27 +78,32 @@ export class CategoriesResolver {
     }
 
     @Mutation(() => Category)
+    @RequireAdmin()
     async createCategory(@Args('input') input: CreateCategoryInput): Promise<Category> {
         return this.categoriesService.create(input);
     }
 
     @Mutation(() => Category)
+    @RequireAdmin()
     async updateCategory(@Args('input') input: UpdateCategoryInput): Promise<Category> {
         const { id, ...data } = input;
         return this.categoriesService.update(id, data);
     }
 
     @Mutation(() => Category)
+    @RequireAdmin()
     async hardDeleteCategory(@Args('id', { type: () => ID }) id: string): Promise<Category> {
         return this.categoriesService.delete(id);
     }
 
     @Mutation(() => Category)
+    @RequireAdmin()
     async softDeleteCategory(@Args('id', { type: () => ID }) id: string): Promise<Category> {
         return this.categoriesService.softDelete(id);
     }
 
     @Mutation(() => Category)
+    @RequireAdmin()
     async restoreCategory(@Args('id', { type: () => ID }) id: string): Promise<Category> {
         return this.categoriesService.restore(id);
     }

@@ -6,16 +6,16 @@ import { PaginationArgs } from '@/common/presentation/dto/pagination.args';
 export class ProductTypeFilterArgs extends PaginationArgs {
     @Field(() => ID, { nullable: true, description: 'Фильтр по категории' })
     @IsOptional()
-    @IsUUID()
+    @IsUUID(4, { message: 'categoryId must be a valid UUID' })
     categoryId?: string;
 
-    @Field({ nullable: true, description: 'Фильтр на удаленные элементы' })
+    @Field(() => Boolean, { nullable: true, description: 'Фильтр на удаленные элементы' })
     @IsOptional()
-    @IsBoolean()
+    @IsBoolean({ message: 'includeInactive must be a boolean' })
     includeInactive?: boolean;
 
-    @Field({ nullable: true, description: 'Поиск по названию' })
+    @Field(() => String, { nullable: true, description: 'Поиск по названию' })
     @IsOptional()
-    @IsString()
+    @IsString({ message: 'search must be a string' })
     search?: string;
 }

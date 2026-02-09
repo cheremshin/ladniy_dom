@@ -5,6 +5,7 @@ import { ProductTypesService } from '../domain/product-types.service';
 import { ProductTypeFilterArgs } from './dto/product-type-filter.args';
 import { buildPaginatedResponse } from '@/common/presentation/utils/pagination.helper';
 import { CreateProductTypeInput, UpdateProductTypeInput } from './dto/product-type.input';
+import { RequireAdmin } from '@/modules/auth/decorators/require-admin.decorator';
 
 @ObjectType()
 export class PaginatedProductTypes extends Paginated(ProductType) {}
@@ -35,27 +36,32 @@ export class ProductTypesResolver {
     }
 
     @Mutation(() => ProductType, { name: 'createProductType' })
+    @RequireAdmin()
     async createProductType(@Args('input') input: CreateProductTypeInput): Promise<ProductType> {
         return this.productTypesService.create(input);
     }
 
     @Mutation(() => ProductType, { name: 'updateProductType' })
+    @RequireAdmin()
     async updateProductType(@Args('input') input: UpdateProductTypeInput): Promise<ProductType> {
         const { id, ...data } = input;
         return this.productTypesService.update(id, data);
     }
 
     @Mutation(() => ProductType, { name: 'hardDeleteProductType' })
+    @RequireAdmin()
     async hardDeleteProductType(@Args('id', { type: () => ID }) id: string): Promise<ProductType> {
         return this.productTypesService.hardDelete(id);
     }
 
     @Mutation(() => ProductType, { name: 'softDeleteProductType' })
+    @RequireAdmin()
     async softDeleteProductType(@Args('id', { type: () => ID }) id: string): Promise<ProductType> {
         return this.productTypesService.softDelete(id);
     }
 
     @Mutation(() => ProductType, { name: 'restoreProductType' })
+    @RequireAdmin()
     async restoreProductType(@Args('id', { type: () => ID }) id: string): Promise<ProductType> {
         return this.productTypesService.restore(id);
     }

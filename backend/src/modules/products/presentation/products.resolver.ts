@@ -25,6 +25,7 @@ import { ProductTypesService } from '@/modules/product-types/domain/product-type
 import { Category } from '@/modules/categories/presentation/entities/category.entity';
 import { Brand } from '@/modules/brands/presentation/entities/brand.entity';
 import { ProductType } from '@/modules/product-types/presentation/entities/product-type.entity';
+import { RequireAdmin } from '@/modules/auth/decorators/require-admin.decorator';
 
 @ObjectType()
 class PaginatedProducts extends Paginated(Product) {}
@@ -103,6 +104,7 @@ export class ProductsResolver {
     }
 
     @Mutation(() => Product)
+    @RequireAdmin()
     async createProduct(@Args('input') input: CreateProductInput): Promise<Product> {
         const product = await this.productsService.create({
             ...input,
@@ -117,6 +119,7 @@ export class ProductsResolver {
     }
 
     @Mutation(() => Product)
+    @RequireAdmin()
     async updateProduct(@Args('input') input: UpdateProductInput): Promise<Product> {
         const { id, ...data } = input;
         const product = await this.productsService.update(id, {
@@ -132,29 +135,34 @@ export class ProductsResolver {
     }
 
     @Mutation(() => Product)
+    @RequireAdmin()
     async softDeleteProduct(@Args('id', { type: () => ID }) id: string): Promise<Product> {
         const product = await this.productsService.softDelete(id);
         return this.mapToEntity(product);
     }
 
     @Mutation(() => Product)
+    @RequireAdmin()
     async restoreProduct(@Args('id', { type: () => ID }) id: string): Promise<Product> {
         const product = await this.productsService.restore(id);
         return this.mapToEntity(product);
     }
 
     @Mutation(() => Product)
+    @RequireAdmin()
     async hardDeleteProduct(@Args('id', { type: () => ID }) id: string): Promise<Product> {
         const product = await this.productsService.hardDelete(id);
         return this.mapToEntity(product);
     }
 
     @Mutation(() => ProductImage)
+    @RequireAdmin()
     async attachProductImage(@Args('input') input: AttachImageInput): Promise<ProductImage> {
         return this.productsService.attachImage(input);
     }
 
     @Mutation(() => ProductImage)
+    @RequireAdmin()
     async detachProductImage(
         @Args('imageId', { type: () => ID }) imageId: string,
     ): Promise<ProductImage> {
@@ -162,6 +170,7 @@ export class ProductsResolver {
     }
 
     @Mutation(() => ProductImage)
+    @RequireAdmin()
     async setProductPrimaryImage(
         @Args('imageId', { type: () => ID }) imageId: string,
     ): Promise<ProductImage> {

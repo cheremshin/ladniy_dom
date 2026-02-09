@@ -111,15 +111,6 @@ export class Product {
     @Field(() => String, { nullable: true })
     metaDescription: string | null;
 
-    @Field()
-    createdAt: Date;
-
-    @Field()
-    updatedAt: Date;
-
-    @Field(() => Date, { nullable: true })
-    deletedAt: Date | null;
-
     @Field(() => ProductImage, { nullable: true })
     primaryImage?: ProductImage | null;
 

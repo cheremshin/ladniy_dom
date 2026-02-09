@@ -16,13 +16,4 @@ export class ProductType {
 
     @Field(() => ID)
     categoryId: string;
-
-    @Field(() => Date)
-    createdAt: Date;
-
-    @Field(() => Date)
-    updatedAt: Date;
-
-    @Field(() => String, { nullable: true })
-    deletedAt: Date | null;
 }

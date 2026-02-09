@@ -5,9 +5,10 @@ import { ProductsResolver } from './presentation/products.resolver';
 import { CategoriesModule } from '../categories/categories.module';
 import { ProductTypesModule } from '../product-types/product-types.module';
 import { FilesModule } from '../files/files.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-    imports: [CategoriesModule, BrandsModule, ProductTypesModule, FilesModule],
+    imports: [CategoriesModule, BrandsModule, ProductTypesModule, FilesModule, AuthModule],
     providers: [ProductsService, ProductsResolver],
     exports: [ProductsService],
 })

@@ -5,10 +5,10 @@ export class Brand {
     @Field(() => ID)
     id: string;
 
-    @Field()
+    @Field(() => String)
     title: string;
 
-    @Field()
+    @Field(() => String)
     slug: string;
 
     @Field(() => String, { nullable: true })
@@ -23,15 +23,6 @@ export class Brand {
     @Field(() => String, { nullable: true })
     website: string | null;
 
-    @Field()
+    @Field(() => Boolean)
     isActive: boolean;
-
-    @Field()
-    createdAt: Date;
-
-    @Field()
-    updatedAt: Date;
-
-    @Field(() => String, { nullable: true })
-    deletedAt: Date | null;
 }

@@ -8,10 +8,10 @@ export class Category {
     @Field(() => ID, { nullable: true })
     parentId: string | null;
 
-    @Field()
+    @Field(() => String)
     title: string;
 
-    @Field()
+    @Field(() => String)
     slug: string;
 
     @Field(() => String, { nullable: true })
@@ -20,13 +20,13 @@ export class Category {
     @Field(() => Int)
     sortOrder: number;
 
-    @Field()
+    @Field(() => Boolean)
     isActive: boolean;
 
-    @Field()
+    @Field(() => Date)
     createdAt: Date;
 
-    @Field()
+    @Field(() => Date)
     updatedAt: Date;
 
     @Field(() => String, { nullable: true })

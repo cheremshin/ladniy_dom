@@ -1,18 +1,21 @@
 import { Field, ID, InputType, OmitType, PartialType } from '@nestjs/graphql';
-import { IsNotEmpty, IsOptional, Matches } from 'class-validator';
+import { IsNotEmpty, IsOptional, Matches, IsString, IsUUID } from 'class-validator';
 
 @InputType()
 export class CreateProductTypeInput {
     @Field(() => String)
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'title is required' })
+    @IsString({ message: 'title must be a string' })
     title: string;
 
     @Field(() => String)
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'plural is required' })
+    @IsString({ message: 'plural must be a string' })
     plural: string;
 
     @Field(() => ID)
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'categoryId is required' })
+    @IsUUID(4, { message: 'categoryId must be a valid UUID' })
     categoryId: string;
 }
 
@@ -21,19 +24,23 @@ export class UpdateProductTypeInput extends PartialType(
     OmitType(CreateProductTypeInput, ['title', 'plural'] as const),
 ) {
     @Field(() => ID)
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'id is required' })
+    @IsUUID(4, { message: 'id must be a valid UUID' })
     id: string;
 
     @Field(() => String, { nullable: true })
     @IsOptional()
+    @IsString({ message: 'title must be a string' })
     title?: string;
 
     @Field(() => String, { nullable: true })
     @IsOptional()
+    @IsString({ message: 'plural must be a string' })
     plural?: string;
 
     @Field(() => String, { nullable: true })
     @IsOptional()
     @Matches(/^[a-z0-9-]+$/, { message: 'Slug must be lowercase with hyphens only' })
+    @IsString({ message: 'slug must be a string' })
     slug?: string;
 }

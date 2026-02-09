@@ -8,6 +8,7 @@ import {
     CreateSpecificationDefinitionInput,
     UpdateSpecificationDefinitionInput,
 } from './dto/specification-definition.input';
+import { RequireAdmin } from '@/modules/auth/decorators/require-admin.decorator';
 
 @ObjectType()
 export class PaginatedSpecificationDefinitions extends Paginated(SpecificationDefinition) {}
@@ -41,6 +42,7 @@ export class SpecificationDefinitionsResolver {
     }
 
     @Mutation(() => SpecificationDefinition, { name: 'createSpecificationDefinition' })
+    @RequireAdmin()
     async createSpecificationDefinition(
         @Args('input') input: CreateSpecificationDefinitionInput,
     ): Promise<SpecificationDefinition> {
@@ -48,6 +50,7 @@ export class SpecificationDefinitionsResolver {
     }
 
     @Mutation(() => SpecificationDefinition, { name: 'updateSpecificationDefinition' })
+    @RequireAdmin()
     async updateSpecificationDefinition(
         @Args('input') input: UpdateSpecificationDefinitionInput,
     ): Promise<SpecificationDefinition> {
@@ -56,6 +59,7 @@ export class SpecificationDefinitionsResolver {
     }
 
     @Mutation(() => SpecificationDefinition, { name: 'hardDeleteSpecificationDefinition' })
+    @RequireAdmin()
     async hardDeleteSpecificationDefinition(
         @Args('id', { type: () => ID }) id: string,
     ): Promise<SpecificationDefinition> {
@@ -63,6 +67,7 @@ export class SpecificationDefinitionsResolver {
     }
 
     @Mutation(() => SpecificationDefinition, { name: 'softDeleteSpecificationDefinition' })
+    @RequireAdmin()
     async softDeleteSpecificationDefinition(
         @Args('id', { type: () => ID }) id: string,
     ): Promise<SpecificationDefinition> {
@@ -70,6 +75,7 @@ export class SpecificationDefinitionsResolver {
     }
 
     @Mutation(() => SpecificationDefinition, { name: 'restoreSpecificationDefinition' })
+    @RequireAdmin()
     async restoreSpecificationDefinition(
         @Args('id', { type: () => ID }) id: string,
     ): Promise<SpecificationDefinition> {

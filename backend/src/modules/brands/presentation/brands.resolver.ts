@@ -5,6 +5,7 @@ import { BrandFilterArgs } from './dto/brand-filter.args';
 import { CreateBrandInput, UpdateBrandInput } from './dto/brand.input';
 import { buildPaginatedResponse } from '@/common/presentation/utils/pagination.helper';
 import { Paginated } from '@/common/presentation/dto/paginated.response';
+import { RequireAdmin } from '@/modules/auth/decorators/require-admin.decorator';
 
 @ObjectType()
 class PaginatedBrands extends Paginated(Brand) {}
@@ -33,27 +34,32 @@ export class BrandsResolver {
     }
 
     @Mutation(() => Brand)
+    @RequireAdmin()
     async createBrand(@Args('input') input: CreateBrandInput): Promise<Brand> {
         return this.brandsService.create(input);
     }
 
     @Mutation(() => Brand)
+    @RequireAdmin()
     async updateBrand(@Args('input') input: UpdateBrandInput): Promise<Brand> {
         const { id, ...data } = input;
         return this.brandsService.update(id, data);
     }
 
     @Mutation(() => Brand)
+    @RequireAdmin()
     async hardDeleteBrand(@Args('id', { type: () => ID }) id: string): Promise<Brand> {
         return this.brandsService.delete(id);
     }
 
     @Mutation(() => Brand)
+    @RequireAdmin()
     async softDeleteBrand(@Args('id', { type: () => ID }) id: string): Promise<Brand> {
         return this.brandsService.softDelete(id);
     }
 
     @Mutation(() => Brand)
+    @RequireAdmin()
     async restoreBrand(@Args('id', { type: () => ID }) id: string): Promise<Brand> {
         return this.brandsService.restore(id);
     }

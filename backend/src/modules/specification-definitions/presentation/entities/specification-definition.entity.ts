@@ -25,10 +25,4 @@ export class SpecificationDefinition {
 
     @Field(() => Boolean)
     isActive: boolean;
-
-    @Field(() => Date)
-    createdAt: Date;
-
-    @Field(() => Date)
-    updatedAt: Date;
 }
