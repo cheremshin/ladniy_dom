@@ -1,8 +1,6 @@
-'use server';
-
 import { CatalogProductsQuery, CatalogProductsQueryVariables, ProductPageQuery, ProductPageQueryVariables } from '@/shared/api/graphql/__generated__/types';
-import { graphqlFetch } from '../apollo/client/apollo-server-client';
-import { CATALOG_PRODUCTS, PRODUCT_PAGE } from '@/shared/api/graphql/operations/products';
+import { graphqlFetch } from '../apollo/client/graphql-fetch';
+import { CATALOG_PRODUCTS, PRODUCT_PAGE } from '@/shared/api/graphql/queries/products';
 
 export async function getCatalogProducts(variables?: CatalogProductsQueryVariables) {
     const data = await graphqlFetch<CatalogProductsQuery, CatalogProductsQueryVariables>(

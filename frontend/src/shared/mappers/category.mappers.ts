@@ -17,6 +17,7 @@ export function mapCatalogCategoryDTOtoCatalogCategory(catalogCategoryDTO: Catal
         imageUrl: catalogCategoryDTO.imageUrl ? mapImageUrlValueToRealUrl(catalogCategoryDTO.imageUrl) : null,
         productTypes: catalogCategoryDTO.productTypes.map((item) => ({
             id: item.id,
+            slug: item.slug,
             plural: item.plural,
         })),
     };

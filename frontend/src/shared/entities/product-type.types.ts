@@ -11,5 +11,6 @@ export type ProductTypeBase = Readonly<{
 
 export type CatalogProductType = Readonly<{
     id: Id;
+    slug: Slug;
     plural: string;
 }>;

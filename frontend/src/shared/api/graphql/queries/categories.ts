@@ -21,6 +21,7 @@ export const CATALOG_CATEGORY = gql`
             imageUrl
             productTypes {
                 id
+                slug
                 plural
             }
         }
