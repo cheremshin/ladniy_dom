@@ -1,7 +1,6 @@
 header {
     position: relative;
-    max-width: 1200px;
-    padding: 24px 0px;
+    padding: 24px calc(var(--spacing) * 8);
     margin: 0px auto;
     background: var(--color-background-main);
     display: flex;
