@@ -1,0 +1,5 @@
+.product-types-list__item--active .product-type-card {
+    background: var(--color-action-primary);
+    color: var(--color-action-foreground-primary);
+    border: 1px solid var(--color-action-primary);
+}
