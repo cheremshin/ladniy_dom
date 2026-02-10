@@ -1,11 +1,7 @@
 .product-overview-card {
     width: 100%;
-    background: var(--color-background-main);
-    border: 1px solid var(--color-border);
     display: flex;
     gap: 60px;
-    padding: 20px;
-    border-radius: 6px;
 }
 
 .product-overview-card__images-container {

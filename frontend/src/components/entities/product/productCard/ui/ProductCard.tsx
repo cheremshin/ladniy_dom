@@ -4,6 +4,7 @@ import { getPrices } from '../../model/pricing';
 import { ImageFallback } from '@/components/dummies/imageFallback';
 import Link from 'next/link';
 import { FeaturedBadge } from '@/components/dummies/badges';
+import { Card } from '@/components/base/ui/Card';
 
 import './ProductCard.styles.css';
 
@@ -21,7 +22,7 @@ export const ProductCard: FC<PropsT> = ({
     const { currentPrice, oldPrice } = getPrices(product.pricing);
 
     return (
-        <div className="product-card">
+        <Card className="product-card">
             <div className="product-card__image-container">
                 {product.primaryImage?.url ? (
                     <img
@@ -54,6 +55,6 @@ export const ProductCard: FC<PropsT> = ({
             <div className="product-card__buttons">
                 {children}
             </div>
-        </div>
+        </Card>
     );
 };

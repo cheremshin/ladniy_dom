@@ -1,6 +1,7 @@
 import { FC, ReactNode } from 'react';
 import { ProductOverview } from '@/shared/entities/product.types';
 import { getPrices } from '../../model/pricing';
+import { Card } from '@/components/base/ui/Card';
 
 import './ProductOverviewCard.css';
 
@@ -13,7 +14,7 @@ export const ProductOverviewCard: FC<PropsT> = ({ product, children }) => {
     const { currentPrice, oldPrice } = getPrices(product.pricing);
 
     return (
-        <div className="product-overview-card">
+        <Card className="product-overview-card">
             <div className="product-overview-card__images-container">
             </div>
             <div className="product-overview-card__content">
@@ -35,6 +36,6 @@ export const ProductOverviewCard: FC<PropsT> = ({ product, children }) => {
                     {children}
                 </div>
             </div>
-        </div>
+        </Card>
     );
 };
