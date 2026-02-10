@@ -14,6 +14,7 @@ import { ProductsModule } from './products/products.module';
 import { LogginMiddleware } from '@/common/middleware/logging.middleware';
 import { validate } from '@/config/configuration';
 import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
     imports: [
@@ -24,6 +25,7 @@ import { AuthModule } from './auth/auth.module';
         ProductTypesModule,
         SpecificationDefinitionsModule,
         ProductsModule,
+        UsersModule,
         GraphQLModule.forRoot<ApolloDriverConfig>({
             driver: ApolloDriver,
             autoSchemaFile: true,
