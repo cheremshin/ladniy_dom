@@ -7,7 +7,7 @@ import './ButtonLink.styles.css';
 type PropsT = {
     href: string;
     icon?: ReactNode;
-    children: ReactNode;
+    children?: ReactNode;
     className?: string;
     variant?: 'primary';
 };
