@@ -1,16 +1,21 @@
-.header__categories-link {
+.base-button-link {
     display: flex;
     align-items: center;
     gap: 8px;
     padding: 10.5px 24px;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.base-button-link--primary {
     background: var(--color-background-main);
     color: var(--color-link);
-    border-radius: 6px;
     border: 1px solid var(--color-background-main);
 }
 
-.header__categories-link:hover,
-.header__categories-link:focus-visible {
+.base-button-link--primary:hover,
+.base-button-link--primary:focus-visible {
     color: var(--color-link-hover);
     border: 1px solid var(--color-border);
 }

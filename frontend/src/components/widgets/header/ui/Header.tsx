@@ -1,12 +1,16 @@
 import { Suspense } from 'react';
-import { CategoriesLink } from './components/CategoriesLink';
 import { HeaderView } from './HeaderView';
 import { ProductsSearch } from '@/components/features/productsSearch';
+import { ButtonLink } from '@/components/base/ui/ButtonLink';
+import { CategoriesIcon } from '@/components/dummies/icons';
 
 export function Header() {
     return (
         <HeaderView>
-            <CategoriesLink categoriesPageUrl="/catalog" />
+            <ButtonLink href="/catalog">
+                <CategoriesIcon />
+                Категории
+            </ButtonLink>
             <Suspense>
                 <ProductsSearch />
             </Suspense>
