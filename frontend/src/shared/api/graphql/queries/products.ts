@@ -98,3 +98,25 @@ export const PRODUCT_PAGE = gql`
         }
     }
 `;
+
+export const PRODUCTS_BY_IDS = gql`
+    query ProductsByIds($input: [ID!]!) {
+        productsByIds(ids: $input) {
+            id
+            title
+            slug
+            basePrice
+            discountPrice
+            status
+            isFeatured
+            stockQuantity
+            primaryImage {
+                id
+                url
+                altText
+                sortOrder
+                isPrimary
+            }
+        }
+    }
+`;

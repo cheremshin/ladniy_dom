@@ -470,6 +470,7 @@ export type Query = {
   productTypeBySlug: ProductType;
   productTypes: PaginatedProductTypes;
   products: PaginatedProducts;
+  productsByIds: Array<Product>;
   specificationDefinition: SpecificationDefinition;
   specificationDefinitions: PaginatedSpecificationDefinitions;
   user: User;
@@ -561,6 +562,11 @@ export type QueryProductsArgs = {
   productTypeId?: InputMaybe<Scalars['ID']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<ProductStatus>;
+};
+
+
+export type QueryProductsByIdsArgs = {
+  ids: Array<Scalars['ID']['input']>;
 };
 
 
@@ -820,6 +826,13 @@ export type ProductPageQueryVariables = Exact<{
 
 
 export type ProductPageQuery = { __typename?: 'Query', productBySlug: { __typename?: 'Product', id: string, title: string, slug: string, description?: string | null, sku: string, status: ProductStatus, basePrice: number, discountPrice?: number | null, warrantyMonths: number, specifications?: Record<string, unknown> | null, stockQuantity: number, isFeatured: boolean, metaTitle?: string | null, metaDescription?: string | null, category: { __typename?: 'Category', id: string, title: string, slug: string }, brand: { __typename?: 'Brand', id: string, title: string, slug: string, logoUrl?: string | null }, images?: Array<{ __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean }> | null, specificationDefinitions?: Array<{ __typename?: 'ProductSpecificationDefinition', key: string, displayName: string, description?: string | null, unit?: string | null }> | null } };
+
+export type ProductsByIdsQueryVariables = Exact<{
+  input: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
+}>;
+
+
+export type ProductsByIdsQuery = { __typename?: 'Query', productsByIds: Array<{ __typename?: 'Product', id: string, title: string, slug: string, basePrice: number, discountPrice?: number | null, status: ProductStatus, isFeatured: boolean, stockQuantity: number, primaryImage?: { __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean } | null }> };
 
 export type UserQueryVariables = Exact<{
   id: Scalars['ID']['input'];
