@@ -2,19 +2,16 @@ import { ArgsType, Field, ID } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional, IsUUID } from 'class-validator';
 
 @ArgsType()
-export class UserFavouritesArgs {
-    @Field(() => ID, { nullable: true, description: 'Поиск favourite товаров по userId' })
+export class UserCartArgs {
+    @Field(() => ID, { nullable: true, description: 'Поиск корзины по userId' })
     @IsOptional()
     @IsUUID(4, { message: 'userId must be a valid UUID' })
     userId?: string;
 }
 
 @ArgsType()
-export class ToggleUserFavouriteArgs {
-    @Field(() => ID, {
-        nullable: true,
-        description: 'Переключение метки favourite у товара по userId',
-    })
+export class AddToCartArgs {
+    @Field(() => ID, { nullable: true, description: 'Поиск корзины по userId' })
     @IsOptional()
     @IsUUID(4, { message: 'userId must be a valid UUID' })
     userId?: string;
@@ -24,3 +21,6 @@ export class ToggleUserFavouriteArgs {
     @IsUUID(4, { message: 'productId must be a valid UUID' })
     productId: string;
 }
+
+@ArgsType()
+export class RemoveFromCartArgs extends AddToCartArgs {}

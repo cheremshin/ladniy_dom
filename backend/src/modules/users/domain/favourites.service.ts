@@ -2,10 +2,8 @@ import { ListResult } from '@/common/domain/list-result.type';
 import { DATABASE_CONNECTION } from '@/database/database.provider';
 import { Database } from '@/database/database.types';
 import { wishlist } from '@/database/schema';
-import { ProductsService } from '@/modules/products/domain/products.service';
 import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { and, count, eq, SQL } from 'drizzle-orm';
-import { UsersService } from './users.service';
 
 export type UserFavouriteRecord = typeof wishlist.$inferSelect;
 
@@ -23,8 +21,6 @@ export class UserFavouritesService {
     constructor(
         @Inject(DATABASE_CONNECTION)
         private readonly db: Database,
-        private readonly productsService: ProductsService,
-        private readonly usersService: UsersService,
     ) {}
 
     async getUserFavourites(
@@ -43,43 +39,43 @@ export class UserFavouritesService {
 
     async toggleUserFavourite(data: ToggleFavouriteData): Promise<UserFavouriteRecord> {
         return this.db.transaction(async (tx) => {
-            const [existsFavourite] = await tx
-                .select()
-                .from(wishlist)
+            const [deleted] = await tx
+                .delete(wishlist)
                 .where(
-                    and(eq(wishlist.productId, data.productId), eq(wishlist.userId, data.userId)),
+                    and(eq(wishlist.userId, data.userId), eq(wishlist.productId, data.productId)),
                 )
-                .limit(1);
+                .returning();
 
-            if (existsFavourite) {
-                await tx
-                    .delete(wishlist)
-                    .where(
-                        and(
-                            eq(wishlist.productId, data.productId),
-                            eq(wishlist.userId, data.userId),
-                        ),
-                    );
-
-                return existsFavourite;
+            if (deleted) {
+                return deleted;
             }
 
-            await this.productsService.findOne(data.productId);
-            await this.usersService.findOne(data.userId);
-
-            const [record] = await tx
+            const [inserted] = await tx
                 .insert(wishlist)
                 .values({
                     userId: data.userId,
                     productId: data.productId,
                 })
+                .onConflictDoNothing()
                 .returning();
 
-            if (!record) {
-                throw new InternalServerErrorException('Cannot insert record');
+            if (inserted) {
+                return inserted;
             }
 
-            return record;
+            const [existing] = await tx
+                .select()
+                .from(wishlist)
+                .where(
+                    and(eq(wishlist.userId, data.userId), eq(wishlist.productId, data.productId)),
+                )
+                .limit(1);
+
+            if (!existing) {
+                throw new InternalServerErrorException('Toggle failed');
+            }
+
+            return existing;
         });
     }
 

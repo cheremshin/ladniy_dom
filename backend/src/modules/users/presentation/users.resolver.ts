@@ -12,11 +12,14 @@ import { buildPaginatedResponse } from '@/common/presentation/utils/pagination.h
 import { Paginated } from '@/common/presentation/dto/paginated.response';
 import { RequireAdmin } from '@/modules/auth/decorators/require-admin.decorator';
 import { SessionGuard } from '@/modules/auth/guards/session.guard';
-import { BadRequestException, ForbiddenException, UseGuards } from '@nestjs/common';
+import { ForbiddenException, UseGuards } from '@nestjs/common';
 import { GqlContext } from '@/common/presentation/dto/gql.context';
 import { UserFavourite, UserFavourites } from './entities/user-favourites.entity';
 import { UserFavouritesService } from '../domain/favourites.service';
 import { ToggleUserFavouriteArgs, UserFavouritesArgs } from './dto/user-favourites-filter.args';
+import { UserCartService } from '../domain/cart.service';
+import { UserCart, UserCartItem } from './entities/user-cart.entity';
+import { AddToCartArgs, RemoveFromCartArgs, UserCartArgs } from './dto/user-cart-filter.args';
 
 @ObjectType()
 class PaginatedUsers extends Paginated(User) {}
@@ -26,6 +29,7 @@ export class UsersResolver {
     constructor(
         private readonly usersService: UsersService,
         private readonly favouritesService: UserFavouritesService,
+        private readonly cartService: UserCartService,
     ) {}
 
     @Query(() => PaginatedUsers, { name: 'users' })
@@ -96,15 +100,24 @@ export class UsersResolver {
 
         const userId = filters?.userId ?? session.user.userId;
         return {
-            items: (await this.favouritesService.getUserFavourites({ userId })).items.map(
-                (item) =>
-                    ({
-                        id: item.id,
-                        userId: item.userId,
-                        productId: item.productId,
-                    }) as UserFavourite,
-            ),
+            items: (await this.favouritesService.getUserFavourites({ userId }))
+                .items as UserFavourite[],
         };
+    }
+
+    @Query(() => UserCart, { name: 'cart' })
+    @UseGuards(SessionGuard)
+    async getUserCart(
+        @Context() context: GqlContext,
+        @Args({ nullable: true }) filters?: UserCartArgs,
+    ): Promise<UserCart> {
+        const session = context.req.session;
+        if (!session?.user?.userId && session?.user?.role !== 'admin') {
+            throw new ForbiddenException('Access denied');
+        }
+
+        const userId = filters?.userId ?? session.user.userId;
+        return { items: (await this.cartService.getUserCart({ userId })) as UserCartItem[] };
     }
 
     @Mutation(() => UserFavourite)
@@ -113,24 +126,52 @@ export class UsersResolver {
         @Args() input: ToggleUserFavouriteArgs,
         @Context() context: GqlContext,
     ): Promise<UserFavourite> {
-        const session = context.req.session;
-        const isAdmin = session?.user?.role === 'admin';
-        const sessionUserId = session?.user?.userId;
-
-        if (!isAdmin) {
-            if (input.userId !== undefined && input.userId !== sessionUserId) {
-                throw new ForbiddenException('Access denied');
-            }
-
-            if (input.userId === undefined && !sessionUserId) {
-                throw new ForbiddenException('Access denied');
-            }
-        } else if (!input.userId) {
-            throw new BadRequestException('userId is required');
-        }
+        const userId = this.resolveTargetUserId(context, input.userId);
 
         return this.favouritesService.toggleUserFavourite({
-            userId: input.userId ?? sessionUserId!,
+            userId,
+            productId: input.productId,
+        });
+    }
+
+    @Mutation(() => UserCartItem)
+    @UseGuards(SessionGuard)
+    async addToCart(
+        @Args() input: AddToCartArgs,
+        @Context() context: GqlContext,
+    ): Promise<UserCartItem> {
+        const userId = this.resolveTargetUserId(context, input.userId);
+
+        return this.cartService.addToCart({
+            userId,
+            productId: input.productId,
+        });
+    }
+
+    @Mutation(() => UserCartItem)
+    @UseGuards(SessionGuard)
+    async removeFromCart(
+        @Args() input: RemoveFromCartArgs,
+        @Context() context: GqlContext,
+    ): Promise<UserCartItem> {
+        const userId = this.resolveTargetUserId(context, input.userId);
+
+        return this.cartService.removeFromCart({
+            userId,
+            productId: input.productId,
+        });
+    }
+
+    @Mutation(() => UserCartItem)
+    @UseGuards(SessionGuard)
+    async decreaseCount(
+        @Args() input: RemoveFromCartArgs,
+        @Context() context: GqlContext,
+    ): Promise<UserCartItem> {
+        const userId = this.resolveTargetUserId(context, input.userId);
+
+        return this.cartService.decreaseCount({
+            userId,
             productId: input.productId,
         });
     }
@@ -190,5 +231,20 @@ export class UsersResolver {
     @RequireAdmin()
     async restoreUser(@Args('id', { type: () => ID }) id: string): Promise<User> {
         return this.usersService.restore(id) as Promise<User>;
+    }
+
+    private resolveTargetUserId(context: GqlContext, inputUserId?: string): string {
+        const session = context.req.session;
+        const sessionUserId = session?.user?.userId;
+
+        if (!sessionUserId) {
+            throw new ForbiddenException('Access denied');
+        }
+
+        if (inputUserId && inputUserId !== sessionUserId) {
+            throw new ForbiddenException('Access denied');
+        }
+
+        return sessionUserId;
     }
 }
