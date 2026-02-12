@@ -9,6 +9,7 @@ type PropsT = {
     icon?: ReactNode;
     children?: ReactNode;
     className?: string;
+    badge?: number;
     variant?: 'primary' | 'outlined';
 };
 
@@ -18,6 +19,7 @@ export const ButtonLink: FC<PropsT> = ({
     children,
     className,
     variant = 'primary',
+    badge,
 }) => (
     <Link
         href={href}
@@ -25,5 +27,6 @@ export const ButtonLink: FC<PropsT> = ({
     >
         {icon && <span className="base-button-link__icon">{icon}</span>}
         {children}
+        {badge && badge > 0 && <span className="base-button-link__badge">{badge}</span>}
     </Link>
 );
