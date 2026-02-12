@@ -12,7 +12,7 @@ header {
 header .header__actions {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 10px;
     flex-grow: 1;
 }
 

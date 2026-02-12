@@ -5,6 +5,7 @@ import { ButtonLink } from '@/components/base/';
 import { CategoriesIcon } from '@/components/dummies/icons';
 import { ProfileIcon } from '@/components/dummies/icons/profile/ProfileIcon';
 import { cookies } from 'next/headers';
+import { Favourites } from '../_components/Favourites';
 
 export async function Header() {
     const cookieStore = await cookies();
@@ -17,7 +18,10 @@ export async function Header() {
                 <ProductsSearch />
             </Suspense>
             {session ? (
-                <ButtonLink href="/account" icon={<ProfileIcon />} />
+                <>
+                    <Favourites href="/account/favourites" />
+                    <ButtonLink href="/account" icon={<ProfileIcon />} />
+                </>
             ) : (
                 <ButtonLink href="/auth/sign-in" variant="outlined">Войти</ButtonLink>
             )}
