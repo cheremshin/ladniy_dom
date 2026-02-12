@@ -95,4 +95,5 @@ main {
     --color-status-featured-foreground:rgb(255, 48, 11);
 
     --color-accept: #4bae4f;
+    --color-error: #e41c1c;
 }
