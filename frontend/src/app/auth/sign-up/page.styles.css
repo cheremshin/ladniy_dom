@@ -1,0 +1,33 @@
+.sign-up-page {
+    width: 100%;
+    height: calc(100% - 100px);
+    margin: 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sign-up-card {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.sign-up-form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sign-up-form .base-input {
+    width: 350px;
+}
+
+.sign-up-form__login_link {
+    margin-left: 10px;
+    color: var(--color-link-hover);
+}
