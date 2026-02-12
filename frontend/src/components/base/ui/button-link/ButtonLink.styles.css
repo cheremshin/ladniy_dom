@@ -6,11 +6,11 @@
     text-decoration: none;
     cursor: pointer;
     border-radius: 6px;
+    background: var(--color-background-main);
+    color: var(--color-link);
 }
 
 .base-button-link--primary {
-    background: var(--color-background-main);
-    color: var(--color-link);
     border: 1px solid var(--color-background-main);
 }
 
@@ -18,4 +18,14 @@
 .base-button-link--primary:focus-visible {
     color: var(--color-link-hover);
     border: 1px solid var(--color-border);
+}
+
+.base-button-link--outlined {
+    border: 1px solid var(--color-border);
+}
+
+.base-button-link--outlined:hover,
+.base-button-link--outlined:focus-visible {
+    color: var(--color-link-hover);
+    border: 1px solid var(--color-link-hover);
 }

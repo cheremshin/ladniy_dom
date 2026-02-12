@@ -9,7 +9,7 @@ type PropsT = {
     icon?: ReactNode;
     children?: ReactNode;
     className?: string;
-    variant?: 'primary';
+    variant?: 'primary' | 'outlined';
 };
 
 export const ButtonLink: FC<PropsT> = ({
