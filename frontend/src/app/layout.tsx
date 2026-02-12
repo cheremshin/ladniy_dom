@@ -1,6 +1,8 @@
 import { Providers } from './providers';
 import type { Metadata } from 'next';
 import { Header } from '@/components/widgets/header';
+import { getUser } from '@/server/queries/users';
+import { getUserFavourites } from '@/server/queries/favourites';
 
 import './globals.css';
 
@@ -9,11 +11,19 @@ export const metadata: Metadata = {
     description: 'Интернет-магазин бытовой электроники',
 };
 
-export default function RootLayout({ children }: Readonly<LayoutProps<'/'>>) {
+export const dynamic = 'force-dynamic';
+
+export default async function RootLayout({ children }: Readonly<LayoutProps<'/'>>) {
+    const user = await getUser();
+    const favourites = await getUserFavourites();
+
     return (
         <html lang="ru">
             <body>
-                <Providers>
+                <Providers
+                    user={user}
+                    favourites={favourites}
+                >
                     <Header />
                     {children}
                 </Providers>
