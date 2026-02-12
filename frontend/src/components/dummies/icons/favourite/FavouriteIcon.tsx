@@ -9,7 +9,9 @@ import './FavouriteIcon.styles.css';
 export const FavouriteIcon: FC<SVGProps<SVGSVGElement>> = ({ className = '' }) => (
     <svg className={clsx('favourite-icon', className)} version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.000000 512.000000">
         <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)">
-            <path d={`M1262 4830 c-319 -40 -586 -171 -812 -399 -203 -204 -325 -420 -395
+            <path
+                fill="currentColor"
+                d={`M1262 4830 c-319 -40 -586 -171 -812 -399 -203 -204 -325 -420 -395
             -701 -124 -487 -34 -967 264 -1418 191 -289 438 -554 891 -958 288 -257 1167\n
             -1007 1210 -1032 40 -24 55 -27 140 -27 85 0 100 3 140 27 43 25 924 776 1210\n
             1032 455 406 700 670 891 958 298 451 388 931 264 1418 -70 281 -192 497 -395\n
