@@ -1,7 +1,7 @@
 'use client';
 
-import { AddToFavouriteButton } from '@/components/features/addToFavourite';
 import { AddToCartButton } from '@/components/features/addToCart';
+import { FavouriteButton } from '@/components/features/favourite';
 import { Id } from '@/shared/entities/common.types';
 import { FC } from 'react';
 
@@ -14,7 +14,7 @@ export const ProductActions: FC<PropsT> = ({ productId, isAvailable }) => {
     return (
         <>
             <AddToCartButton productId={productId} isAvailable={isAvailable} />
-            <AddToFavouriteButton productId={productId} />
+            <FavouriteButton productId={productId} />
         </>
     );
 };
