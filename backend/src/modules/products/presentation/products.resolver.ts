@@ -15,7 +15,7 @@ import {
     ProductStatus,
 } from './entities/product.entity';
 import { ProductImageRecord, ProductRecord, ProductsService } from '../domain/products.service';
-import { ProductFilterArgs } from './dto/product-filter.args';
+import { ProductFilterArgs, ProductsByIdsArgs } from './dto/product-filter.args';
 import { CreateProductInput, UpdateProductInput, AttachImageInput } from './dto/product.input';
 import { buildPaginatedResponse } from '@/common/presentation/utils/pagination.helper';
 import { Paginated } from '@/common/presentation/dto/paginated.response';
@@ -74,6 +74,16 @@ export class ProductsResolver {
         const product = await this.productsService.findBySlug(slug);
         const productImages = await this.productsService.getImages(product.id);
         return this.mapToEntity(product, productImages);
+    }
+
+    @Query(() => [Product], { name: 'productsByIds' })
+    async getProductsByIds(@Args() args: ProductsByIdsArgs): Promise<Product[]> {
+        const products = await this.productsService.findByIds(args.ids);
+        const productIds = products.map((product) => product.id);
+        const imagesMap = await this.productsService.getImagesForProducts(productIds);
+        return products.map((product) =>
+            this.mapToEntity(product, imagesMap.get(product.id) ?? []),
+        );
     }
 
     @ResolveField(() => Category)

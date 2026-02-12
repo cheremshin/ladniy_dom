@@ -1,7 +1,17 @@
 import { PaginationArgs } from '@/common/presentation/dto/pagination.args';
 import { ArgsType, Field, Float, ID } from '@nestjs/graphql';
 import { ProductStatus } from '../entities/product.entity';
-import { IsBoolean, IsEnum, IsOptional, IsPositive, IsString, IsUUID } from 'class-validator';
+import {
+    ArrayNotEmpty,
+    ArrayUnique,
+    IsArray,
+    IsBoolean,
+    IsEnum,
+    IsOptional,
+    IsPositive,
+    IsString,
+    IsUUID,
+} from 'class-validator';
 
 @ArgsType()
 export class ProductFilterArgs extends PaginationArgs {
@@ -49,4 +59,14 @@ export class ProductFilterArgs extends PaginationArgs {
     @IsOptional()
     @IsBoolean({ message: 'includeDeleted must be a boolean' })
     includeDeleted?: boolean;
+}
+
+@ArgsType()
+export class ProductsByIdsArgs {
+    @Field(() => [ID])
+    @IsArray()
+    @ArrayNotEmpty()
+    @ArrayUnique()
+    @IsUUID(4, { each: true, message: 'ids must be a valid UUID' })
+    ids: string[];
 }

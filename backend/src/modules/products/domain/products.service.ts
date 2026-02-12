@@ -114,6 +114,15 @@ export class ProductsService {
         return product;
     }
 
+    async findByIds(ids: string[]): Promise<ProductRecord[]> {
+        if (ids.length === 0) {
+            return [];
+        }
+
+        const productArray = await this.db.select().from(products).where(inArray(products.id, ids));
+        return productArray;
+    }
+
     async findBySlug(slug: string): Promise<ProductRecord> {
         const [product] = await this.db
             .select()
