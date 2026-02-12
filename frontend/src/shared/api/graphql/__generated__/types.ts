@@ -27,15 +27,12 @@ export type AttachImageInput = {
 export type Brand = {
   __typename?: 'Brand';
   country?: Maybe<Scalars['String']['output']>;
-  createdAt: Scalars['DateTime']['output'];
-  deletedAt?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   isActive: Scalars['Boolean']['output'];
   logoUrl?: Maybe<Scalars['String']['output']>;
   slug: Scalars['String']['output'];
   title: Scalars['String']['output'];
-  updatedAt: Scalars['DateTime']['output'];
   website?: Maybe<Scalars['String']['output']>;
 };
 
@@ -108,6 +105,22 @@ export type CreateSpecificationDefinitionInput = {
   unit?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type CreateUserInput = {
+  email: Scalars['String']['input'];
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  isActive?: Scalars['Boolean']['input'];
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  nickname?: InputMaybe<Scalars['String']['input']>;
+  password: Scalars['String']['input'];
+  phone?: InputMaybe<Scalars['String']['input']>;
+  role?: UserRole;
+};
+
+export type LoginInput = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   attachProductImage: ProductImage;
@@ -116,28 +129,37 @@ export type Mutation = {
   createProduct: Product;
   createProductType: ProductType;
   createSpecificationDefinition: SpecificationDefinition;
+  createUser: User;
   detachProductImage: ProductImage;
   hardDeleteBrand: Brand;
   hardDeleteCategory: Category;
   hardDeleteProduct: Product;
   hardDeleteProductType: ProductType;
   hardDeleteSpecificationDefinition: SpecificationDefinition;
+  login: Scalars['String']['output'];
+  logout: Scalars['String']['output'];
+  register: User;
   restoreBrand: Brand;
   restoreCategory: Category;
   restoreProduct: Product;
   restoreProductType: ProductType;
   restoreSpecificationDefinition: SpecificationDefinition;
+  restoreUser: User;
   setProductPrimaryImage: ProductImage;
   softDeleteBrand: Brand;
   softDeleteCategory: Category;
   softDeleteProduct: Product;
   softDeleteProductType: ProductType;
   softDeleteSpecificationDefinition: SpecificationDefinition;
+  softDeleteUser: User;
+  toggleUserFavourite: UserFavourite;
   updateBrand: Brand;
   updateCategory: Category;
   updateProduct: Product;
   updateProductType: ProductType;
+  updateProfileInfo: User;
   updateSpecificationDefinition: SpecificationDefinition;
+  updateUser: User;
 };
 
 
@@ -171,6 +193,11 @@ export type MutationCreateSpecificationDefinitionArgs = {
 };
 
 
+export type MutationCreateUserArgs = {
+  input: CreateUserInput;
+};
+
+
 export type MutationDetachProductImageArgs = {
   imageId: Scalars['ID']['input'];
 };
@@ -201,6 +228,16 @@ export type MutationHardDeleteSpecificationDefinitionArgs = {
 };
 
 
+export type MutationLoginArgs = {
+  input: LoginInput;
+};
+
+
+export type MutationRegisterArgs = {
+  input: RegisterUserInputPublic;
+};
+
+
 export type MutationRestoreBrandArgs = {
   id: Scalars['ID']['input'];
 };
@@ -222,6 +259,11 @@ export type MutationRestoreProductTypeArgs = {
 
 
 export type MutationRestoreSpecificationDefinitionArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationRestoreUserArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -256,6 +298,17 @@ export type MutationSoftDeleteSpecificationDefinitionArgs = {
 };
 
 
+export type MutationSoftDeleteUserArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationToggleUserFavouriteArgs = {
+  productId: Scalars['String']['input'];
+  userId?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type MutationUpdateBrandArgs = {
   input: UpdateBrandInput;
 };
@@ -276,8 +329,18 @@ export type MutationUpdateProductTypeArgs = {
 };
 
 
+export type MutationUpdateProfileInfoArgs = {
+  input: UpdateUserInputPublic;
+};
+
+
 export type MutationUpdateSpecificationDefinitionArgs = {
   input: UpdateSpecificationDefinitionInput;
+};
+
+
+export type MutationUpdateUserArgs = {
+  input: UpdateUserInput;
 };
 
 export type PaginatedBrands = {
@@ -310,6 +373,12 @@ export type PaginatedSpecificationDefinitions = {
   meta: PaginationMeta;
 };
 
+export type PaginatedUsers = {
+  __typename?: 'PaginatedUsers';
+  items: Array<User>;
+  meta: PaginationMeta;
+};
+
 export type PaginationMeta = {
   __typename?: 'PaginationMeta';
   hasNextPage: Scalars['Boolean']['output'];
@@ -328,8 +397,6 @@ export type Product = {
   category: Category;
   categoryId: Scalars['ID']['output'];
   costPrice: Scalars['Float']['output'];
-  createdAt: Scalars['DateTime']['output'];
-  deletedAt?: Maybe<Scalars['DateTime']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   discountPrice?: Maybe<Scalars['Float']['output']>;
   id: Scalars['ID']['output'];
@@ -347,7 +414,6 @@ export type Product = {
   status: ProductStatus;
   stockQuantity: Scalars['Int']['output'];
   title: Scalars['String']['output'];
-  updatedAt: Scalars['DateTime']['output'];
   warrantyMonths: Scalars['Int']['output'];
 };
 
@@ -381,13 +447,10 @@ export type ProductStatus =
 export type ProductType = {
   __typename?: 'ProductType';
   categoryId: Scalars['ID']['output'];
-  createdAt: Scalars['DateTime']['output'];
-  deletedAt?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   plural: Scalars['String']['output'];
   slug: Scalars['String']['output'];
   title: Scalars['String']['output'];
-  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type Query = {
@@ -398,7 +461,9 @@ export type Query = {
   categories: PaginatedCategories;
   category: Category;
   categoryBySlug: Category;
+  favourites: UserFavourites;
   health: Scalars['String']['output'];
+  me: User;
   product: Product;
   productBySlug: Product;
   productType: ProductType;
@@ -407,6 +472,8 @@ export type Query = {
   products: PaginatedProducts;
   specificationDefinition: SpecificationDefinition;
   specificationDefinitions: PaginatedSpecificationDefinitions;
+  user: User;
+  users: PaginatedUsers;
 };
 
 
@@ -445,6 +512,11 @@ export type QueryCategoryArgs = {
 
 export type QueryCategoryBySlugArgs = {
   slug: Scalars['String']['input'];
+};
+
+
+export type QueryFavouritesArgs = {
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -506,9 +578,27 @@ export type QuerySpecificationDefinitionsArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
 };
 
+
+export type QueryUserArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryUsersArgs = {
+  includeInactive?: InputMaybe<Scalars['Boolean']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: Scalars['Int']['input'];
+  role?: InputMaybe<UserRole>;
+  search?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type RegisterUserInputPublic = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
 export type SpecificationDefinition = {
   __typename?: 'SpecificationDefinition';
-  createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
   displayName: Scalars['String']['output'];
   id: Scalars['ID']['output'];
@@ -517,7 +607,6 @@ export type SpecificationDefinition = {
   key: Scalars['String']['output'];
   productTypeId: Scalars['ID']['output'];
   unit?: Maybe<Scalars['String']['output']>;
-  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type SpecificationValueInput = {
@@ -585,6 +674,75 @@ export type UpdateSpecificationDefinitionInput = {
   unit?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UpdateUserInput = {
+  email?: InputMaybe<Scalars['String']['input']>;
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  /** Новый пароль (если нужно изменить) */
+  newPassword?: InputMaybe<Scalars['String']['input']>;
+  nickname?: InputMaybe<Scalars['String']['input']>;
+  phone?: InputMaybe<Scalars['String']['input']>;
+  role?: InputMaybe<UserRole>;
+};
+
+export type UpdateUserInputPublic = {
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  nickname?: InputMaybe<Scalars['String']['input']>;
+  phone?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type User = {
+  __typename?: 'User';
+  email: Scalars['String']['output'];
+  firstName?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  isActive: Scalars['Boolean']['output'];
+  lastName?: Maybe<Scalars['String']['output']>;
+  nickname: Scalars['String']['output'];
+  phone?: Maybe<Scalars['String']['output']>;
+  role: UserRole;
+};
+
+export type UserFavourite = {
+  __typename?: 'UserFavourite';
+  id: Scalars['ID']['output'];
+  productId: Scalars['ID']['output'];
+  userId: Scalars['ID']['output'];
+};
+
+export type UserFavourites = {
+  __typename?: 'UserFavourites';
+  items: Array<UserFavourite>;
+};
+
+export type UserRole =
+  | 'ADMIN'
+  | 'CUSTOMER'
+  | '%future added value';
+
+export type LoginMutationVariables = Exact<{
+  input: LoginInput;
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login: string };
+
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutMutation = { __typename?: 'Mutation', logout: string };
+
+export type RegisterMutationVariables = Exact<{
+  input: RegisterUserInputPublic;
+}>;
+
+
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'User', id: string, email: string, firstName?: string | null, lastName?: string | null, nickname: string, phone?: string | null } };
+
 export type CreateProductMutationVariables = Exact<{
   input: CreateProductInput;
 }>;
@@ -612,6 +770,14 @@ export type RestoreProductMutationVariables = Exact<{
 
 
 export type RestoreProductMutation = { __typename?: 'Mutation', restoreProduct: { __typename?: 'Product', id: string, status: ProductStatus } };
+
+export type ToggleUserFavouriteMutationVariables = Exact<{
+  userId?: InputMaybe<Scalars['String']['input']>;
+  productId: Scalars['String']['input'];
+}>;
+
+
+export type ToggleUserFavouriteMutation = { __typename?: 'Mutation', toggleUserFavourite: { __typename?: 'UserFavourite', id: string, userId: string, productId: string } };
 
 export type CategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -654,3 +820,20 @@ export type ProductPageQueryVariables = Exact<{
 
 
 export type ProductPageQuery = { __typename?: 'Query', productBySlug: { __typename?: 'Product', id: string, title: string, slug: string, description?: string | null, sku: string, status: ProductStatus, basePrice: number, discountPrice?: number | null, warrantyMonths: number, specifications?: Record<string, unknown> | null, stockQuantity: number, isFeatured: boolean, metaTitle?: string | null, metaDescription?: string | null, category: { __typename?: 'Category', id: string, title: string, slug: string }, brand: { __typename?: 'Brand', id: string, title: string, slug: string, logoUrl?: string | null }, images?: Array<{ __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean }> | null, specificationDefinitions?: Array<{ __typename?: 'ProductSpecificationDefinition', key: string, displayName: string, description?: string | null, unit?: string | null }> | null } };
+
+export type UserQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, email: string, firstName?: string | null, lastName?: string | null, nickname: string, phone?: string | null, role: UserRole } };
+
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, email: string, firstName?: string | null, lastName?: string | null, nickname: string, phone?: string | null, role: UserRole } };
+
+export type FavouritesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FavouritesQuery = { __typename?: 'Query', favourites: { __typename?: 'UserFavourites', items: Array<{ __typename?: 'UserFavourite', productId: string }> } };
