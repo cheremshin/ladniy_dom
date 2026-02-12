@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
 import { ProductOverview } from '@/shared/entities/product.types';
 import { getPrices } from '../../model/pricing';
-import { Card } from '@/components/base/ui/Card';
+import { Card } from '@/components/base';
 
 import './ProductOverviewCard.css';
 

@@ -4,7 +4,7 @@ import { getPrices } from '../../model/pricing';
 import { ImageFallback } from '@/components/dummies/imageFallback';
 import Link from 'next/link';
 import { FeaturedBadge } from '@/components/dummies/badges';
-import { Card } from '@/components/base/ui/Card';
+import { Card } from '@/components/base';
 
 import './ProductCard.styles.css';
 
