@@ -6,3 +6,6 @@ export const useIsFavourite = (id: Id) =>
 
 export const useFavouriteIds = () =>
     useFavouritesStore((state) => state.favourites);
+
+export const useTotalItems = () =>
+    useFavouritesStore((state) => state.favourites.size);

@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import './Button.styles.css';
 
 type PropsT = React.ComponentProps<'button'> & {
-    variant?: 'primary' | 'secondary';
+    variant?: 'primary' | 'secondary' | 'outlined' | 'empty';
 };
 
 export const Button: FC<PropsT> = ({

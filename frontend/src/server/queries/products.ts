@@ -21,6 +21,8 @@ export async function getProductBySlug(slug: string) {
 }
 
 export async function getProductsByIds(ids: string[]) {
+    if (ids.length === 0) return [];
+
     const data = await graphqlFetch<ProductsByIdsQuery, ProductsByIdsQueryVariables>(
         PRODUCTS_BY_IDS,
         { input: ids },

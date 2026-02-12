@@ -2,7 +2,7 @@
 
 import { ButtonLink } from '@/components/base';
 import { FavouriteIcon } from '@/components/dummies/icons';
-import { useFavouriteIds } from '@/components/features/favourite/model/favourites.selectors';
+import { useTotalItems } from '@/components/features/favourite/model/favourites.selectors';
 import { FC } from 'react';
 
 type PropsT = {
@@ -10,7 +10,6 @@ type PropsT = {
 };
 
 export const Favourites: FC<PropsT> = ({ href }) => {
-    const favouritesCount = useFavouriteIds().size;
-
-    return <ButtonLink href={href} icon={<FavouriteIcon />} badge={favouritesCount} />;
+    const favouritesCount = useTotalItems();
+    return <ButtonLink href={href} icon={<FavouriteIcon fillStyle="filled" />} badge={favouritesCount} />;
 };

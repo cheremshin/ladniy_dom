@@ -49,6 +49,10 @@ export function mapProductToProductPreview(product: CatalogProductItem): Product
             base: formatPrice(product.basePrice),
             discountPrice: product.discountPrice ? formatPrice(product.discountPrice) : null,
         },
+        rawPricing: {
+            base: product.basePrice,
+            discountPrice: product.discountPrice,
+        },
         status: product.status as ProductStatus,
         isFeatured: product.isFeatured,
         stockQuantity: product.stockQuantity,

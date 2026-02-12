@@ -91,8 +91,11 @@ main {
     --color-action-secondary-active-hovered:rgba(255, 17, 88, 0.21);
     --color-action-foreground-secondary-active: #ff1159;
 
+    --color-action-danger:rgb(255, 163, 163);
+    --color-action-danger-hovered:rgb(255, 70, 70);
+
     --color-status-featured:rgb(255, 225, 221);
-    --color-status-featured-foreground:rgb(255, 48, 11);
+    --color-status-featured-foreground:rgb(214, 52, 23);
 
     --color-accept: #4bae4f;
     --color-error: #e41c1c;

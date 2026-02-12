@@ -3,9 +3,10 @@ import { HeaderView } from './HeaderView';
 import { ProductsSearch } from '@/components/features/productsSearch';
 import { ButtonLink } from '@/components/base/';
 import { CategoriesIcon } from '@/components/dummies/icons';
-import { ProfileIcon } from '@/components/dummies/icons/profile/ProfileIcon';
+import { ProfileIcon } from '@/components/dummies/icons';
 import { cookies } from 'next/headers';
 import { Favourites } from '../_components/Favourites';
+import { Cart } from '../_components/Cart';
 
 export async function Header() {
     const cookieStore = await cookies();
@@ -20,6 +21,7 @@ export async function Header() {
             {session ? (
                 <>
                     <Favourites href="/account/favourites" />
+                    <Cart href="/account/cart" />
                     <ButtonLink href="/account" icon={<ProfileIcon />} />
                 </>
             ) : (

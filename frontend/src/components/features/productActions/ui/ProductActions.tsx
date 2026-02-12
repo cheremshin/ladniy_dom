@@ -1,6 +1,6 @@
 'use client';
 
-import { AddToCartButton } from '@/components/features/addToCart';
+import { AddToCartButton } from '@/components/features/cart';
 import { FavouriteButton } from '@/components/features/favourite';
 import { Id } from '@/shared/entities/common.types';
 import { FC } from 'react';

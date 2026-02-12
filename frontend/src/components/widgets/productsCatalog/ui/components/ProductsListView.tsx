@@ -1,15 +1,17 @@
 import { ProductCard } from '@/components/entities/product/productCard/ui/ProductCard';
 import { ProductPreview } from '@/shared/entities/product.types';
-import { ProductActions } from '@/components/widgets/productActions';
+import { ProductActions } from '@/components/features/productActions';
+import { CartProductActions } from '@/components/features/cartProductActions';
 
 import './ProductsListView.styles.css';
 
 type PropsT = {
     products: ProductPreview[];
     productPageBaseUrl: string;
+    view?: 'catalog' | 'cart';
 };
 
-export function ProductsListView({ products, productPageBaseUrl }: PropsT) {
+export function ProductsListView({ products, productPageBaseUrl, view = 'catalog' }: PropsT) {
     return (
         <div className="products-list-view">
             {products.map((product) => (
@@ -18,10 +20,17 @@ export function ProductsListView({ products, productPageBaseUrl }: PropsT) {
                     product={product}
                     productPageUrl={`${productPageBaseUrl}/${product.slug}`}
                 >
-                    <ProductActions
-                        productId={product.id}
-                        isAvailable={product.stockQuantity > 0}
-                    />
+                    {view === 'catalog' ? (
+                        <ProductActions
+                            productId={product.id}
+                            isAvailable={product.stockQuantity > 0}
+                        />
+                    ) : (
+                        <CartProductActions
+                            productId={product.id}
+                            amountAvailable={product.stockQuantity}
+                        />
+                    )}
                 </ProductCard>
             ))}
         </div>

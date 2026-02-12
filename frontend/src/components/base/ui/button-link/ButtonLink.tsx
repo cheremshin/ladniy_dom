@@ -27,6 +27,6 @@ export const ButtonLink: FC<PropsT> = ({
     >
         {icon && <span className="base-button-link__icon">{icon}</span>}
         {children}
-        {badge && badge > 0 && <span className="base-button-link__badge">{badge}</span>}
+        {!!badge && <span className="base-button-link__badge">{badge}</span>}
     </Link>
 );

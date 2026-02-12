@@ -24,6 +24,10 @@ export type ProductPreview = Readonly<{
     title: string;
 
     pricing: ProductPricing;
+    rawPricing: {
+        base: number;
+        discountPrice?: number | null;
+    };
     status: ProductStatus;
 
     isFeatured: boolean;

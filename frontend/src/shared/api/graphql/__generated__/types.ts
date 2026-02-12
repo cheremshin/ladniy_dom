@@ -123,6 +123,7 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addToCart: UserCartItem;
   attachProductImage: ProductImage;
   createBrand: Brand;
   createCategory: Category;
@@ -130,6 +131,7 @@ export type Mutation = {
   createProductType: ProductType;
   createSpecificationDefinition: SpecificationDefinition;
   createUser: User;
+  decreaseCount: UserCartItem;
   detachProductImage: ProductImage;
   hardDeleteBrand: Brand;
   hardDeleteCategory: Category;
@@ -139,6 +141,7 @@ export type Mutation = {
   login: Scalars['String']['output'];
   logout: Scalars['String']['output'];
   register: User;
+  removeFromCart: UserCartItem;
   restoreBrand: Brand;
   restoreCategory: Category;
   restoreProduct: Product;
@@ -160,6 +163,12 @@ export type Mutation = {
   updateProfileInfo: User;
   updateSpecificationDefinition: SpecificationDefinition;
   updateUser: User;
+};
+
+
+export type MutationAddToCartArgs = {
+  productId: Scalars['ID']['input'];
+  userId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
@@ -195,6 +204,12 @@ export type MutationCreateSpecificationDefinitionArgs = {
 
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
+};
+
+
+export type MutationDecreaseCountArgs = {
+  productId: Scalars['ID']['input'];
+  userId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
@@ -235,6 +250,12 @@ export type MutationLoginArgs = {
 
 export type MutationRegisterArgs = {
   input: RegisterUserInputPublic;
+};
+
+
+export type MutationRemoveFromCartArgs = {
+  productId: Scalars['ID']['input'];
+  userId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
@@ -304,8 +325,8 @@ export type MutationSoftDeleteUserArgs = {
 
 
 export type MutationToggleUserFavouriteArgs = {
-  productId: Scalars['String']['input'];
-  userId?: InputMaybe<Scalars['String']['input']>;
+  productId: Scalars['ID']['input'];
+  userId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
@@ -458,6 +479,7 @@ export type Query = {
   brand: Brand;
   brandBySlug: Brand;
   brands: PaginatedBrands;
+  cart: UserCart;
   categories: PaginatedCategories;
   category: Category;
   categoryBySlug: Category;
@@ -496,6 +518,11 @@ export type QueryBrandsArgs = {
 };
 
 
+export type QueryCartArgs = {
+  userId?: InputMaybe<Scalars['ID']['input']>;
+};
+
+
 export type QueryCategoriesArgs = {
   includeInactive?: InputMaybe<Scalars['Boolean']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -517,7 +544,7 @@ export type QueryCategoryBySlugArgs = {
 
 
 export type QueryFavouritesArgs = {
-  userId?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
@@ -713,6 +740,19 @@ export type User = {
   role: UserRole;
 };
 
+export type UserCart = {
+  __typename?: 'UserCart';
+  items: Array<UserCartItem>;
+};
+
+export type UserCartItem = {
+  __typename?: 'UserCartItem';
+  id: Scalars['ID']['output'];
+  productId: Scalars['ID']['output'];
+  quantity: Scalars['Int']['output'];
+  userId: Scalars['ID']['output'];
+};
+
 export type UserFavourite = {
   __typename?: 'UserFavourite';
   id: Scalars['ID']['output'];
@@ -778,12 +818,36 @@ export type RestoreProductMutationVariables = Exact<{
 export type RestoreProductMutation = { __typename?: 'Mutation', restoreProduct: { __typename?: 'Product', id: string, status: ProductStatus } };
 
 export type ToggleUserFavouriteMutationVariables = Exact<{
-  userId?: InputMaybe<Scalars['String']['input']>;
-  productId: Scalars['String']['input'];
+  userId?: InputMaybe<Scalars['ID']['input']>;
+  productId: Scalars['ID']['input'];
 }>;
 
 
 export type ToggleUserFavouriteMutation = { __typename?: 'Mutation', toggleUserFavourite: { __typename?: 'UserFavourite', id: string, userId: string, productId: string } };
+
+export type AddToCartMutationVariables = Exact<{
+  userId?: InputMaybe<Scalars['ID']['input']>;
+  productId: Scalars['ID']['input'];
+}>;
+
+
+export type AddToCartMutation = { __typename?: 'Mutation', addToCart: { __typename?: 'UserCartItem', id: string, userId: string, productId: string, quantity: number } };
+
+export type RemoveFromCartMutationVariables = Exact<{
+  userId?: InputMaybe<Scalars['ID']['input']>;
+  productId: Scalars['ID']['input'];
+}>;
+
+
+export type RemoveFromCartMutation = { __typename?: 'Mutation', removeFromCart: { __typename?: 'UserCartItem', id: string, userId: string, productId: string, quantity: number } };
+
+export type DecreaseCartItemCountMutationVariables = Exact<{
+  userId?: InputMaybe<Scalars['ID']['input']>;
+  productId: Scalars['ID']['input'];
+}>;
+
+
+export type DecreaseCartItemCountMutation = { __typename?: 'Mutation', decreaseCount: { __typename?: 'UserCartItem', id: string, userId: string, productId: string, quantity: number } };
 
 export type CategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -850,3 +914,8 @@ export type FavouritesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type FavouritesQuery = { __typename?: 'Query', favourites: { __typename?: 'UserFavourites', items: Array<{ __typename?: 'UserFavourite', productId: string }> } };
+
+export type CartQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CartQuery = { __typename?: 'Query', cart: { __typename?: 'UserCart', items: Array<{ __typename?: 'UserCartItem', productId: string, quantity: number }> } };

@@ -37,3 +37,14 @@ export const GET_USER_FAVOURITES = gql`
         }
     }
 `;
+
+export const GET_USER_CART = gql`
+    query Cart {
+        cart {
+            items {
+                productId
+                quantity
+            }
+        }
+    }
+`;

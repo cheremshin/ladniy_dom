@@ -6,20 +6,24 @@ import { ApolloProvider } from '@apollo/client/react';
 import { ReactNode } from 'react';
 import { RawUser } from '@/shared/contexts/user-context';
 import { FavouritesProvider } from '@/shared/contexts/favourites-provider';
+import { CartProvider } from '@/shared/contexts/cart-provider';
 import { Id } from '@/shared/entities/common.types';
 
 type PropsT = {
     user: RawUser;
-    favourites: Id[] | null;
+    favourites: Id[];
+    cart: { productId: Id; quantity: number }[];
     children: ReactNode;
 };
 
-export function Providers({ user, favourites: initialFavourites, children }: PropsT) {
+export function Providers({ user, favourites: initialFavourites, cart: initialCart, children }: PropsT) {
     return (
         <ApolloProvider client={apolloBrowserClient}>
             <UserProvider initialUser={user}>
-                <FavouritesProvider initialFavourites={initialFavourites}>
-                    {children}
+                <FavouritesProvider key={user?.id ?? 'guest'} initialFavourites={initialFavourites}>
+                    <CartProvider key={user?.id ?? 'guest'} initialCart={initialCart}>
+                        {children}
+                    </CartProvider>
                 </FavouritesProvider>
             </UserProvider>
         </ApolloProvider>

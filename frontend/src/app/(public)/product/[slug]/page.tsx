@@ -5,7 +5,7 @@ import { mapProductToProductDetails, mapProductToProductOverview } from '@/share
 import { notFound } from 'next/navigation';
 import { ProductOverviewCard } from '@/components/entities/product/productOverviewCard';
 import { Suspense } from 'react';
-import { ProductActions } from '@/components/widgets/productActions';
+import { ProductActions } from '@/components/features/productActions';
 
 import './page.styles.css';
 
