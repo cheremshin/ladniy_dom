@@ -13,6 +13,37 @@ const nextConfig: NextConfig = {
             },
         ],
     },
+    redirects: () => {
+        return [
+            {
+                source: '/product',
+                destination: '/',
+                permanent: true,
+            },
+            {
+                source: '/auth/:path',
+                has: [
+                    {
+                        type: 'cookie',
+                        key: 'session',
+                    },
+                ],
+                destination: '/',
+                permanent: false,
+            },
+            {
+                source: '/account',
+                missing: [
+                    {
+                        type: 'cookie',
+                        key: 'session',
+                    },
+                ],
+                destination: '/auth/sign-in',
+                permanent: false,
+            },
+        ];
+    },
 };
 
 export default nextConfig;
