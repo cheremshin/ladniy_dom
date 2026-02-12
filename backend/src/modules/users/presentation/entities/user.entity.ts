@@ -29,4 +29,7 @@ export class User {
 
     @Field(() => Boolean)
     isActive: boolean;
+
+    @Field(() => UserRole)
+    role: 'customer' | 'admin';
 }
