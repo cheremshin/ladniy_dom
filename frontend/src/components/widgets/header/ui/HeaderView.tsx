@@ -6,13 +6,14 @@ import Link from 'next/link';
 import './HeaderView.styles.css';
 
 type PropsT = {
+    mainPageUrl: string;
     children?: ReactNode;
 };
 
-export const HeaderView: FC<PropsT> = ({ children }) => {
+export const HeaderView: FC<PropsT> = ({ mainPageUrl, children }) => {
     return (
         <header>
-            <Link href="/" className="header__logo">
+            <Link href={mainPageUrl} className="header__logo">
                 Ладный дом
             </Link>
             <div className="header__actions">
