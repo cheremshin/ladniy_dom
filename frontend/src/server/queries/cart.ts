@@ -1,10 +1,10 @@
 import { CartQuery } from '@/shared/api/graphql/__generated__/types';
 import { graphqlFetch } from '../apollo/client/graphql-fetch';
-import { GET_USER_CART } from '@/shared/api/graphql/queries/profile';
+import { CART } from '@/shared/api/graphql/queries';
 
 export async function getUserCart() {
     try {
-        const data = await graphqlFetch<CartQuery>(GET_USER_CART);
+        const data = await graphqlFetch<CartQuery>(CART);
         return data.cart;
     } catch {
         return null;

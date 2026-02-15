@@ -1,10 +1,10 @@
 import { CatalogProductsQuery, CatalogProductsQueryVariables, ProductPageQuery, ProductPageQueryVariables, ProductsByIdsQuery, ProductsByIdsQueryVariables } from '@/shared/api/graphql/__generated__/types';
 import { graphqlFetch } from '../apollo/client/graphql-fetch';
-import { CATALOG_PRODUCTS, PRODUCT_PAGE, PRODUCTS_BY_IDS } from '@/shared/api/graphql/queries/products';
+import { PRODUCTS, PRODUCT_BY_SLUG, PRODUCTS_BY_IDS } from '@/shared/api/graphql/queries';
 
 export async function getCatalogProducts(variables?: CatalogProductsQueryVariables) {
     const data = await graphqlFetch<CatalogProductsQuery, CatalogProductsQueryVariables>(
-        CATALOG_PRODUCTS,
+        PRODUCTS,
         variables ?? {},
     );
 
@@ -13,7 +13,7 @@ export async function getCatalogProducts(variables?: CatalogProductsQueryVariabl
 
 export async function getProductBySlug(slug: string) {
     const data = await graphqlFetch<ProductPageQuery, ProductPageQueryVariables>(
-        PRODUCT_PAGE,
+        PRODUCT_BY_SLUG,
         { slug },
     );
 

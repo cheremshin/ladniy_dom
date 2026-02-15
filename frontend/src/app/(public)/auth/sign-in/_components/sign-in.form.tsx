@@ -10,7 +10,7 @@ import { schema, SignInValues } from '../_lib/sign-in.schema';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useUser } from '@/shared/contexts/user-context';
-import { GET_ME } from '@/shared/api/graphql/queries/profile';
+import { ME } from '@/shared/api/graphql/queries';
 import { MeQuery } from '@/shared/api/graphql/__generated__/types';
 import { sidebarBaseRoute } from '@/shared/config/erp.sidebar.config';
 
@@ -42,7 +42,7 @@ export const SignInForm = () => {
                 variables: { input: { email: values.email, password: values.password } },
             });
 
-            const user = await apolloBrowserClient.query<MeQuery>({ query: GET_ME });
+            const user = await apolloBrowserClient.query<MeQuery>({ query: ME });
             if (!user.data) {
                 throw Error('Internal server error');
             }

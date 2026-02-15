@@ -35,10 +35,3 @@ export {
     FAVOURITES,
     CART,
 } from './user';
-
-export {
-    GET_ME,
-    USER_PROFILE,
-    GET_USER_FAVOURITES,
-    GET_USER_CART,
-} from './profile';
