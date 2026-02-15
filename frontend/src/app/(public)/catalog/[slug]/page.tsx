@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { mapCatalogCategoryDTOtoCatalogCategory } from '@/shared/mappers/category.mappers';
+import { mapCatalogCategoryDTOToCatalogCategory } from '@/shared/mappers/category.mapper';
 import { mapProductToProductPreview } from '@/shared/mappers/product.mapper';
 import { getCatalogCategory } from '@/server/queries/categories';
 import { getCatalogProducts } from '@/server/queries/products';
@@ -19,7 +19,7 @@ export default async function Page({ params, searchParams }: Readonly<PageProps<
         notFound();
     }
 
-    const catalogCategory = mapCatalogCategoryDTOtoCatalogCategory(categoryDTO);
+    const catalogCategory = mapCatalogCategoryDTOToCatalogCategory(categoryDTO);
 
     if (catalogCategory.productTypes.length === 0) {
         notFound();

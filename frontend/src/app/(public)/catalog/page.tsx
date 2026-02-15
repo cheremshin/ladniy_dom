@@ -1,6 +1,6 @@
 import { CategoryLink } from '@/components/features/categoryLink';
 import { getCategoriesList } from '@/server/queries/categories';
-import { mapCategoryListItemDTOtoCategoryListItem } from '@/shared/mappers/category.mappers';
+import { mapCategoryListItemDTOToCategoryListItem } from '@/shared/mappers/category.mapper';
 import { Metadata } from 'next';
 
 import './page.styles.css';
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default async function Page() {
     const categories = await getCategoriesList();
-    const categoriesData = categories.map(item => mapCategoryListItemDTOtoCategoryListItem(item));
+    const categoriesData = categories.map(item => mapCategoryListItemDTOToCategoryListItem(item));
 
     return (
         <main className="categories-page">

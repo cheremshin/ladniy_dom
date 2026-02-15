@@ -11,7 +11,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useUser } from '@/shared/contexts/user-context';
 import { GET_ME } from '@/shared/api/graphql/queries/profile';
-import { User } from '@/shared/api/graphql/__generated__/types';
+import { MeQuery } from '@/shared/api/graphql/__generated__/types';
+import { sidebarBaseRoute } from '@/shared/config/erp.sidebar.config';
 
 const defaultValues: SignInValues = {
     email: '',
@@ -41,18 +42,18 @@ export const SignInForm = () => {
                 variables: { input: { email: values.email, password: values.password } },
             });
 
-            const user = await apolloBrowserClient.query<User>({ query: GET_ME });
+            const user = await apolloBrowserClient.query<MeQuery>({ query: GET_ME });
             if (!user.data) {
                 throw Error('Internal server error');
             }
 
             setUser({
-                userId: user.data.id,
-                role: user.data.role,
-                email: user.data.email,
+                userId: user.data.me.id,
+                role: user.data.me.role,
+                email: user.data.me.email,
             });
 
-            router.push('/');
+            router.push(user.data.me.role === 'ADMIN' ? sidebarBaseRoute.href : '/');
             router.refresh();
         } catch (e) {
             if (e instanceof Error && e.message === 'Invalid email or password') {
