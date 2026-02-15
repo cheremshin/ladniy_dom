@@ -770,6 +770,28 @@ export type UserRole =
   | 'CUSTOMER'
   | '%future added value';
 
+export type BrandFieldsFragment = { __typename?: 'Brand', id: string, title: string, slug: string, description?: string | null, logoUrl?: string | null, country?: string | null, website?: string | null, isActive: boolean };
+
+export type CategoryFieldsFragment = { __typename?: 'Category', id: string, parentId?: string | null, title: string, slug: string, imageUrl?: string | null, sortOrder: number, isActive: boolean, createdAt: string, updatedAt: string };
+
+export type ProductImageFieldsFragment = { __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string };
+
+export type ProductFieldsFragment = { __typename?: 'Product', id: string, title: string, slug: string, categoryId: string, productTypeId?: string | null, brandId: string, description?: string | null, sku: string, status: ProductStatus, basePrice: number, discountPrice?: number | null, costPrice: number, specifications?: Record<string, unknown> | null, stockQuantity: number, isFeatured: boolean, warrantyMonths: number, metaTitle?: string | null, metaDescription?: string | null, primaryImage?: { __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string } | null, images?: Array<{ __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string }> | null };
+
+export type ProductTypeFieldsFragment = { __typename?: 'ProductType', id: string, title: string, plural: string, slug: string, categoryId: string };
+
+export type SpecificationDefinitionFieldsFragment = { __typename?: 'SpecificationDefinition', id: string, productTypeId: string, key: string, displayName: string, description?: string | null, unit?: string | null, isFilterable: boolean, isActive: boolean };
+
+export type ProductSpecificationDefinitionFieldsFragment = { __typename?: 'ProductSpecificationDefinition', id: string, key: string, displayName: string, description?: string | null, unit?: string | null, isFilterable: boolean };
+
+export type UserFieldsFragment = { __typename?: 'User', id: string, email: string, firstName?: string | null, lastName?: string | null, nickname: string, phone?: string | null, isActive: boolean, role: UserRole };
+
+export type UserFavouriteFieldsFragment = { __typename?: 'UserFavourite', id: string, userId: string, productId: string };
+
+export type UserCartItemFieldsFragment = { __typename?: 'UserCartItem', id: string, userId: string, productId: string, quantity: number };
+
+export type PaginationMetaFieldsFragment = { __typename?: 'PaginationMeta', total: number, page: number, limit: number, totalPages: number, hasNextPage: boolean, hasPrevPage: boolean };
+
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
 }>;
@@ -782,40 +804,243 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type LogoutMutation = { __typename?: 'Mutation', logout: string };
 
-export type RegisterMutationVariables = Exact<{
-  input: RegisterUserInputPublic;
+export type CreateBrandMutationVariables = Exact<{
+  input: CreateBrandInput;
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'User', id: string, email: string, firstName?: string | null, lastName?: string | null, nickname: string, phone?: string | null } };
+export type CreateBrandMutation = { __typename?: 'Mutation', createBrand: { __typename?: 'Brand', id: string, title: string, slug: string, description?: string | null, logoUrl?: string | null, country?: string | null, website?: string | null, isActive: boolean } };
+
+export type UpdateBrandMutationVariables = Exact<{
+  input: UpdateBrandInput;
+}>;
+
+
+export type UpdateBrandMutation = { __typename?: 'Mutation', updateBrand: { __typename?: 'Brand', id: string, title: string, slug: string, description?: string | null, logoUrl?: string | null, country?: string | null, website?: string | null, isActive: boolean } };
+
+export type HardDeleteBrandMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type HardDeleteBrandMutation = { __typename?: 'Mutation', hardDeleteBrand: { __typename?: 'Brand', id: string, title: string, slug: string, description?: string | null, logoUrl?: string | null, country?: string | null, website?: string | null, isActive: boolean } };
+
+export type SoftDeleteBrandMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type SoftDeleteBrandMutation = { __typename?: 'Mutation', softDeleteBrand: { __typename?: 'Brand', id: string, title: string, slug: string, description?: string | null, logoUrl?: string | null, country?: string | null, website?: string | null, isActive: boolean } };
+
+export type RestoreBrandMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type RestoreBrandMutation = { __typename?: 'Mutation', restoreBrand: { __typename?: 'Brand', id: string, title: string, slug: string, description?: string | null, logoUrl?: string | null, country?: string | null, website?: string | null, isActive: boolean } };
+
+export type CreateCategoryMutationVariables = Exact<{
+  input: CreateCategoryInput;
+}>;
+
+
+export type CreateCategoryMutation = { __typename?: 'Mutation', createCategory: { __typename?: 'Category', id: string, parentId?: string | null, title: string, slug: string, imageUrl?: string | null, sortOrder: number, isActive: boolean, createdAt: string, updatedAt: string } };
+
+export type UpdateCategoryMutationVariables = Exact<{
+  input: UpdateCategoryInput;
+}>;
+
+
+export type UpdateCategoryMutation = { __typename?: 'Mutation', updateCategory: { __typename?: 'Category', id: string, parentId?: string | null, title: string, slug: string, imageUrl?: string | null, sortOrder: number, isActive: boolean, createdAt: string, updatedAt: string } };
+
+export type HardDeleteCategoryMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type HardDeleteCategoryMutation = { __typename?: 'Mutation', hardDeleteCategory: { __typename?: 'Category', id: string, parentId?: string | null, title: string, slug: string, imageUrl?: string | null, sortOrder: number, isActive: boolean, createdAt: string, updatedAt: string } };
+
+export type SoftDeleteCategoryMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type SoftDeleteCategoryMutation = { __typename?: 'Mutation', softDeleteCategory: { __typename?: 'Category', id: string, parentId?: string | null, title: string, slug: string, imageUrl?: string | null, sortOrder: number, isActive: boolean, createdAt: string, updatedAt: string } };
+
+export type RestoreCategoryMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type RestoreCategoryMutation = { __typename?: 'Mutation', restoreCategory: { __typename?: 'Category', id: string, parentId?: string | null, title: string, slug: string, imageUrl?: string | null, sortOrder: number, isActive: boolean, createdAt: string, updatedAt: string } };
+
+export type CreateProductTypeMutationVariables = Exact<{
+  input: CreateProductTypeInput;
+}>;
+
+
+export type CreateProductTypeMutation = { __typename?: 'Mutation', createProductType: { __typename?: 'ProductType', id: string, title: string, plural: string, slug: string, categoryId: string } };
+
+export type UpdateProductTypeMutationVariables = Exact<{
+  input: UpdateProductTypeInput;
+}>;
+
+
+export type UpdateProductTypeMutation = { __typename?: 'Mutation', updateProductType: { __typename?: 'ProductType', id: string, title: string, plural: string, slug: string, categoryId: string } };
+
+export type HardDeleteProductTypeMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type HardDeleteProductTypeMutation = { __typename?: 'Mutation', hardDeleteProductType: { __typename?: 'ProductType', id: string, title: string, plural: string, slug: string, categoryId: string } };
+
+export type SoftDeleteProductTypeMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type SoftDeleteProductTypeMutation = { __typename?: 'Mutation', softDeleteProductType: { __typename?: 'ProductType', id: string, title: string, plural: string, slug: string, categoryId: string } };
+
+export type RestoreProductTypeMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type RestoreProductTypeMutation = { __typename?: 'Mutation', restoreProductType: { __typename?: 'ProductType', id: string, title: string, plural: string, slug: string, categoryId: string } };
 
 export type CreateProductMutationVariables = Exact<{
   input: CreateProductInput;
 }>;
 
 
-export type CreateProductMutation = { __typename?: 'Mutation', createProduct: { __typename?: 'Product', id: string, title: string, slug: string, status: ProductStatus, basePrice: number } };
+export type CreateProductMutation = { __typename?: 'Mutation', createProduct: { __typename?: 'Product', id: string, title: string, slug: string, categoryId: string, productTypeId?: string | null, brandId: string, description?: string | null, sku: string, status: ProductStatus, basePrice: number, discountPrice?: number | null, costPrice: number, specifications?: Record<string, unknown> | null, stockQuantity: number, isFeatured: boolean, warrantyMonths: number, metaTitle?: string | null, metaDescription?: string | null, primaryImage?: { __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string } | null, images?: Array<{ __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string }> | null } };
 
 export type UpdateProductMutationVariables = Exact<{
   input: UpdateProductInput;
 }>;
 
 
-export type UpdateProductMutation = { __typename?: 'Mutation', updateProduct: { __typename?: 'Product', id: string, title: string, basePrice: number, discountPrice?: number | null, status: ProductStatus } };
+export type UpdateProductMutation = { __typename?: 'Mutation', updateProduct: { __typename?: 'Product', id: string, title: string, slug: string, categoryId: string, productTypeId?: string | null, brandId: string, description?: string | null, sku: string, status: ProductStatus, basePrice: number, discountPrice?: number | null, costPrice: number, specifications?: Record<string, unknown> | null, stockQuantity: number, isFeatured: boolean, warrantyMonths: number, metaTitle?: string | null, metaDescription?: string | null, primaryImage?: { __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string } | null, images?: Array<{ __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string }> | null } };
 
 export type SoftDeleteProductMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type SoftDeleteProductMutation = { __typename?: 'Mutation', softDeleteProduct: { __typename?: 'Product', id: string, status: ProductStatus } };
+export type SoftDeleteProductMutation = { __typename?: 'Mutation', softDeleteProduct: { __typename?: 'Product', id: string, title: string, slug: string, categoryId: string, productTypeId?: string | null, brandId: string, description?: string | null, sku: string, status: ProductStatus, basePrice: number, discountPrice?: number | null, costPrice: number, specifications?: Record<string, unknown> | null, stockQuantity: number, isFeatured: boolean, warrantyMonths: number, metaTitle?: string | null, metaDescription?: string | null, primaryImage?: { __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string } | null, images?: Array<{ __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string }> | null } };
 
 export type RestoreProductMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type RestoreProductMutation = { __typename?: 'Mutation', restoreProduct: { __typename?: 'Product', id: string, status: ProductStatus } };
+export type RestoreProductMutation = { __typename?: 'Mutation', restoreProduct: { __typename?: 'Product', id: string, title: string, slug: string, categoryId: string, productTypeId?: string | null, brandId: string, description?: string | null, sku: string, status: ProductStatus, basePrice: number, discountPrice?: number | null, costPrice: number, specifications?: Record<string, unknown> | null, stockQuantity: number, isFeatured: boolean, warrantyMonths: number, metaTitle?: string | null, metaDescription?: string | null, primaryImage?: { __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string } | null, images?: Array<{ __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string }> | null } };
+
+export type HardDeleteProductMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type HardDeleteProductMutation = { __typename?: 'Mutation', hardDeleteProduct: { __typename?: 'Product', id: string, title: string, slug: string, categoryId: string, productTypeId?: string | null, brandId: string, description?: string | null, sku: string, status: ProductStatus, basePrice: number, discountPrice?: number | null, costPrice: number, specifications?: Record<string, unknown> | null, stockQuantity: number, isFeatured: boolean, warrantyMonths: number, metaTitle?: string | null, metaDescription?: string | null, primaryImage?: { __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string } | null, images?: Array<{ __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string }> | null } };
+
+export type AttachProductImageMutationVariables = Exact<{
+  input: AttachImageInput;
+}>;
+
+
+export type AttachProductImageMutation = { __typename?: 'Mutation', attachProductImage: { __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string } };
+
+export type DetachProductImageMutationVariables = Exact<{
+  imageId: Scalars['ID']['input'];
+}>;
+
+
+export type DetachProductImageMutation = { __typename?: 'Mutation', detachProductImage: { __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string } };
+
+export type SetProductPrimaryImageMutationVariables = Exact<{
+  imageId: Scalars['ID']['input'];
+}>;
+
+
+export type SetProductPrimaryImageMutation = { __typename?: 'Mutation', setProductPrimaryImage: { __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string } };
+
+export type CreateSpecificationDefinitionMutationVariables = Exact<{
+  input: CreateSpecificationDefinitionInput;
+}>;
+
+
+export type CreateSpecificationDefinitionMutation = { __typename?: 'Mutation', createSpecificationDefinition: { __typename?: 'SpecificationDefinition', id: string, productTypeId: string, key: string, displayName: string, description?: string | null, unit?: string | null, isFilterable: boolean, isActive: boolean } };
+
+export type UpdateSpecificationDefinitionMutationVariables = Exact<{
+  input: UpdateSpecificationDefinitionInput;
+}>;
+
+
+export type UpdateSpecificationDefinitionMutation = { __typename?: 'Mutation', updateSpecificationDefinition: { __typename?: 'SpecificationDefinition', id: string, productTypeId: string, key: string, displayName: string, description?: string | null, unit?: string | null, isFilterable: boolean, isActive: boolean } };
+
+export type HardDeleteSpecificationDefinitionMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type HardDeleteSpecificationDefinitionMutation = { __typename?: 'Mutation', hardDeleteSpecificationDefinition: { __typename?: 'SpecificationDefinition', id: string, productTypeId: string, key: string, displayName: string, description?: string | null, unit?: string | null, isFilterable: boolean, isActive: boolean } };
+
+export type SoftDeleteSpecificationDefinitionMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type SoftDeleteSpecificationDefinitionMutation = { __typename?: 'Mutation', softDeleteSpecificationDefinition: { __typename?: 'SpecificationDefinition', id: string, productTypeId: string, key: string, displayName: string, description?: string | null, unit?: string | null, isFilterable: boolean, isActive: boolean } };
+
+export type RestoreSpecificationDefinitionMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type RestoreSpecificationDefinitionMutation = { __typename?: 'Mutation', restoreSpecificationDefinition: { __typename?: 'SpecificationDefinition', id: string, productTypeId: string, key: string, displayName: string, description?: string | null, unit?: string | null, isFilterable: boolean, isActive: boolean } };
+
+export type CreateUserMutationVariables = Exact<{
+  input: CreateUserInput;
+}>;
+
+
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, email: string, firstName?: string | null, lastName?: string | null, nickname: string, phone?: string | null, isActive: boolean, role: UserRole } };
+
+export type RegisterMutationVariables = Exact<{
+  input: RegisterUserInputPublic;
+}>;
+
+
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'User', id: string, email: string, firstName?: string | null, lastName?: string | null, nickname: string, phone?: string | null, isActive: boolean, role: UserRole } };
+
+export type UpdateUserMutationVariables = Exact<{
+  input: UpdateUserInput;
+}>;
+
+
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, firstName?: string | null, lastName?: string | null, nickname: string, phone?: string | null, isActive: boolean, role: UserRole } };
+
+export type UpdateProfileInfoMutationVariables = Exact<{
+  input: UpdateUserInputPublic;
+}>;
+
+
+export type UpdateProfileInfoMutation = { __typename?: 'Mutation', updateProfileInfo: { __typename?: 'User', id: string, email: string, firstName?: string | null, lastName?: string | null, nickname: string, phone?: string | null, isActive: boolean, role: UserRole } };
+
+export type SoftDeleteUserMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type SoftDeleteUserMutation = { __typename?: 'Mutation', softDeleteUser: { __typename?: 'User', id: string, email: string, firstName?: string | null, lastName?: string | null, nickname: string, phone?: string | null, isActive: boolean, role: UserRole } };
+
+export type RestoreUserMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type RestoreUserMutation = { __typename?: 'Mutation', restoreUser: { __typename?: 'User', id: string, email: string, firstName?: string | null, lastName?: string | null, nickname: string, phone?: string | null, isActive: boolean, role: UserRole } };
 
 export type ToggleUserFavouriteMutationVariables = Exact<{
   userId?: InputMaybe<Scalars['ID']['input']>;
@@ -841,32 +1066,88 @@ export type RemoveFromCartMutationVariables = Exact<{
 
 export type RemoveFromCartMutation = { __typename?: 'Mutation', removeFromCart: { __typename?: 'UserCartItem', id: string, userId: string, productId: string, quantity: number } };
 
-export type DecreaseCartItemCountMutationVariables = Exact<{
+export type DecreaseCountMutationVariables = Exact<{
   userId?: InputMaybe<Scalars['ID']['input']>;
   productId: Scalars['ID']['input'];
 }>;
 
 
-export type DecreaseCartItemCountMutation = { __typename?: 'Mutation', decreaseCount: { __typename?: 'UserCartItem', id: string, userId: string, productId: string, quantity: number } };
+export type DecreaseCountMutation = { __typename?: 'Mutation', decreaseCount: { __typename?: 'UserCartItem', id: string, userId: string, productId: string, quantity: number } };
 
-export type CategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+export type BrandsQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  includeInactive?: InputMaybe<Scalars['Boolean']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
-export type CategoriesQuery = { __typename?: 'Query', categories: { __typename?: 'PaginatedCategories', items: Array<{ __typename?: 'Category', id: string, title: string, slug: string, imageUrl?: string | null, sortOrder: number }> } };
+export type BrandsQuery = { __typename?: 'Query', brands: { __typename?: 'PaginatedBrands', items: Array<{ __typename?: 'Brand', id: string, title: string, slug: string, description?: string | null, logoUrl?: string | null, country?: string | null, website?: string | null, isActive: boolean }>, meta: { __typename?: 'PaginationMeta', total: number, page: number, limit: number, totalPages: number, hasNextPage: boolean, hasPrevPage: boolean } } };
+
+export type BrandQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type BrandQuery = { __typename?: 'Query', brand: { __typename?: 'Brand', id: string, title: string, slug: string, description?: string | null, logoUrl?: string | null, country?: string | null, website?: string | null, isActive: boolean } };
+
+export type BrandBySlugQueryVariables = Exact<{
+  slug: Scalars['String']['input'];
+}>;
+
+
+export type BrandBySlugQuery = { __typename?: 'Query', brandBySlug: { __typename?: 'Brand', id: string, title: string, slug: string, description?: string | null, logoUrl?: string | null, country?: string | null, website?: string | null, isActive: boolean } };
+
+export type CategoriesQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  parentId?: InputMaybe<Scalars['ID']['input']>;
+  includeInactive?: InputMaybe<Scalars['Boolean']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  rootOnly?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+
+export type CategoriesQuery = { __typename?: 'Query', categories: { __typename?: 'PaginatedCategories', items: Array<{ __typename?: 'Category', id: string, parentId?: string | null, title: string, slug: string, imageUrl?: string | null, sortOrder: number, isActive: boolean, createdAt: string, updatedAt: string }>, meta: { __typename?: 'PaginationMeta', total: number, page: number, limit: number, totalPages: number, hasNextPage: boolean, hasPrevPage: boolean } } };
+
+export type CategoryQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type CategoryQuery = { __typename?: 'Query', category: { __typename?: 'Category', id: string, parentId?: string | null, title: string, slug: string, imageUrl?: string | null, sortOrder: number, isActive: boolean, createdAt: string, updatedAt: string } };
 
 export type CategoryBySlugQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
 
-export type CategoryBySlugQuery = { __typename?: 'Query', categoryBySlug: { __typename?: 'Category', title: string, imageUrl?: string | null, productTypes: Array<{ __typename?: 'ProductType', id: string, slug: string, plural: string }> } };
+export type CategoryBySlugQuery = { __typename?: 'Query', categoryBySlug: { __typename?: 'Category', id: string, parentId?: string | null, title: string, slug: string, imageUrl?: string | null, sortOrder: number, isActive: boolean, createdAt: string, updatedAt: string, productTypes: Array<{ __typename?: 'ProductType', id: string, title: string, plural: string, slug: string, categoryId: string }> } };
 
 export type ProductTypesQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
   categoryId?: InputMaybe<Scalars['ID']['input']>;
+  includeInactive?: InputMaybe<Scalars['Boolean']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type ProductTypesQuery = { __typename?: 'Query', productTypes: { __typename?: 'PaginatedProductTypes', items: Array<{ __typename?: 'ProductType', id: string, slug: string, title: string, plural: string, categoryId: string }> } };
+export type ProductTypesQuery = { __typename?: 'Query', productTypes: { __typename?: 'PaginatedProductTypes', items: Array<{ __typename?: 'ProductType', id: string, title: string, plural: string, slug: string, categoryId: string }>, meta: { __typename?: 'PaginationMeta', total: number, page: number, limit: number, totalPages: number, hasNextPage: boolean, hasPrevPage: boolean } } };
+
+export type ProductTypeQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type ProductTypeQuery = { __typename?: 'Query', productType: { __typename?: 'ProductType', id: string, title: string, plural: string, slug: string, categoryId: string } };
+
+export type ProductTypeBySlugQueryVariables = Exact<{
+  slug: Scalars['String']['input'];
+}>;
+
+
+export type ProductTypeBySlugQuery = { __typename?: 'Query', productTypeBySlug: { __typename?: 'ProductType', id: string, title: string, plural: string, slug: string, categoryId: string } };
 
 export type CatalogProductsQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -874,48 +1155,90 @@ export type CatalogProductsQueryVariables = Exact<{
   categoryId?: InputMaybe<Scalars['ID']['input']>;
   brandId?: InputMaybe<Scalars['ID']['input']>;
   productTypeId?: InputMaybe<Scalars['ID']['input']>;
-  minPrice?: InputMaybe<Scalars['Float']['input']>;
-  maxPrice?: InputMaybe<Scalars['Float']['input']>;
-  search?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<ProductStatus>;
   isFeatured?: InputMaybe<Scalars['Boolean']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  minPrice?: InputMaybe<Scalars['Float']['input']>;
+  maxPrice?: InputMaybe<Scalars['Float']['input']>;
+  includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 
-export type CatalogProductsQuery = { __typename?: 'Query', products: { __typename?: 'PaginatedProducts', items: Array<{ __typename?: 'Product', id: string, title: string, slug: string, basePrice: number, discountPrice?: number | null, status: ProductStatus, isFeatured: boolean, stockQuantity: number, primaryImage?: { __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean } | null }>, meta: { __typename?: 'PaginationMeta', total: number, page: number, limit: number, totalPages: number, hasNextPage: boolean, hasPrevPage: boolean } } };
+export type CatalogProductsQuery = { __typename?: 'Query', products: { __typename?: 'PaginatedProducts', items: Array<{ __typename?: 'Product', id: string, title: string, slug: string, categoryId: string, productTypeId?: string | null, brandId: string, description?: string | null, sku: string, status: ProductStatus, basePrice: number, discountPrice?: number | null, costPrice: number, specifications?: Record<string, unknown> | null, stockQuantity: number, isFeatured: boolean, warrantyMonths: number, metaTitle?: string | null, metaDescription?: string | null, primaryImage?: { __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string } | null, images?: Array<{ __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string }> | null }>, meta: { __typename?: 'PaginationMeta', total: number, page: number, limit: number, totalPages: number, hasNextPage: boolean, hasPrevPage: boolean } } };
+
+export type ProductQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', id: string, title: string, slug: string, categoryId: string, productTypeId?: string | null, brandId: string, description?: string | null, sku: string, status: ProductStatus, basePrice: number, discountPrice?: number | null, costPrice: number, specifications?: Record<string, unknown> | null, stockQuantity: number, isFeatured: boolean, warrantyMonths: number, metaTitle?: string | null, metaDescription?: string | null, category: { __typename?: 'Category', id: string, parentId?: string | null, title: string, slug: string, imageUrl?: string | null, sortOrder: number, isActive: boolean, createdAt: string, updatedAt: string }, brand: { __typename?: 'Brand', id: string, title: string, slug: string, description?: string | null, logoUrl?: string | null, country?: string | null, website?: string | null, isActive: boolean }, productType?: { __typename?: 'ProductType', id: string, title: string, plural: string, slug: string, categoryId: string } | null, specificationDefinitions?: Array<{ __typename?: 'ProductSpecificationDefinition', id: string, key: string, displayName: string, description?: string | null, unit?: string | null, isFilterable: boolean }> | null, primaryImage?: { __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string } | null, images?: Array<{ __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string }> | null } };
 
 export type ProductPageQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
 
-export type ProductPageQuery = { __typename?: 'Query', productBySlug: { __typename?: 'Product', id: string, title: string, slug: string, description?: string | null, sku: string, status: ProductStatus, basePrice: number, discountPrice?: number | null, warrantyMonths: number, specifications?: Record<string, unknown> | null, stockQuantity: number, isFeatured: boolean, metaTitle?: string | null, metaDescription?: string | null, category: { __typename?: 'Category', id: string, title: string, slug: string }, brand: { __typename?: 'Brand', id: string, title: string, slug: string, logoUrl?: string | null }, images?: Array<{ __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean }> | null, specificationDefinitions?: Array<{ __typename?: 'ProductSpecificationDefinition', key: string, displayName: string, description?: string | null, unit?: string | null }> | null } };
+export type ProductPageQuery = { __typename?: 'Query', productBySlug: { __typename?: 'Product', id: string, title: string, slug: string, categoryId: string, productTypeId?: string | null, brandId: string, description?: string | null, sku: string, status: ProductStatus, basePrice: number, discountPrice?: number | null, costPrice: number, specifications?: Record<string, unknown> | null, stockQuantity: number, isFeatured: boolean, warrantyMonths: number, metaTitle?: string | null, metaDescription?: string | null, category: { __typename?: 'Category', id: string, parentId?: string | null, title: string, slug: string, imageUrl?: string | null, sortOrder: number, isActive: boolean, createdAt: string, updatedAt: string }, brand: { __typename?: 'Brand', id: string, title: string, slug: string, description?: string | null, logoUrl?: string | null, country?: string | null, website?: string | null, isActive: boolean }, productType?: { __typename?: 'ProductType', id: string, title: string, plural: string, slug: string, categoryId: string } | null, specificationDefinitions?: Array<{ __typename?: 'ProductSpecificationDefinition', id: string, key: string, displayName: string, description?: string | null, unit?: string | null, isFilterable: boolean }> | null, primaryImage?: { __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string } | null, images?: Array<{ __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string }> | null } };
 
 export type ProductsByIdsQueryVariables = Exact<{
   input: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
 }>;
 
 
-export type ProductsByIdsQuery = { __typename?: 'Query', productsByIds: Array<{ __typename?: 'Product', id: string, title: string, slug: string, basePrice: number, discountPrice?: number | null, status: ProductStatus, isFeatured: boolean, stockQuantity: number, primaryImage?: { __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean } | null }> };
+export type ProductsByIdsQuery = { __typename?: 'Query', productsByIds: Array<{ __typename?: 'Product', id: string, title: string, slug: string, categoryId: string, productTypeId?: string | null, brandId: string, description?: string | null, sku: string, status: ProductStatus, basePrice: number, discountPrice?: number | null, costPrice: number, specifications?: Record<string, unknown> | null, stockQuantity: number, isFeatured: boolean, warrantyMonths: number, metaTitle?: string | null, metaDescription?: string | null, primaryImage?: { __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string } | null, images?: Array<{ __typename?: 'ProductImage', id: string, url: string, altText?: string | null, sortOrder: number, isPrimary: boolean, createdAt: string }> | null }> };
+
+export type SpecificationDefinitionsQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  productTypeId?: InputMaybe<Scalars['ID']['input']>;
+  includeInactive?: InputMaybe<Scalars['Boolean']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  displayNameSearch?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type SpecificationDefinitionsQuery = { __typename?: 'Query', specificationDefinitions: { __typename?: 'PaginatedSpecificationDefinitions', items: Array<{ __typename?: 'SpecificationDefinition', id: string, productTypeId: string, key: string, displayName: string, description?: string | null, unit?: string | null, isFilterable: boolean, isActive: boolean }>, meta: { __typename?: 'PaginationMeta', total: number, page: number, limit: number, totalPages: number, hasNextPage: boolean, hasPrevPage: boolean } } };
+
+export type SpecificationDefinitionQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type SpecificationDefinitionQuery = { __typename?: 'Query', specificationDefinition: { __typename?: 'SpecificationDefinition', id: string, productTypeId: string, key: string, displayName: string, description?: string | null, unit?: string | null, isFilterable: boolean, isActive: boolean } };
+
+export type UsersQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  role?: InputMaybe<UserRole>;
+  includeInactive?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+
+export type UsersQuery = { __typename?: 'Query', users: { __typename?: 'PaginatedUsers', items: Array<{ __typename?: 'User', id: string, email: string, firstName?: string | null, lastName?: string | null, nickname: string, phone?: string | null, isActive: boolean, role: UserRole }>, meta: { __typename?: 'PaginationMeta', total: number, page: number, limit: number, totalPages: number, hasNextPage: boolean, hasPrevPage: boolean } } };
 
 export type UserQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, email: string, firstName?: string | null, lastName?: string | null, nickname: string, phone?: string | null, role: UserRole } };
+export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, email: string, firstName?: string | null, lastName?: string | null, nickname: string, phone?: string | null, isActive: boolean, role: UserRole } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, email: string, firstName?: string | null, lastName?: string | null, nickname: string, phone?: string | null, role: UserRole } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, email: string, firstName?: string | null, lastName?: string | null, nickname: string, phone?: string | null, isActive: boolean, role: UserRole } };
 
-export type FavouritesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type FavouritesQuery = { __typename?: 'Query', favourites: { __typename?: 'UserFavourites', items: Array<{ __typename?: 'UserFavourite', productId: string }> } };
-
-export type CartQueryVariables = Exact<{ [key: string]: never; }>;
+export type FavouritesQueryVariables = Exact<{
+  userId?: InputMaybe<Scalars['ID']['input']>;
+}>;
 
 
-export type CartQuery = { __typename?: 'Query', cart: { __typename?: 'UserCart', items: Array<{ __typename?: 'UserCartItem', productId: string, quantity: number }> } };
+export type FavouritesQuery = { __typename?: 'Query', favourites: { __typename?: 'UserFavourites', items: Array<{ __typename?: 'UserFavourite', id: string, userId: string, productId: string }> } };
+
+export type CartQueryVariables = Exact<{
+  userId?: InputMaybe<Scalars['ID']['input']>;
+}>;
+
+
+export type CartQuery = { __typename?: 'Query', cart: { __typename?: 'UserCart', items: Array<{ __typename?: 'UserCartItem', id: string, userId: string, productId: string, quantity: number }> } };

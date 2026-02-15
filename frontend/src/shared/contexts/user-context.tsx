@@ -1,16 +1,15 @@
 'use client';
 
 import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
-import { MeQuery } from '../api/graphql/__generated__/types';
-
-export type RawUser = MeQuery['me'] | null;
-
-export type User = { userId: string; role: string; email: string } | null;
+import { ClientUser } from '../entities/user.types';
+import { mapRawUserToClientUser, RawUser } from '../mappers/user.mapper';
 
 type UserContextValue = {
-    user: User;
-    setUser: (user: User) => void;
+    user: ClientUser;
+    setUser: (user: ClientUser) => void;
     clearUser: () => void;
+    isAuthenticated: boolean;
+    isAdmin: boolean;
 };
 
 const UserContext = createContext<UserContextValue | undefined>(undefined);
@@ -21,16 +20,14 @@ type PropsT = {
 };
 
 export function UserProvider({ initialUser = null, children }: PropsT) {
-    const [user, setUser] = useState<User>(initialUser && {
-        userId: initialUser.id,
-        role: initialUser.role,
-        email: initialUser.email,
-    });
+    const [user, setUser] = useState<ClientUser>(() => mapRawUserToClientUser(initialUser));
 
     const value = useMemo(() => ({
         user,
         setUser,
         clearUser: () => setUser(null),
+        isAuthenticated: !!user,
+        isAdmin: user?.role === 'ADMIN',
     }), [user]);
 
     return (

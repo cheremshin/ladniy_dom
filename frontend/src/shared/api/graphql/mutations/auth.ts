@@ -11,16 +11,3 @@ export const LOGOUT = gql`
         logout
     }
 `;
-
-export const REGISTER = gql`
-    mutation Register($input: RegisterUserInputPublic!) {
-        register(input: $input) {
-            id
-            email
-            firstName
-            lastName
-            nickname
-            phone
-        }
-    }
-`;

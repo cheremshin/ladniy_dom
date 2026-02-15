@@ -88,7 +88,7 @@ export function mapProductToProductOverview(product: ProductPageItem): ProductOv
             id: product.brand.id,
             slug: product.brand.slug,
             title: product.brand.title,
-            logoUrl: mapImageUrlValueToRealUrl(product.brand.title),
+            logoUrl: product.brand.logoUrl ? mapImageUrlValueToRealUrl(product.brand.logoUrl) : null,
         },
     };
 }
