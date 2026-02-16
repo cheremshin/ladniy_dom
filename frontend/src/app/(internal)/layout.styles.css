@@ -1,0 +1,25 @@
+.page-layout {
+    margin-left: 310px;
+    padding: 24px;
+}
+
+.erp-page__header {
+    margin-bottom: 20px;
+}
+
+.erp-page__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text-primary, #1a1a1a);
+}
+
+.erp-page__meta {
+    margin-top: 4px;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #666);
+}
+
+.erp-page__card {
+    padding: 0;
+    overflow: hidden;
+}

@@ -1,10 +1,14 @@
 import { Sidebar } from '@/components/widgets/sidebar';
 
+import './layout.styles.css';
+
 export default async function Layout({ children }: Readonly<LayoutProps<'/'>>) {
     return (
-        <main>
+        <>
             <Sidebar />
-            {children}
-        </main>
+            <main className="page-layout">
+                {children}
+            </main>
+        </>
     );
 }
