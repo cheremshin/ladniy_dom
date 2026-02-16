@@ -1,0 +1,85 @@
+.lazy-select {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.lazy-select__label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+}
+
+.lazy-select__trigger-wrapper {
+    position: relative;
+}
+
+.lazy-select__trigger {
+    min-width: 280px;
+    padding: 8px 12px;
+    font-size: 14px;
+    text-align: left;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background-color: white;
+    color: #374151;
+    cursor: pointer;
+}
+
+.lazy-select__trigger:hover {
+    border-color: #d1d5db;
+}
+
+.lazy-select__trigger:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.lazy-select__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+}
+
+.lazy-select__list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 20;
+    margin-top: 4px;
+    max-height: 280px;
+    min-width: 100%;
+    overflow-y: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.lazy-select__option {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 14px;
+    text-align: left;
+    border: none;
+    background: none;
+    color: #374151;
+    cursor: pointer;
+}
+
+.lazy-select__option:hover {
+    background-color: #f3f4f6;
+}
+
+.lazy-select__option[aria-selected="true"] {
+    background-color: #eff6ff;
+}
+
+.lazy-select__load-more {
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #9ca3af;
+    text-align: center;
+}
