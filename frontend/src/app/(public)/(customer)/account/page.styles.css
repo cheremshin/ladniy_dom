@@ -1,0 +1,52 @@
+.account-page {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 24px 16px;
+}
+
+.account-page__title {
+    margin: 0 0 20px;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.account-page__card {
+    padding: 24px;
+}
+
+.account-page__empty {
+    margin: 0;
+    color: #6b7280;
+}
+
+.account-profile {
+    margin: 0 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.account-profile__row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 12px;
+    align-items: baseline;
+}
+
+.account-profile__term {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.account-profile__value {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: #111827;
+}
+
+.account-page__actions {
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+}
