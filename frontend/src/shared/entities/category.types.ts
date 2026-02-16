@@ -21,3 +21,11 @@ export type CatalogCategory = Readonly<{
     imageUrl?: string | null;
     productTypes: CatalogProductType[];
 }>;
+
+export type CategoryEntity = CategoryBase & Readonly<{
+    parentId: Id | null;
+    sortOrder: number;
+    isActive: boolean;
+    createdAt: string;
+    updatedAt: string;
+}>;

@@ -7,6 +7,7 @@ export type {
     CategoryListItemDTO,
     CatalogCategoryDTO,
     CategoryBase,
+    CategoryEntity,
     CategoryListItem,
     CatalogCategory,
 } from './category.types';

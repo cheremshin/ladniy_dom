@@ -1,13 +1,5 @@
 import { Field, ID, InputType, OmitType, PartialType } from '@nestjs/graphql';
-import {
-    IsBoolean,
-    IsNotEmpty,
-    IsOptional,
-    IsString,
-    IsUrl,
-    IsUUID,
-    Matches,
-} from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString, IsUrl, IsUUID } from 'class-validator';
 
 @InputType()
 export class CreateBrandInput {
@@ -52,10 +44,4 @@ export class UpdateBrandInput extends PartialType(OmitType(CreateBrandInput, ['t
     @IsOptional()
     @IsString({ message: 'title must be a string' })
     title?: string;
-
-    @Field(() => String, { nullable: true })
-    @IsOptional()
-    @IsString({ message: 'slug must be a string' })
-    @Matches(/^[a-z0-9-]+$/, { message: 'Slug must be lowercase with hyphens only' })
-    slug?: string;
 }

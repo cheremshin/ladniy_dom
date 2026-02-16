@@ -1,14 +1,5 @@
 import { InputType, Field, ID, Int, PartialType, OmitType } from '@nestjs/graphql';
-import {
-    IsNotEmpty,
-    IsOptional,
-    Min,
-    Matches,
-    IsBoolean,
-    IsUUID,
-    IsInt,
-    IsString,
-} from 'class-validator';
+import { IsNotEmpty, IsOptional, Min, IsBoolean, IsUUID, IsInt, IsString } from 'class-validator';
 
 @InputType()
 export class CreateCategoryInput {
@@ -50,10 +41,4 @@ export class UpdateCategoryInput extends PartialType(
     @IsOptional()
     @IsString({ message: 'title must be a string' })
     title?: string;
-
-    @Field(() => String, { nullable: true })
-    @IsOptional()
-    @IsString({ message: 'slug must be a string' })
-    @Matches(/^[a-z0-9-]+$/, { message: 'slug must be lowercase with hyphens only' })
-    slug?: string;
 }

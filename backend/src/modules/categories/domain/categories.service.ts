@@ -35,9 +35,7 @@ export type CreateCategoryData = {
     isActive?: boolean;
 };
 
-export type UpdateCategoryData = Partial<CreateCategoryData> & {
-    slug?: string;
-};
+export type UpdateCategoryData = Partial<CreateCategoryData>;
 
 @Injectable()
 export class CategoriesService {
@@ -173,24 +171,7 @@ export class CategoriesService {
             await this.findOne(id);
             let slug: string | undefined;
 
-            if (data.slug) {
-                const existing = await tx
-                    .select({ id: categories.id })
-                    .from(categories)
-                    .where(
-                        and(
-                            eq(categories.slug, data.slug.toLowerCase()),
-                            sql`${categories.id} != ${id}`,
-                        ),
-                    )
-                    .limit(1);
-
-                if (existing.length > 0) {
-                    throw new ConflictException(`Category with slug "${data.slug} already exists"`);
-                } else {
-                    slug = data.slug;
-                }
-            } else if (data.title) {
+            if (data.title) {
                 slug = generateSlug(data.title.trim());
             }
 

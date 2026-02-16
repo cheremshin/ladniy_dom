@@ -4,7 +4,6 @@ import {
     IsOptional,
     IsEnum,
     Min,
-    Matches,
     IsUUID,
     IsArray,
     ValidateNested,
@@ -128,12 +127,6 @@ export class UpdateProductInput {
     @IsNotEmpty()
     @IsString({ message: 'title must be a string' })
     title?: string;
-
-    @Field(() => String, { nullable: true })
-    @IsOptional()
-    @Matches(/^[a-z0-9-]+$/, { message: 'Slug must be lowercase with hyphens only' })
-    @IsString({ message: 'slug must be a string' })
-    slug?: string;
 
     @Field(() => ID, { nullable: true })
     @IsOptional()

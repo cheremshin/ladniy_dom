@@ -29,7 +29,9 @@ export async function graphqlFetch<TData, TVars = Record<string, unknown>>(
     const json = await response.json();
 
     if (json.errors) {
-        console.log(`Error while fetching [QUERY]: ${print(query)} [ERROR]: ${json.errors[0]?.message}`);
+        if (process.env.NODE_ENV === 'development') {
+            console.log(`Error while fetching [QUERY]: ${print(query)} [ERROR]: ${json.errors[0]?.message}`);
+        }
         throw new Error(json.errors[0]?.message ?? 'Internal server error');
     }
 

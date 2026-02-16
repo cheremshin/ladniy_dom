@@ -653,7 +653,6 @@ export type UpdateBrandInput = {
   id: Scalars['ID']['input'];
   isActive?: InputMaybe<Scalars['Boolean']['input']>;
   logoUrl?: InputMaybe<Scalars['String']['input']>;
-  slug?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
   website?: InputMaybe<Scalars['String']['input']>;
 };
@@ -663,7 +662,6 @@ export type UpdateCategoryInput = {
   imageUrl?: InputMaybe<Scalars['String']['input']>;
   isActive?: InputMaybe<Scalars['Boolean']['input']>;
   parentId?: InputMaybe<Scalars['ID']['input']>;
-  slug?: InputMaybe<Scalars['String']['input']>;
   sortOrder?: InputMaybe<Scalars['Int']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -681,7 +679,6 @@ export type UpdateProductInput = {
   metaTitle?: InputMaybe<Scalars['String']['input']>;
   productTypeId?: InputMaybe<Scalars['ID']['input']>;
   sku?: InputMaybe<Scalars['String']['input']>;
-  slug?: InputMaybe<Scalars['String']['input']>;
   specifications?: InputMaybe<Array<SpecificationValueInput>>;
   status?: InputMaybe<ProductStatus>;
   stockQuantity?: InputMaybe<Scalars['Int']['input']>;
@@ -693,7 +690,6 @@ export type UpdateProductTypeInput = {
   categoryId?: InputMaybe<Scalars['ID']['input']>;
   id: Scalars['ID']['input'];
   plural?: InputMaybe<Scalars['String']['input']>;
-  slug?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
 };
 

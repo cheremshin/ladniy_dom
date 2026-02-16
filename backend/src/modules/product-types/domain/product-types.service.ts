@@ -28,9 +28,7 @@ export type CreateProductTypeData = {
     categoryId: string;
 };
 
-export type UpdateProductTypeData = Partial<CreateProductTypeData> & {
-    slug?: string;
-};
+export type UpdateProductTypeData = Partial<CreateProductTypeData>;
 
 @Injectable()
 export class ProductTypesService {
@@ -122,21 +120,7 @@ export class ProductTypesService {
             await this.findOne(id);
             let slug: string | undefined;
 
-            if (data.slug) {
-                const existing = await tx
-                    .select({ id: productTypes.id })
-                    .from(productTypes)
-                    .where(eq(productTypes.slug, data.slug))
-                    .limit(1);
-
-                if (existing.length > 0) {
-                    throw new ConflictException(
-                        `Product type with slug "${data.slug}" already exists`,
-                    );
-                } else {
-                    slug = data.slug;
-                }
-            } else if (data.title) {
+            if (data.title) {
                 slug = generateSlug(data.title.trim());
             }
 

@@ -10,5 +10,10 @@ export function mapRawUserToClientUser(raw: RawUser): ClientUser {
         userId: raw.id,
         role: raw.role,
         email: raw.email,
+        firstName: raw.firstName,
+        lastName: raw.lastName,
+        nickname: raw.nickname,
+        phone: raw.phone,
+        isActive: raw.isActive,
     };
 }

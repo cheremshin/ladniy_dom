@@ -28,9 +28,7 @@ export type CreateBrandData = {
     isActive?: boolean;
 };
 
-export type UpdateBrandData = Partial<CreateBrandData> & {
-    slug?: string;
-};
+export type UpdateBrandData = Partial<CreateBrandData>;
 
 @Injectable()
 export class BrandsService {
@@ -116,21 +114,7 @@ export class BrandsService {
 
             let slug: string | undefined;
 
-            if (data.slug) {
-                const existing = await tx
-                    .select({ id: brands.id })
-                    .from(brands)
-                    .where(
-                        and(eq(brands.slug, data.slug.toLowerCase()), sql`${brands.id} != ${id}`),
-                    )
-                    .limit(1);
-
-                if (existing.length > 0) {
-                    throw new ConflictException(`Brand with slug "${data.slug}" already exists`);
-                } else {
-                    slug = data.slug;
-                }
-            } else if (data.title) {
+            if (data.title) {
                 slug = generateSlug(data.title.trim());
             }
 

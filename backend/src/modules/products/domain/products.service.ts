@@ -59,9 +59,7 @@ export type CreateProductData = {
     metaDescription?: string;
 };
 
-export type UpdateProductData = Partial<CreateProductData> & {
-    slug?: string;
-};
+export type UpdateProductData = Partial<CreateProductData>;
 
 export type AttachImageData = {
     productId: string;
@@ -225,24 +223,6 @@ export class ProductsService {
                 await this.productTypesService.findOne(data.productTypeId);
             }
 
-            // Проверка уникальности slug
-            if (data.slug) {
-                const existingSlug = await tx
-                    .select({ id: products.id })
-                    .from(products)
-                    .where(
-                        and(
-                            eq(products.slug, data.slug.toLowerCase()),
-                            sql`${products.id} != ${id}`,
-                        ),
-                    )
-                    .limit(1);
-
-                if (existingSlug.length > 0) {
-                    throw new ConflictException(`Product with slug "${data.slug}" already exists`);
-                }
-            }
-
             // Проверка уникальности SKU
             if (data.sku) {
                 const normalizedSku = data.sku.trim();
@@ -272,7 +252,7 @@ export class ProductsService {
                 );
             }
 
-            const { slug, specifications, basePrice, discountPrice, costPrice, ...rest } = data;
+            const { title, specifications, basePrice, discountPrice, costPrice, ...rest } = data;
             const shouldUpdateSpecifications = specifications !== undefined || productTypeChanged;
 
             const updateData: Partial<typeof products.$inferInsert> = {
@@ -282,7 +262,7 @@ export class ProductsService {
                     discountPrice: discountPrice === null ? null : String(discountPrice),
                 }),
                 ...(costPrice !== undefined && { costPrice: String(costPrice) }),
-                ...(slug !== undefined && { slug: slug.toLowerCase() }),
+                ...(title !== undefined && { slug: generateSlug(title.trim()) }),
                 ...(data.sku !== undefined && { sku: data.sku.trim() }),
                 ...(shouldUpdateSpecifications && { specifications: validatedSpecifications }),
             };
