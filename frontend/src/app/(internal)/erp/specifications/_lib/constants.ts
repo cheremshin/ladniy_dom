@@ -1,0 +1,1 @@
+export const SPECIFICATIONS_PAGE_SIZE = 20;
