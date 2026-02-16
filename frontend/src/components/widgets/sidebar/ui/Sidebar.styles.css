@@ -1,6 +1,8 @@
 .admin-sidebar {
+    position: absolute;
+    min-width: 300px;
     max-width: 300px;
-    min-height: 100vh;
+    height: calc(100vh - 120px);
 }
 
 .admin-sidebar__card {
