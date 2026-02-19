@@ -6,8 +6,6 @@ import { apolloBrowserClient } from '@/shared/api/apollo/client/apollo-browser-c
 import { LOGOUT } from '@/shared/api/graphql/mutations/auth';
 
 import './page.styles.css';
-import { useCallback } from 'react';
-import { useRouter } from 'next/navigation';
 
 const ROLE_LABELS: Record<string, string> = {
     ADMIN: 'Администратор',
@@ -20,16 +18,12 @@ function formatValue(value: string | null | undefined): string {
 }
 
 export default function AccountPage() {
-    const router = useRouter();
     const { user } = useUser();
 
-    const handleLogout = useCallback(async () => {
+    const handleLogout = async () => {
         await apolloBrowserClient.mutate({ mutation: LOGOUT });
-        setTimeout(() => {
-            router.push('/');
-        }, 1000);
-        router.refresh();
-    }, [router]);
+        window.location.href = '/';
+    };
 
     if (!user) {
         return (

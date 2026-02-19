@@ -4,8 +4,7 @@ import { Button, ErrorMessage, FormField } from '@/components/base';
 import { apolloBrowserClient } from '@/shared/api/apollo/client/apollo-browser-client';
 import { REGISTER } from '@/shared/api/graphql/mutations';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { schema, SignUpValues } from '../_lib/sign-up.schema';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,8 +14,7 @@ const defaultValues: SignUpValues = {
     password: '',
 };
 
-export const SignUpForm = () => {
-    const router = useRouter();
+export const SignUpForm: FC = () => {
     const [submitError, setSubmitError] = useState<string | null>(null);
 
     const {
@@ -31,16 +29,14 @@ export const SignUpForm = () => {
     const onSubmit = async (values: { email: string; password: string }) => {
         setSubmitError(null);
 
-        try {
-            await apolloBrowserClient.mutate({
-                mutation: REGISTER,
-                variables: { input: { email: values.email, password: values.password } },
-            });
-            router.push('/');
-            router.refresh();
-        } catch {
+        await apolloBrowserClient.mutate({
+            mutation: REGISTER,
+            variables: { input: { email: values.email, password: values.password } },
+        }).then(() => {
+            window.location.href = '/';
+        }).catch(() => {
             setSubmitError('Не удалось создать аккаунт');
-        }
+        });
     };
 
     return (

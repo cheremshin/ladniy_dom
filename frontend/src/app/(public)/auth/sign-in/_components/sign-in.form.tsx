@@ -4,7 +4,6 @@ import { Button, ErrorMessage, FormField } from '@/components/base';
 import { apolloBrowserClient } from '@/shared/api/apollo/client/apollo-browser-client';
 import { LOGIN } from '@/shared/api/graphql/mutations/auth';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { schema, SignInValues } from '../_lib/sign-in.schema';
 import { useForm } from 'react-hook-form';
@@ -20,7 +19,6 @@ const defaultValues: SignInValues = {
 };
 
 export const SignInForm = () => {
-    const router = useRouter();
     const { setUser } = useUser();
     const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -36,12 +34,10 @@ export const SignInForm = () => {
     const onSubmit = async (values: { email: string; password: string }) => {
         setSubmitError(null);
 
-        try {
-            await apolloBrowserClient.mutate({
-                mutation: LOGIN,
-                variables: { input: { email: values.email, password: values.password } },
-            });
-
+        await apolloBrowserClient.mutate({
+            mutation: LOGIN,
+            variables: { input: { email: values.email, password: values.password } },
+        }).then(async () => {
             const user = await apolloBrowserClient.query<MeQuery>({ query: ME });
             if (!user.data) {
                 throw Error('Internal server error');
@@ -51,18 +47,22 @@ export const SignInForm = () => {
                 userId: user.data.me.id,
                 role: user.data.me.role,
                 email: user.data.me.email,
+                firstName: user.data.me.firstName,
+                lastName: user.data.me.lastName,
+                nickname: user.data.me.nickname,
+                isActive: user.data.me.isActive,
+                phone: user.data.me.phone,
             });
 
-            router.push(user.data.me.role === 'ADMIN' ? sidebarBaseRoute.href : '/');
-            router.refresh();
-        } catch (e) {
-            if (e instanceof Error && e.message === 'Invalid email or password') {
+            window.location.href = user.data.me.role === 'ADMIN' ? sidebarBaseRoute.href : '/';
+        }).catch((error) => {
+            if (error instanceof Error && error.message === 'Invalid email or password') {
                 setSubmitError('Неверный логин или пароль');
                 return;
             }
 
             setSubmitError('Не удалось войти в аккаунт');
-        }
+        });
     };
 
     return (
