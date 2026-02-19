@@ -14,7 +14,6 @@ import './DataTable.styles.css';
 export type DataTablePaginationProps = {
     hasNextPage: boolean;
     onLoadMore: () => void;
-    isLoadingMore?: boolean;
     loadMoreLabel?: string;
 };
 
@@ -39,7 +38,7 @@ export function DataTable<TData>({
         getCoreRowModel: getCoreRowModel(),
     });
 
-    if (isLoading) {
+    if (isLoading && data.length === 0) {
         return (
             <div className="data-table-container">
                 <div className="data-table-loading">Загрузка...</div>
@@ -98,9 +97,9 @@ export function DataTable<TData>({
                 <div className="data-table-pagination">
                     <Button
                         onClick={pagination.onLoadMore}
-                        disabled={pagination.isLoadingMore}
+                        disabled={isLoading}
                     >
-                        {pagination.isLoadingMore
+                        {isLoading
                             ? 'Загрузка…'
                             : (pagination.loadMoreLabel ?? 'Загрузить ещё')}
                     </Button>

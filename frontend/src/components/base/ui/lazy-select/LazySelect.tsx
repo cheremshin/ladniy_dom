@@ -12,8 +12,9 @@ export type LazySelectOption = {
 type LazySelectProps = {
     options: LazySelectOption[];
     value: string;
-    onChange: (id: string) => void;
+    onChange: (id: string, label: string) => void;
     onLoadMore?: () => void;
+    onOpen?: () => void;
     hasNextPage?: boolean;
     isLoadingMore?: boolean;
     placeholder?: string;
@@ -26,6 +27,7 @@ export const LazySelect: FC<LazySelectProps> = ({
     value,
     onChange,
     onLoadMore,
+    onOpen,
     hasNextPage = false,
     isLoadingMore = false,
     placeholder = 'Все',
@@ -33,6 +35,7 @@ export const LazySelect: FC<LazySelectProps> = ({
     id: idProp,
 }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const openedOnceRef = useRef(false);
     const listRef = useRef<HTMLDivElement>(null);
 
     const selectedOption = options.find((o) => o.id === value);
@@ -47,12 +50,24 @@ export const LazySelect: FC<LazySelectProps> = ({
         }
     }, [onLoadMore, hasNextPage, isLoadingMore]);
 
+    const handleOpen = useCallback(() => {
+        setIsOpen((prev) => {
+            const next = !prev;
+            if (next && !openedOnceRef.current) {
+                openedOnceRef.current = true;
+                onOpen?.();
+            }
+            return next;
+        });
+    }, [onOpen]);
+
     const handleSelect = useCallback(
         (id: string) => {
-            onChange(id);
+            const opt = options.find((o) => o.id === id);
+            onChange(id, opt?.label ?? '');
             setIsOpen(false);
         },
-        [onChange],
+        [onChange, options],
     );
 
     const generatedId = useId();
@@ -70,7 +85,7 @@ export const LazySelect: FC<LazySelectProps> = ({
                     id={controlId}
                     type="button"
                     className="lazy-select__trigger"
-                    onClick={() => setIsOpen((prev) => !prev)}
+                    onClick={handleOpen}
                     aria-expanded={isOpen}
                     aria-haspopup="listbox"
                 >

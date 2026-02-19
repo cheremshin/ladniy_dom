@@ -15,11 +15,11 @@ import type {
     SoftDeleteProductTypeMutationVariables,
 } from '@/shared/api/graphql/__generated__/types';
 
-import type { ProductType, ProductTypesTableInitialData } from './types';
+import type { ProductType } from './types';
 import { PRODUCT_TYPES_PAGE_SIZE } from './constants';
 
 function toTableMeta(
-    meta: ProductTypesTableInitialData['productTypes']['meta'],
+    meta: ProductTypesQuery['productTypes']['meta'],
 ): TablePaginationMeta {
     return {
         hasNextPage: meta.hasNextPage,
@@ -32,10 +32,10 @@ function toTableMeta(
 }
 
 type UseProductTypesTableParams = {
-    initialData: ProductTypesTableInitialData;
+    categoryId: string | null;
 };
 
-export function useProductTypesTable({ initialData }: UseProductTypesTableParams) {
+export function useProductTypesTable({ categoryId }: UseProductTypesTableParams) {
     const router = useRouter();
 
     const [fetchProductTypes] = useLazyQuery<
@@ -54,6 +54,7 @@ export function useProductTypesTable({ initialData }: UseProductTypesTableParams
                 page,
                 limit,
                 includeInactive: true,
+                categoryId: categoryId ?? undefined,
             },
         });
         if (result.error) throw result.error;
@@ -65,13 +66,14 @@ export function useProductTypesTable({ initialData }: UseProductTypesTableParams
             items: data.items,
             meta: toTableMeta(data.meta),
         };
-    }, [fetchProductTypes]);
+    // categoryId в deps: при смене категории fetchPage меняется →
+    // useTablePagination автоматически сбрасывает и перезагружает таблицу
+    }, [fetchProductTypes, categoryId]);
 
     const pagination = useTablePagination<ProductType>({
-        initialItems: initialData.productTypes.items,
-        initialMeta: toTableMeta(initialData.productTypes.meta),
         pageSize: PRODUCT_TYPES_PAGE_SIZE,
         fetchPage,
+        enabled: !!categoryId,
     });
 
     const handleEdit = useCallback((productType: ProductType) => {

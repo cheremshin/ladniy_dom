@@ -1,6 +1,11 @@
 export type { Id, Slug, Price } from './common.types';
 export { formatPrice } from './common.types';
 
+export type {
+    PaginatedCollection,
+    PaginationVariables,
+} from './meta.types';
+
 export type { BrandBase } from './brand.types';
 
 export type {

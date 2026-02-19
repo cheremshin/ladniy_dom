@@ -9,3 +9,5 @@ export {
     type UseTablePaginationParams,
     type UseTablePaginationResult,
 } from './use-table-pagination';
+
+export { usePaginatedSelect } from './use-paginated-select';

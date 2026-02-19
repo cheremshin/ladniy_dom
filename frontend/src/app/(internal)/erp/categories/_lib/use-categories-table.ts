@@ -15,11 +15,11 @@ import type {
     SoftDeleteCategoryMutationVariables,
 } from '@/shared/api/graphql/__generated__/types';
 
-import type { Category, CategoriesTableInitialData } from './types';
+import type { Category } from './types';
 import { CATEGORIES_PAGE_SIZE } from './constants';
 
 function toTableMeta(
-    meta: CategoriesTableInitialData['categories']['meta'],
+    meta: CategoriesQuery['categories']['meta'],
 ): TablePaginationMeta {
     return {
         hasNextPage: meta.hasNextPage,
@@ -31,11 +31,7 @@ function toTableMeta(
     };
 }
 
-type UseCategoriesTableParams = {
-    initialData: CategoriesTableInitialData;
-};
-
-export function useCategoriesTable({ initialData }: UseCategoriesTableParams) {
+export function useCategoriesTable() {
     const router = useRouter();
 
     const [fetchCategories] = useLazyQuery<
@@ -65,8 +61,6 @@ export function useCategoriesTable({ initialData }: UseCategoriesTableParams) {
     }, [fetchCategories]);
 
     const pagination = useTablePagination<Category>({
-        initialItems: initialData.categories.items,
-        initialMeta: toTableMeta(initialData.categories.meta),
         pageSize: CATEGORIES_PAGE_SIZE,
         fetchPage,
     });

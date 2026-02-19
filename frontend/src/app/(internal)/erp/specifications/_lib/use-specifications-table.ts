@@ -15,14 +15,11 @@ import type {
     SoftDeleteSpecificationDefinitionMutationVariables,
 } from '@/shared/api/graphql/__generated__/types';
 
-import type {
-    SpecificationDefinition,
-    SpecificationsTableInitialData,
-} from './types';
+import type { SpecificationDefinition } from './types';
 import { SPECIFICATIONS_PAGE_SIZE } from './constants';
 
 function toTableMeta(
-    meta: SpecificationsTableInitialData['specificationDefinitions']['meta'],
+    meta: SpecificationDefinitionsQuery['specificationDefinitions']['meta'],
 ): TablePaginationMeta {
     return {
         hasNextPage: meta.hasNextPage,
@@ -35,10 +32,10 @@ function toTableMeta(
 }
 
 type UseSpecificationsTableParams = {
-    initialData: SpecificationsTableInitialData;
+    productTypeId: string | null;
 };
 
-export function useSpecificationsTable({ initialData }: UseSpecificationsTableParams) {
+export function useSpecificationsTable({ productTypeId }: UseSpecificationsTableParams) {
     const router = useRouter();
 
     const [fetchSpecifications] = useLazyQuery<
@@ -57,6 +54,7 @@ export function useSpecificationsTable({ initialData }: UseSpecificationsTablePa
                 page,
                 limit,
                 includeInactive: true,
+                productTypeId: productTypeId ?? undefined,
             },
         });
         if (result.error) throw result.error;
@@ -66,11 +64,9 @@ export function useSpecificationsTable({ initialData }: UseSpecificationsTablePa
             items: data.items,
             meta: toTableMeta(data.meta),
         };
-    }, [fetchSpecifications]);
+    }, [fetchSpecifications, productTypeId]);
 
     const pagination = useTablePagination<SpecificationDefinition>({
-        initialItems: initialData.specificationDefinitions.items,
-        initialMeta: toTableMeta(initialData.specificationDefinitions.meta),
         pageSize: SPECIFICATIONS_PAGE_SIZE,
         fetchPage,
     });

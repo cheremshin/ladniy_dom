@@ -4,23 +4,20 @@ import { FC, useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { DataTable, TableActions, TableLink } from '@/components/base';
-import { useProductsTable } from '../_lib';
+import { useProductPageContext, useProductsTable } from '../_lib';
 import type { Product } from '../_lib';
 
-type PropsT = {
-    initialProducts: Parameters<typeof useProductsTable>[0]['initialData'];
-};
-
-export const ProductsTable: FC<PropsT> = ({ initialProducts }) => {
+export const ProductsTable: FC = () => {
+    const { categoryId, productTypeId } = useProductPageContext();
     const {
         items,
-        isLoadingMore,
+        isLoading,
         error,
         hasNextPage,
         handleEdit,
         handleDelete,
         loadMore,
-    } = useProductsTable({ initialData: initialProducts });
+    } = useProductsTable({ categoryId, productTypeId });
 
     const columns = useMemo<ColumnDef<Product>[]>(
         () => [
@@ -68,6 +65,22 @@ export const ProductsTable: FC<PropsT> = ({ initialProducts }) => {
         [handleEdit, handleDelete],
     );
 
+    if (!categoryId) {
+        return (
+            <div style={{ padding: '20px', color: '#6b7280' }}>
+                Выберите категорию
+            </div>
+        );
+    }
+
+    if (!productTypeId) {
+        return (
+            <div style={{ padding: '20px', color: '#6b7280' }}>
+                Выберите тип продукта
+            </div>
+        );
+    }
+
     if (error) {
         return (
             <div style={{ padding: '20px', color: '#dc2626' }}>
@@ -82,14 +95,13 @@ export const ProductsTable: FC<PropsT> = ({ initialProducts }) => {
         <DataTable
             columns={columns}
             data={items}
-            isLoading={false}
+            isLoading={isLoading}
             emptyMessage="Продукты не найдены"
             pagination={
                 hasNextPage
                     ? {
                             hasNextPage,
                             onLoadMore: loadMore,
-                            isLoadingMore,
                             loadMoreLabel: 'Загрузить ещё',
                         }
                     : undefined

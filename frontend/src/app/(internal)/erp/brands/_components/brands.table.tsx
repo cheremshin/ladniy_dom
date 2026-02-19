@@ -7,20 +7,16 @@ import { DataTable, TableActions, TableLink } from '@/components/base';
 import { useBrandsTable } from '../_lib';
 import type { Brand } from '../_lib';
 
-type PropsT = {
-    initialBrands: Parameters<typeof useBrandsTable>[0]['initialData'];
-};
-
-export const BrandsTable: FC<PropsT> = ({ initialBrands }) => {
+export const BrandsTable: FC = () => {
     const {
         items,
-        isLoadingMore,
+        isLoading,
         error,
         hasNextPage,
         handleEdit,
         handleDelete,
         loadMore,
-    } = useBrandsTable({ initialData: initialBrands });
+    } = useBrandsTable();
 
     const columns = useMemo<ColumnDef<Brand>[]>(
         () => [
@@ -97,13 +93,12 @@ export const BrandsTable: FC<PropsT> = ({ initialBrands }) => {
         <DataTable
             columns={columns}
             data={items}
-            isLoading={false}
+            isLoading={isLoading}
             emptyMessage="Бренды не найдены"
             pagination={
                 hasNextPage ? {
                     hasNextPage,
                     onLoadMore: loadMore,
-                    isLoadingMore,
                     loadMoreLabel: 'Загрузить ещё',
                 } : undefined
             }

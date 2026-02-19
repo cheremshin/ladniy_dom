@@ -7,20 +7,16 @@ import { DataTable, TableActions, TableLink } from '@/components/base';
 import { useCategoriesTable } from '../_lib';
 import type { Category } from '../_lib';
 
-type PropsT = {
-    initialCategories: Parameters<typeof useCategoriesTable>[0]['initialData'];
-};
-
-export const CategoriesTable: FC<PropsT> = ({ initialCategories }) => {
+export const CategoriesTable: FC = () => {
     const {
         items,
-        isLoadingMore,
+        isLoading,
         error,
         hasNextPage,
         handleEdit,
         handleDelete,
         loadMore,
-    } = useCategoriesTable({ initialData: initialCategories });
+    } = useCategoriesTable();
 
     const columns = useMemo<ColumnDef<Category>[]>(
         () => [
@@ -79,13 +75,12 @@ export const CategoriesTable: FC<PropsT> = ({ initialCategories }) => {
         <DataTable
             columns={columns}
             data={items}
-            isLoading={false}
+            isLoading={isLoading}
             emptyMessage="Категории не найдены"
             pagination={
                 hasNextPage ? {
                     hasNextPage,
                     onLoadMore: loadMore,
-                    isLoadingMore,
                     loadMoreLabel: 'Загрузить еще',
                 } : undefined
             }

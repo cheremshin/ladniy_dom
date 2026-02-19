@@ -4,3 +4,4 @@ export type {
 } from './types';
 export { SPECIFICATIONS_PAGE_SIZE } from './constants';
 export { useSpecificationsTable } from './use-specifications-table';
+export { SpecificationsPageProvider, useSpecificationsPageContext } from './specifications-page.context';

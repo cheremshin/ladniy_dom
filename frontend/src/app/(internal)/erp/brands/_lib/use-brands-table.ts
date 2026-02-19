@@ -15,10 +15,10 @@ import type {
     SoftDeleteBrandMutationVariables,
 } from '@/shared/api/graphql/__generated__/types';
 
-import type { Brand, BrandsTableInitialData } from './types';
+import type { Brand } from './types';
 import { BRANDS_PAGE_SIZE } from './constants';
 
-function toTableMeta(meta: BrandsTableInitialData['brands']['meta']): TablePaginationMeta {
+function toTableMeta(meta: BrandsQuery['brands']['meta']): TablePaginationMeta {
     return {
         hasNextPage: meta.hasNextPage,
         hasPrevPage: meta.hasPrevPage,
@@ -29,11 +29,7 @@ function toTableMeta(meta: BrandsTableInitialData['brands']['meta']): TablePagin
     };
 }
 
-type UseBrandsTableParams = {
-    initialData: BrandsTableInitialData;
-};
-
-export function useBrandsTable({ initialData }: UseBrandsTableParams) {
+export function useBrandsTable() {
     const router = useRouter();
 
     const [fetchBrands] = useLazyQuery<BrandsQuery, BrandsQueryVariables>(BRANDS);
@@ -60,8 +56,6 @@ export function useBrandsTable({ initialData }: UseBrandsTableParams) {
     }, [fetchBrands]);
 
     const pagination = useTablePagination<Brand>({
-        initialItems: initialData.brands.items,
-        initialMeta: toTableMeta(initialData.brands.meta),
         pageSize: BRANDS_PAGE_SIZE,
         fetchPage,
     });

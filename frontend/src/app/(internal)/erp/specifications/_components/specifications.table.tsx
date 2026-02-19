@@ -4,23 +4,20 @@ import { FC, useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { DataTable, TableActions, TableLink } from '@/components/base';
-import { useSpecificationsTable } from '../_lib';
+import { useSpecificationsPageContext, useSpecificationsTable } from '../_lib';
 import type { SpecificationDefinition } from '../_lib';
 
-type PropsT = {
-    initialSpecifications: Parameters<typeof useSpecificationsTable>[0]['initialData'];
-};
-
-export const SpecificationsTable: FC<PropsT> = ({ initialSpecifications }) => {
+export const SpecificationsTable: FC = () => {
+    const { categoryId, productTypeId } = useSpecificationsPageContext();
     const {
         items,
-        isLoadingMore,
+        isLoading,
         error,
         hasNextPage,
         handleEdit,
         handleDelete,
         loadMore,
-    } = useSpecificationsTable({ initialData: initialSpecifications });
+    } = useSpecificationsTable({ productTypeId });
 
     const columns = useMemo<ColumnDef<SpecificationDefinition>[]>(
         () => [
@@ -75,6 +72,22 @@ export const SpecificationsTable: FC<PropsT> = ({ initialSpecifications }) => {
         [handleEdit, handleDelete],
     );
 
+    if (!categoryId) {
+        return (
+            <div style={{ padding: '20px', color: '#6b7280' }}>
+                Выберите категорию
+            </div>
+        );
+    }
+
+    if (!productTypeId) {
+        return (
+            <div style={{ padding: '20px', color: '#6b7280' }}>
+                Выберите тип продукта
+            </div>
+        );
+    }
+
     if (error) {
         return (
             <div style={{ padding: '20px', color: '#dc2626' }}>
@@ -89,14 +102,13 @@ export const SpecificationsTable: FC<PropsT> = ({ initialSpecifications }) => {
         <DataTable
             columns={columns}
             data={items}
-            isLoading={false}
+            isLoading={isLoading}
             emptyMessage="Спецификации не найдены"
             pagination={
                 hasNextPage
                     ? {
                             hasNextPage,
                             onLoadMore: loadMore,
-                            isLoadingMore,
                             loadMoreLabel: 'Загрузить ещё',
                         }
                     : undefined

@@ -4,23 +4,20 @@ import { FC, useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { DataTable, TableActions, TableLink } from '@/components/base';
-import { useProductTypesTable } from '../_lib';
+import { useProductTypesTable, useProductTypesPageContext } from '../_lib';
 import type { ProductType } from '../_lib';
 
-type PropsT = {
-    initialProductTypes: Parameters<typeof useProductTypesTable>[0]['initialData'];
-};
-
-export const ProductTypesTable: FC<PropsT> = ({ initialProductTypes }) => {
+export const ProductTypesTable: FC = () => {
+    const { categoryId } = useProductTypesPageContext();
     const {
         items,
-        isLoadingMore,
+        isLoading,
         error,
         hasNextPage,
         handleEdit,
         handleDelete,
         loadMore,
-    } = useProductTypesTable({ initialData: initialProductTypes });
+    } = useProductTypesTable({ categoryId });
 
     const columns = useMemo<ColumnDef<ProductType>[]>(
         () => [
@@ -55,6 +52,14 @@ export const ProductTypesTable: FC<PropsT> = ({ initialProductTypes }) => {
         [handleEdit, handleDelete],
     );
 
+    if (!categoryId) {
+        return (
+            <div style={{ padding: '20px', color: '#6b7280' }}>
+                Выберите категорию, чтобы увидеть типы продуктов
+            </div>
+        );
+    }
+
     if (error) {
         return (
             <div style={{ padding: '20px', color: '#dc2626' }}>
@@ -69,13 +74,12 @@ export const ProductTypesTable: FC<PropsT> = ({ initialProductTypes }) => {
         <DataTable
             columns={columns}
             data={items}
-            isLoading={false}
+            isLoading={isLoading}
             emptyMessage="Типы продуктов не найдены"
             pagination={
                 hasNextPage ? {
                     hasNextPage,
                     onLoadMore: loadMore,
-                    isLoadingMore,
                     loadMoreLabel: 'Загрузить ещё',
                 } : undefined
             }
