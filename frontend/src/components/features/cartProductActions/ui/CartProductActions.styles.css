@@ -1,0 +1,20 @@
+.amount-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 0 0;
+    color: var(--color-text-accent);
+    font-weight: 600;
+}
+
+.amount-card .base-button {
+    padding: 10.5px 20px;
+}
+
+.cart-product-actions {
+    height: 100%;
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+}

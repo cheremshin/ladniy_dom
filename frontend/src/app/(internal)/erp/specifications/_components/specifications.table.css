@@ -1,0 +1,32 @@
+.specifications-table-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.specifications-table-filters__label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+}
+
+.specifications-table-filters__select {
+    min-width: 280px;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background-color: white;
+    color: #374151;
+}
+
+.specifications-table-filters__select:hover {
+    border-color: #d1d5db;
+}
+
+.specifications-table-filters__select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}

@@ -1,0 +1,13 @@
+.product-type-card {
+    width: fit-content;
+    padding: 10px 40px;
+    border-radius: 6px;
+    background: var(--color-background-tertiary);
+    border: 1px solid var(--color-background-tertiary);
+    border-radius: 40px;
+    cursor: pointer;
+}
+
+.product-type-card:hover {
+    border: 1px solid var(--color-link-hover);
+}

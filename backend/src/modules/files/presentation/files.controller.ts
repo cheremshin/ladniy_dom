@@ -1,0 +1,144 @@
+import {
+    BadRequestException,
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    HttpStatus,
+    NotFoundException,
+    Param,
+    ParseFilePipe,
+    ParseUUIDPipe,
+    Post,
+    Query,
+    Res,
+    UploadedFile,
+    UseInterceptors,
+} from '@nestjs/common';
+import { FilesService } from '../domain/files.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Readable } from 'stream';
+import { File } from './entities/file.entity';
+import { Response } from 'express';
+
+interface MulterFile {
+    fieldname: string;
+    originalname: string;
+    encoding: string;
+    mimetype: string;
+    size: number;
+    buffer: Buffer;
+}
+
+@Controller('files')
+export class FilesController {
+    constructor(private readonly filesService: FilesService) {}
+
+    @Post('upload')
+    @UseInterceptors(FileInterceptor('file'))
+    @HttpCode(HttpStatus.CREATED)
+    async uploadFile(
+        @UploadedFile(new ParseFilePipe({ fileIsRequired: true }))
+        file: MulterFile,
+        @Query('entityType') entityType?: string,
+        @Query('entityId') entityId?: string,
+    ): Promise<File> {
+        const stream = Readable.from(file.buffer);
+        const fileRecord = await this.filesService.saveFileFromStream({
+            stream,
+            name: file.originalname,
+            mimeType: file.mimetype,
+            entityType,
+            entityId,
+        });
+
+        return fileRecord;
+    }
+
+    @Post(':id/attach')
+    @HttpCode(HttpStatus.OK)
+    async attachToEntity(
+        @Param('id', ParseUUIDPipe) id: string,
+        @Body() body: { entityType: string; entityId: string },
+    ): Promise<File> {
+        return await this.filesService.attachToEntity(id, body.entityType, body.entityId);
+    }
+
+    @Post(':id/detach')
+    @HttpCode(HttpStatus.OK)
+    async detachFromEntity(@Param('id', ParseUUIDPipe) id: string): Promise<File> {
+        return await this.filesService.detachFromEntity(id);
+    }
+
+    @Get('by-url')
+    async downloadFileByUrl(@Query('url') url: string, @Res() res: Response): Promise<void> {
+        if (!url) {
+            throw new BadRequestException('URL parameter is required');
+        }
+
+        try {
+            const { stream, file } = await this.filesService.getFileStreamByPath(url);
+            const encodedFilename = encodeURIComponent(file.name).replace(/[']/g, '');
+
+            res.setHeader('Content-Type', file.mimeType);
+            res.setHeader('Content-Length', file.size.toString());
+            res.setHeader(
+                'Content-Disposition',
+                `attachment; filename="${encodedFilename}"; filename*=UTF-8''${encodedFilename}`,
+            );
+
+            stream.pipe(res);
+        } catch (error) {
+            if (error instanceof NotFoundException) {
+                throw error;
+            }
+
+            throw new BadRequestException('Failed to download file');
+        }
+    }
+
+    @Get(':id')
+    async downloadFile(
+        @Param('id', ParseUUIDPipe) id: string,
+        @Res() res: Response,
+    ): Promise<void> {
+        try {
+            const { stream, file } = await this.filesService.getFileStream(id);
+
+            const encodedFilename = encodeURIComponent(file.name).replace(/[']/g, '');
+
+            res.setHeader('Content-Type', file.mimeType);
+            res.setHeader('Content-Length', file.size.toString());
+            res.setHeader(
+                'Content-Disposition',
+                `attachment; filename="${encodedFilename}"; filename*=UTF-8''${encodedFilename}`,
+            );
+
+            stream.pipe(res);
+        } catch (error) {
+            if (error instanceof NotFoundException) {
+                throw error;
+            }
+
+            throw new BadRequestException('Failed to download file');
+        }
+    }
+
+    @Delete(':id')
+    @HttpCode(HttpStatus.OK)
+    async deleteFile(@Param('id') id: string) {
+        const fileRecord = await this.filesService.delete(id);
+
+        return {
+            message: 'File deleted successfully',
+            file: {
+                id: fileRecord.id,
+                name: fileRecord.name,
+                mimeType: fileRecord.mimeType,
+                size: fileRecord.size,
+                path: fileRecord.path,
+            },
+        };
+    }
+}

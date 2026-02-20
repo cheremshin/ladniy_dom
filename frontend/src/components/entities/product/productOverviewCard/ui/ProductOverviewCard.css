@@ -1,0 +1,114 @@
+.product-overview-card {
+    width: 100%;
+    display: flex;
+    gap: 60px;
+}
+
+.product-overview-card__images-container {
+    width: 40%;
+    background:rgb(109, 109, 109);
+}
+
+.product-overview-card__content {
+    flex-grow: 1;
+}
+
+.product-overview-card__info {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-overview-card__sku {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+}
+
+.product-overview-card__title {
+    margin-top: 10px;
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--color-text-main);
+}
+
+.product-overview-card__pricing {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.product-overview-card__price {
+    background: var(--color-action-secondary);
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 24px;
+}
+
+.product-overview-card__old-price {
+    color: var(--color-text-tertiary);
+    font-weight: 500;
+    font-size: 20px;
+    text-decoration: line-through;
+}
+
+.product-overview-card__specifications {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    &:before {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 1px;
+        background: var(--color-border);
+    }
+}
+
+.product-overview-card__specification {
+    display: flex;
+    gap: 10px;
+}
+
+.product-overview-card__specification-key {
+    color: var(--color-text-secondary);
+    font-size: 16px;
+}
+
+.product-overview-card__specification-value {
+    color: var(--color-text-main);
+    font-size: 16px;
+}
+
+.product-overview-card__availability {
+    margin-top: 40px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+    color: var(--color-accept);
+
+    img {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+.product-overview-card__buttons {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.product-overview-card__buttons .base-button {
+    padding: 18px 30px;
+}
+
+.product-overview-card__buttons .base-button:first-child {
+    width: 300px;
+}

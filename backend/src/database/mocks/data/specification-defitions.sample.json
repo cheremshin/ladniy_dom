@@ -1,0 +1,692 @@
+{
+    "specificationDefinitions": [
+        {
+            "productTypeId": "0",
+            "key": "power",
+            "displayName": "Мощность",
+            "description": "Мощность нагрева мультиварки",
+            "unit": "Вт",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "0",
+            "key": "volume",
+            "displayName": "Объем чаши",
+            "description": "Вместимость внутренней чаши",
+            "unit": "л",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "0",
+            "key": "bowl_material",
+            "displayName": "Материал чаши",
+            "description": "Материал изготовления внутренней чаши",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "0",
+            "key": "bowl_coating",
+            "displayName": "Покрытие чаши",
+            "description": "Антипригарное покрытие чаши",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "0",
+            "key": "programs_count",
+            "displayName": "Количество программ",
+            "description": "Количество автоматических режимов приготовления",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "0",
+            "key": "body_material",
+            "displayName": "Материал корпуса",
+            "description": "Материал внешнего корпуса",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "0",
+            "key": "heating_type",
+            "displayName": "Тип нагрева",
+            "description": "Метод нагрева (индукционный, ТЭН и т.д.)",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "0",
+            "key": "control_type",
+            "displayName": "Тип управления",
+            "description": "Электронное или механическое управление",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "0",
+            "key": "delayed_start",
+            "displayName": "Отложенный старт",
+            "description": "Функция задержки начала приготовления",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "0",
+            "key": "keep_warm",
+            "displayName": "Поддержание тепла",
+            "description": "Функция сохранения тепла после приготовления",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "1",
+            "key": "power",
+            "displayName": "Мощность",
+            "description": "Мощность двигателя блендера",
+            "unit": "Вт",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "1",
+            "key": "speeds_count",
+            "displayName": "Количество скоростей",
+            "description": "Число регулируемых скоростей вращения",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "1",
+            "key": "type",
+            "displayName": "Тип блендера",
+            "description": "Погружной или стационарный",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "1",
+            "key": "bowl_volume",
+            "displayName": "Объем чаши",
+            "description": "Вместимость основной чаши",
+            "unit": "л",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "1",
+            "key": "immersion_material",
+            "displayName": "Материал погружной части",
+            "description": "Материал ножки (металл, пластик)",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "1",
+            "key": "attachments",
+            "displayName": "Насадки",
+            "description": "Дополнительные насадки в комплекте",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "1",
+            "key": "turbo_mode",
+            "displayName": "Турборежим",
+            "description": "Режим повышенной мощности",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "1",
+            "key": "impulse_mode",
+            "displayName": "Импульсный режим",
+            "description": "Прерывистая работа для твердых продуктов",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "1",
+            "key": "body_material",
+            "displayName": "Материал корпуса",
+            "description": "",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "2",
+            "key": "power",
+            "displayName": "Мощность",
+            "description": "Мощность нагрева чайника",
+            "unit": "Вт",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "2",
+            "key": "volume",
+            "displayName": "Объем",
+            "description": "Вместимость чайника",
+            "unit": "л",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "2",
+            "key": "body_material",
+            "displayName": "Материал корпуса",
+            "description": "Пластик, металл, стекло и т.д.",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "2",
+            "key": "filter",
+            "displayName": "Фильтр от накипи",
+            "description": "Наличие фильтра для очистки воды",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "2",
+            "key": "auto_off",
+            "displayName": "Автоотключение",
+            "description": "Автоматическое отключение при закипании",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "2",
+            "key": "temp_control",
+            "displayName": "Регулировка температуры",
+            "description": "Возможность выбора температуры нагрева",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "2",
+            "key": "keep_warm",
+            "displayName": "Поддержание тепла",
+            "description": "Функция сохранения температуры воды",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "2",
+            "key": "indicator",
+            "displayName": "Индикатор уровня воды",
+            "description": "",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "3",
+            "key": "power_consumption",
+            "displayName": "Потребляемая мощность",
+            "description": "Общая мощность пылесоса",
+            "unit": "Вт",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "3",
+            "key": "suction_power",
+            "displayName": "Мощность всасывания",
+            "description": "Эффективная мощность всасывания пыли",
+            "unit": "аВт",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "3",
+            "key": "dust_collector_type",
+            "displayName": "Тип пылесборника",
+            "description": "Мешок, контейнер, аквафильтр",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "3",
+            "key": "dust_collector_volume",
+            "displayName": "Объем пылесборника",
+            "description": "",
+            "unit": "л",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "3",
+            "key": "noise_level",
+            "displayName": "Уровень шума",
+            "description": "",
+            "unit": "дБ",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "3",
+            "key": "filter_type",
+            "displayName": "Тип фильтра",
+            "description": "HEPA, циклонный и т.д.",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "3",
+            "key": "cord_length",
+            "displayName": "Длина шнура",
+            "description": "",
+            "unit": "м",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "3",
+            "key": "attachments",
+            "displayName": "Насадки",
+            "description": "Комплект насадок",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "4",
+            "key": "power",
+            "displayName": "Мощность",
+            "description": "Мощность фена",
+            "unit": "Вт",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "4",
+            "key": "speeds_count",
+            "displayName": "Количество скоростей",
+            "description": "Регулировка скорости воздушного потока",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "4",
+            "key": "temp_modes",
+            "displayName": "Количество температурных режимов",
+            "description": "",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "4",
+            "key": "ionization",
+            "displayName": "Ионизация",
+            "description": "Функция ионизации воздуха для ухода за волосами",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "4",
+            "key": "cold_air",
+            "displayName": "Холодный воздух",
+            "description": "Режим подачи холодного воздуха",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "4",
+            "key": "attachments",
+            "displayName": "Насадки",
+            "description": "Диффузор, концентратор и т.д.",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "4",
+            "key": "cord_length",
+            "displayName": "Длина шнура",
+            "description": "",
+            "unit": "м",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "4",
+            "key": "overheat_protection",
+            "displayName": "Защита от перегрева",
+            "description": "",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "5",
+            "key": "max_weight",
+            "displayName": "Максимальный вес",
+            "description": "Наибольший измеряемый вес",
+            "unit": "кг",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "5",
+            "key": "accuracy",
+            "displayName": "Точность измерения",
+            "description": "Дискретность показаний",
+            "unit": "г",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "5",
+            "key": "platform_material",
+            "displayName": "Материал платформы",
+            "description": "Стекло, металл и т.д.",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "5",
+            "key": "type",
+            "displayName": "Тип весов",
+            "description": "Кухонные, напольные",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "5",
+            "key": "auto_off",
+            "displayName": "Автоотключение",
+            "description": "",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "5",
+            "key": "tare_function",
+            "displayName": "Функция тарокомпенсации",
+            "description": "Обнуление веса тары",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "5",
+            "key": "power_source",
+            "displayName": "Источник питания",
+            "description": "Батарейки, аккумулятор",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "6",
+            "key": "diameter",
+            "displayName": "Диаметр",
+            "description": "Диаметр верхней части",
+            "unit": "см",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "6",
+            "key": "bottom_diameter",
+            "displayName": "Диаметр дна",
+            "description": "",
+            "unit": "см",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "6",
+            "key": "material",
+            "displayName": "Материал",
+            "description": "Алюминий, чугун и т.д.",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "6",
+            "key": "coating",
+            "displayName": "Покрытие",
+            "description": "Антипригарное покрытие",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "6",
+            "key": "compatible_stoves",
+            "displayName": "Совместимые плиты",
+            "description": "Газ, электрика, индукция и т.д.",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "6",
+            "key": "handle_material",
+            "displayName": "Материал ручки",
+            "description": "",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "6",
+            "key": "lid_included",
+            "displayName": "Крышка в комплекте",
+            "description": "",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "6",
+            "key": "bottom_thickness",
+            "displayName": "Толщина дна",
+            "description": "",
+            "unit": "мм",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "7",
+            "key": "volume",
+            "displayName": "Объем",
+            "description": "",
+            "unit": "л",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "7",
+            "key": "diameter",
+            "displayName": "Диаметр",
+            "description": "",
+            "unit": "см",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "7",
+            "key": "material",
+            "displayName": "Материал",
+            "description": "Сталь, алюминий, чугун",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "7",
+            "key": "coating",
+            "displayName": "Покрытие",
+            "description": "Эмаль, антипригарное",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "7",
+            "key": "lid_included",
+            "displayName": "Крышка в комплекте",
+            "description": "",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "7",
+            "key": "compatible_stoves",
+            "displayName": "Совместимые плиты",
+            "description": "",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "7",
+            "key": "handle_material",
+            "displayName": "Материал ручек",
+            "description": "",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "7",
+            "key": "bottom_thickness",
+            "displayName": "Толщина дна",
+            "description": "",
+            "unit": "мм",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "8",
+            "key": "total_volume",
+            "displayName": "Общий объем",
+            "description": "",
+            "unit": "л",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "8",
+            "key": "fridge_volume",
+            "displayName": "Объем холодильной камеры",
+            "description": "",
+            "unit": "л",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "8",
+            "key": "freezer_volume",
+            "displayName": "Объем морозильной камеры",
+            "description": "",
+            "unit": "л",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "8",
+            "key": "energy_class",
+            "displayName": "Класс энергопотребления",
+            "description": "",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "8",
+            "key": "defrost_system",
+            "displayName": "Система размораживания",
+            "description": "No Frost, Low Frost и т.д.",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "8",
+            "key": "noise_level",
+            "displayName": "Уровень шума",
+            "description": "",
+            "unit": "дБ",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "8",
+            "key": "height",
+            "displayName": "Высота",
+            "description": "",
+            "unit": "см",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "8",
+            "key": "width",
+            "displayName": "Ширина",
+            "description": "",
+            "unit": "см",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "8",
+            "key": "depth",
+            "displayName": "Глубина",
+            "description": "",
+            "unit": "см",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "8",
+            "key": "fresh_zone",
+            "displayName": "Зона свежести",
+            "description": "",
+            "unit": "",
+            "isFilterable": false
+        },
+        {
+            "productTypeId": "9",
+            "key": "load_capacity",
+            "displayName": "Загрузка",
+            "description": "Максимальный вес белья",
+            "unit": "кг",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "9",
+            "key": "spin_speed",
+            "displayName": "Скорость отжима",
+            "description": "",
+            "unit": "об/мин",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "9",
+            "key": "energy_class",
+            "displayName": "Класс энергопотребления",
+            "description": "",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "9",
+            "key": "wash_class",
+            "displayName": "Класс стирки",
+            "description": "",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "9",
+            "key": "spin_class",
+            "displayName": "Класс отжима",
+            "description": "",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "9",
+            "key": "motor_type",
+            "displayName": "Тип двигателя",
+            "description": "Инверторный, коллекторный",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "9",
+            "key": "load_type",
+            "displayName": "Тип загрузки",
+            "description": "Фронтальная или вертикальная",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "9",
+            "key": "programs_count",
+            "displayName": "Количество программ",
+            "description": "",
+            "unit": "",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "9",
+            "key": "noise_level",
+            "displayName": "Уровень шума",
+            "description": "При стирке/отжиме",
+            "unit": "дБ",
+            "isFilterable": true
+        },
+        {
+            "productTypeId": "9",
+            "key": "depth",
+            "displayName": "Глубина",
+            "description": "",
+            "unit": "см",
+            "isFilterable": true
+        }
+    ]
+}

@@ -1,0 +1,1 @@
+export const PRODUCT_TYPES_PAGE_SIZE = 20;

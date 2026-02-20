@@ -1,0 +1,18 @@
+.table-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 24px;
+}
+
+.table-layout__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table-layout__header h2 {
+    font-size: 24px;
+    fontWeight: bold;
+    margin: 0;
+}

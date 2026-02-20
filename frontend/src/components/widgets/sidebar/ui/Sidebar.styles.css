@@ -1,0 +1,41 @@
+.admin-sidebar {
+    position: absolute;
+    min-width: 300px;
+    max-width: 300px;
+    height: calc(100vh - 120px);
+}
+
+.admin-sidebar__card {
+    height: 100%;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-sidebar__header {
+    margin-bottom: 24px;
+}
+
+.admin-sidebar__header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.admin-sidebar__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.admin-sidebar__link {
+    justify-content: flex-start;
+    color: var(--color-link);
+    text-wrap: nowrap;
+}
+
+.admin-sidebar__link--active {
+    font-weight: 600;
+    background: var(--color-action-secondary);
+    color: var(--color-link-hover);
+}

@@ -1,0 +1,40 @@
+header {
+    position: relative;
+    height: 100px;
+    padding: 0 calc(var(--spacing) * 8);
+    margin: 0px auto;
+    background: var(--color-background-main);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 200px;
+}
+
+header .header__actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    flex-grow: 1;
+}
+
+header .header__logo {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--color-text-main);
+}
+
+header::before,
+header::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100vw;
+    background: var(--color-background-main);
+    z-index: -1;
+}
+
+header::before {
+    right: 100%;
+}

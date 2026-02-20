@@ -1,0 +1,9 @@
+.favourite-icon--active {
+    background: var(--color-action-secondary-hovered);
+    color: var(--color-action-foreground-secondary-active);
+}
+
+.favourite-icon--active:hover {
+    background: var(--color-action-secondary-active-hovered);
+    color: var(--color-action-foreground-secondary-active);
+}

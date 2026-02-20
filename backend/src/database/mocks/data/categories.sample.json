@@ -1,0 +1,72 @@
+{
+    "categories": [
+        {
+            "title": "Техника для кухни",
+            "sortOrder": 1
+        },
+        {
+            "title": "Техника для дома",
+            "sortOrder": 2
+        },
+        {
+            "title": "Красота и здоровье",
+            "sortOrder": 3
+        },
+        {
+            "title": "Посуда",
+            "sortOrder": 4
+        }
+    ],
+    "productTypes": [
+        {
+            "title": "Мультиварка",
+            "plural": "Мультиварки",
+            "categoryId": 0
+        },
+        {
+            "title": "Блендер",
+            "plural": "Блендеры",
+            "categoryId": 0
+        },
+        {
+            "title": "Чайник",
+            "plural": "Чайники",
+            "categoryId": 0
+        },
+        {
+            "title": "Пылесос",
+            "plural": "Пылесосы",
+            "categoryId": 1
+        },
+        {
+            "title": "Фен",
+            "plural": "Фены",
+            "categoryId": 2
+        },
+        {
+            "title": "Весы",
+            "plural": "Весы",
+            "categoryId": 2
+        },
+        {
+            "title": "Сковорода",
+            "plural": "Сковороды",
+            "categoryId": 3
+        },
+        {
+            "title": "Кастрюля",
+            "plural": "Кастрюли",
+            "categoryId": 3
+        },
+        {
+            "title": "Холодильник",
+            "plural": "Холодильники",
+            "categoryId": 1
+        },
+        {
+            "title": "Стиральная машина",
+            "plural": "Стиральные машины",
+            "categoryId": 1
+        }
+    ]
+}

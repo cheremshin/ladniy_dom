@@ -1,0 +1,1 @@
+ALTER TABLE "product_types" ADD COLUMN "plural" varchar(128) NOT NULL;

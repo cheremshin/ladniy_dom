@@ -1,0 +1,30 @@
+.reviews-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: var(--color-action-primary);
+    color: var(--color-action-foreground-primary);
+    padding: 20px;
+    border-radius: 6px;
+    width: 200px;
+    height: 100%;
+    text-align: center;
+}
+
+.reviews-summary__rating {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 10px;
+}
+
+.reviews-summary__rating-max-value {
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 50px;
+}
+
+.reviews-summary__rating-value {
+    font-size: 48px;
+    font-weight: 500;
+}

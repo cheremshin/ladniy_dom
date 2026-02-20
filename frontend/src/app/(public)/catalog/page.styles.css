@@ -1,0 +1,11 @@
+.categories-page {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.categories-page__title {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
