@@ -1,11 +1,9 @@
 'use client';
 
 import { useCallback, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
 import { useMutation, useLazyQuery } from '@apollo/client/react';
 
-import { useTablePagination } from '@/app/(internal)/erp/_lib';
-import type { TablePaginationMeta } from '@/app/(internal)/erp/_lib';
+import { useTablePagination, toTableMeta } from '@/app/(internal)/erp/_lib';
 import { PRODUCT_TYPES } from '@/shared/api/graphql/queries';
 import { SOFT_DELETE_PRODUCT_TYPE } from '@/shared/api/graphql/mutations';
 import type {
@@ -17,26 +15,15 @@ import type {
 
 import type { ProductType } from './types';
 import { PRODUCT_TYPES_PAGE_SIZE } from './constants';
-
-function toTableMeta(
-    meta: ProductTypesQuery['productTypes']['meta'],
-): TablePaginationMeta {
-    return {
-        hasNextPage: meta.hasNextPage,
-        hasPrevPage: meta.hasPrevPage,
-        total: meta.total,
-        page: meta.page,
-        limit: meta.limit,
-        totalPages: meta.totalPages,
-    };
-}
+import { useProductTypesPageContext } from './product-types-page.context';
 
 type UseProductTypesTableParams = {
     categoryId: string | null;
 };
 
 export function useProductTypesTable({ categoryId }: UseProductTypesTableParams) {
-    const router = useRouter();
+    const { updateModal } = useProductTypesPageContext();
+    const { openUpdate, setUpdateModalItem } = updateModal;
 
     const [fetchProductTypes] = useLazyQuery<
         ProductTypesQuery,
@@ -77,8 +64,9 @@ export function useProductTypesTable({ categoryId }: UseProductTypesTableParams)
     });
 
     const handleEdit = useCallback((productType: ProductType) => {
-        router.push(`/erp/product-types/${productType.id}/edit`);
-    }, [router]);
+        setUpdateModalItem(productType);
+        openUpdate();
+    }, [openUpdate, setUpdateModalItem]);
 
     const handleDelete = useCallback(
         async (productType: ProductType) => {

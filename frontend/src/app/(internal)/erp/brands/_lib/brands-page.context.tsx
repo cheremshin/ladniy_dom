@@ -9,21 +9,21 @@ import {
     type FC,
     type ReactNode,
 } from 'react';
+import type { CreateModalState, UpdateModalState } from '@/app/(internal)/erp/_lib';
+import type { Brand } from './types';
 
 type BrandsPageContextValue = {
-    isCreateOpen: boolean;
-    openCreate: () => void;
-    closeCreate: () => void;
-    /** Таблица вызывает один раз при монтировании */
+    createModal: CreateModalState;
     registerRefetch: (fn: () => Promise<void>) => void;
-    /** Модалка вызывает после успешного создания */
-    onCreateSuccess: () => void;
+    updateModal: UpdateModalState<Brand>;
 };
 
 const BrandsPageContext = createContext<BrandsPageContextValue | null>(null);
 
 export const BrandsPageProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const [isCreateOpen, setIsCreateOpen] = useState(false);
+    const [isUpdateOpen, setIsUpdateOpen] = useState(false);
+    const [updateModalItem, setUpdateModalItemState] = useState<Brand | null>(null);
     const refetchRef = useRef<(() => Promise<void>) | null>(null);
 
     const registerRefetch = useCallback((fn: () => Promise<void>) => {
@@ -35,14 +35,29 @@ export const BrandsPageProvider: FC<{ children: ReactNode }> = ({ children }) =>
         await refetchRef.current?.();
     }, []);
 
+    const onUpdateSuccess = useCallback(async () => {
+        setIsUpdateOpen(false);
+        await refetchRef.current?.();
+    }, []);
+
     return (
         <BrandsPageContext.Provider
             value={{
-                isCreateOpen,
-                openCreate: () => setIsCreateOpen(true),
-                closeCreate: () => setIsCreateOpen(false),
+                createModal: {
+                    isCreateOpen,
+                    openCreate: () => setIsCreateOpen(true),
+                    closeCreate: () => setIsCreateOpen(false),
+                    onCreateSuccess,
+                },
                 registerRefetch,
-                onCreateSuccess,
+                updateModal: {
+                    updateModalItem,
+                    setUpdateModalItem: (item: Brand) => setUpdateModalItemState(item),
+                    isUpdateOpen,
+                    openUpdate: () => setIsUpdateOpen(true),
+                    closeUpdate: () => setIsUpdateOpen(false),
+                    onUpdateSuccess,
+                },
             }}
         >
             {children}

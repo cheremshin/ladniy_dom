@@ -12,6 +12,8 @@ export type LazySelectOption = {
 type LazySelectProps = {
     options: LazySelectOption[];
     value: string;
+    // Подпись для текущего value, когда опции ещё не загружены
+    valueLabel?: string;
     onChange: (id: string, label: string) => void;
     onLoadMore?: () => void;
     onOpen?: () => void;
@@ -25,6 +27,7 @@ type LazySelectProps = {
 export const LazySelect: FC<LazySelectProps> = ({
     options,
     value,
+    valueLabel,
     onChange,
     onLoadMore,
     onOpen,
@@ -39,7 +42,9 @@ export const LazySelect: FC<LazySelectProps> = ({
     const listRef = useRef<HTMLDivElement>(null);
 
     const selectedOption = options.find((o) => o.id === value);
-    const displayLabel = value ? (selectedOption?.label ?? value) : placeholder;
+    const displayLabel = value
+        ? (selectedOption?.label ?? valueLabel ?? value)
+        : placeholder;
 
     const handleListScroll = useCallback(() => {
         const el = listRef.current;

@@ -7,6 +7,8 @@ import { ErrorMessage } from '../error-message/ErrorMessage';
 type Props<T extends FieldValues> = Omit<ControllerProps<T>, 'render'> & {
     label: string;
     options: LazySelectOption[];
+    // Подпись для текущего value, когда опции ещё не загружены
+    valueLabel?: string;
     placeholder?: string;
     onOpen?: () => void;
     onLoadMore?: () => void;
@@ -19,6 +21,7 @@ export function FormLazySelectField<T extends FieldValues>({
     control,
     label,
     options,
+    valueLabel,
     placeholder,
     onOpen,
     onLoadMore,
@@ -37,7 +40,8 @@ export function FormLazySelectField<T extends FieldValues>({
                     <LazySelect
                         options={options}
                         value={field.value ?? ''}
-                        onChange={(id) => field.onChange(id || null)}
+                        valueLabel={valueLabel}
+                        onChange={(id, label) => field.onChange(id || null, label || null)}
                         onOpen={onOpen}
                         onLoadMore={onLoadMore}
                         hasNextPage={hasNextPage}

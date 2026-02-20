@@ -1,12 +1,10 @@
 'use client';
 
 import { useCallback, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
 import { useMutation, useLazyQuery } from '@apollo/client/react';
 
-import { useTablePagination } from '@/app/(internal)/erp/_lib';
-import type { TablePaginationMeta } from '@/app/(internal)/erp/_lib';
-import { CATEGORIES } from '@/shared/api/graphql/queries/category';
+import { useTablePagination, toTableMeta } from '@/app/(internal)/erp/_lib';
+import { CATEGORIES } from '@/shared/api/graphql/queries';
 import { SOFT_DELETE_CATEGORY } from '@/shared/api/graphql/mutations/category';
 import type {
     CategoriesQuery,
@@ -17,22 +15,11 @@ import type {
 
 import type { Category } from './types';
 import { CATEGORIES_PAGE_SIZE } from './constants';
-
-function toTableMeta(
-    meta: CategoriesQuery['categories']['meta'],
-): TablePaginationMeta {
-    return {
-        hasNextPage: meta.hasNextPage,
-        hasPrevPage: meta.hasPrevPage,
-        total: meta.total,
-        page: meta.page,
-        limit: meta.limit,
-        totalPages: meta.totalPages,
-    };
-}
+import { useCategoriesPageContext } from './categories-page.context';
 
 export function useCategoriesTable() {
-    const router = useRouter();
+    const { updateModal } = useCategoriesPageContext();
+    const { openUpdate, setUpdateModalItem } = updateModal;
 
     const [fetchCategories] = useLazyQuery<
         CategoriesQuery,
@@ -66,8 +53,9 @@ export function useCategoriesTable() {
     });
 
     const handleEdit = useCallback((category: Category) => {
-        router.push(`/erp/categories/${category.id}/edit`);
-    }, [router]);
+        setUpdateModalItem(category);
+        openUpdate();
+    }, [openUpdate, setUpdateModalItem]);
 
     const handleDelete = useCallback(
         async (category: Category) => {

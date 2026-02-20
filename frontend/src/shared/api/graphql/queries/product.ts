@@ -39,6 +39,9 @@ export const PRODUCTS = gql`
         ) {
             items {
                 ...ProductFields
+                category { id title }
+                brand { id title }
+                productType { id title }
             }
             meta {
                 ...PaginationMetaFields
@@ -102,6 +105,9 @@ export const PRODUCTS_BY_IDS = gql`
     query ProductsByIds($input: [ID!]!) {
         productsByIds(ids: $input) {
             ...ProductFields
+            category { id title }
+            brand { id title }
+            productType { id title }
         }
     }
 `;

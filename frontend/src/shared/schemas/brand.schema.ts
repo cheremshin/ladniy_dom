@@ -16,5 +16,5 @@ export const updateBrandSchema = z.object({
     description: z.string().optional(),
     isActive: z.boolean().optional(),
     logoUrl: z.string().nullable().optional(),
-    website: z.url({ message: 'Invalid URL' }).nullable().optional(),
+    website: z.union([z.string().url({ message: 'Invalid URL' }), z.literal('')]).nullable().optional(),
 });

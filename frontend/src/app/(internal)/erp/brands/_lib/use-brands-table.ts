@@ -1,12 +1,10 @@
 'use client';
 
 import { useCallback, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
 import { useMutation, useLazyQuery } from '@apollo/client/react';
 
-import { useTablePagination } from '@/app/(internal)/erp/_lib';
-import type { TablePaginationMeta } from '@/app/(internal)/erp/_lib';
-import { BRANDS } from '@/shared/api/graphql/queries/brand';
+import { useTablePagination, toTableMeta } from '@/app/(internal)/erp/_lib';
+import { BRANDS } from '@/shared/api/graphql/queries';
 import { SOFT_DELETE_BRAND } from '@/shared/api/graphql/mutations/brand';
 import type {
     BrandsQuery,
@@ -17,20 +15,11 @@ import type {
 
 import type { Brand } from './types';
 import { BRANDS_PAGE_SIZE } from './constants';
-
-function toTableMeta(meta: BrandsQuery['brands']['meta']): TablePaginationMeta {
-    return {
-        hasNextPage: meta.hasNextPage,
-        hasPrevPage: meta.hasPrevPage,
-        total: meta.total,
-        page: meta.page,
-        limit: meta.limit,
-        totalPages: meta.totalPages,
-    };
-}
+import { useBrandsPageContext } from './brands-page.context';
 
 export function useBrandsTable() {
-    const router = useRouter();
+    const { updateModal } = useBrandsPageContext();
+    const { openUpdate, setUpdateModalItem } = updateModal;
 
     const [fetchBrands] = useLazyQuery<BrandsQuery, BrandsQueryVariables>(BRANDS);
     const [deleteBrand] = useMutation<
@@ -61,8 +50,9 @@ export function useBrandsTable() {
     });
 
     const handleEdit = useCallback((brand: Brand) => {
-        router.push(`/erp/brands/${brand.id}/edit`);
-    }, [router]);
+        setUpdateModalItem(brand);
+        openUpdate();
+    }, [openUpdate, setUpdateModalItem]);
 
     const handleDelete = useCallback(
         async (brand: Brand) => {

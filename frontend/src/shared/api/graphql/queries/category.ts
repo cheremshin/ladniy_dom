@@ -22,6 +22,7 @@ export const CATEGORIES = gql`
         ) {
             items {
                 ...CategoryFields
+                parent { id title }
             }
             meta {
                 ...PaginationMetaFields

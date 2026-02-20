@@ -6,6 +6,7 @@ import { BrandsTable } from './_components/brands.table';
 import { BrandsPageProvider } from './_lib';
 import { CreateBrandTrigger } from './_components/create-brand-trigger';
 import { CreateBrandModal } from './_components/create-brand-modal';
+import { UpdateBrandModal } from './_components/update-brand-modal';
 
 export default function Page() {
     return (
@@ -16,6 +17,7 @@ export default function Page() {
                 </TableLayout.Header>
                 <BrandsTable />
                 <CreateBrandModal />
+                <UpdateBrandModal />
             </TableLayout>
         </BrandsPageProvider>
     );

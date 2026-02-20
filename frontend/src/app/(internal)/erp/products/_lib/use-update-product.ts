@@ -6,20 +6,21 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@apollo/client/react';
 import { z } from 'zod';
 
-import { createDynamicCreateProductSchema } from '@/shared/schemas';
-import { CREATE_PRODUCT, ATTACH_PRODUCT_IMAGE } from '@/shared/api/graphql/mutations/product';
+import { createDynamicUpdateProductSchema } from '@/shared/schemas';
+import { UPDATE_PRODUCT, ATTACH_PRODUCT_IMAGE } from '@/shared/api/graphql/mutations/product';
 import { uploadFile } from '@/shared/api/upload-file';
 import type {
-    CreateProductMutation,
-    CreateProductMutationVariables,
+    UpdateProductMutation,
+    UpdateProductMutationVariables,
     AttachProductImageMutation,
     AttachProductImageMutationVariables,
 } from '@/shared/api/graphql/__generated__/types';
 
-const createProductSchema = createDynamicCreateProductSchema([]);
-export type CreateProductValues = z.infer<typeof createProductSchema>;
+const updateProductSchema = createDynamicUpdateProductSchema([]);
+export type UpdateProductValues = z.infer<typeof updateProductSchema>;
 
-const DEFAULT_VALUES: CreateProductValues = {
+const DEFAULT_VALUES: UpdateProductValues = {
+    id: '',
     title: '',
     sku: '',
     basePrice: 0,
@@ -31,30 +32,35 @@ const DEFAULT_VALUES: CreateProductValues = {
     status: 'DRAFT',
     isFeatured: false,
     stockQuantity: 0,
+    discountPrice: 0,
+    warrantyMonths: 0,
+    metaTitle: '',
+    metaDescription: '',
 };
 
-export function useCreateProduct(
+export function useUpdateProduct(
     onSuccess: () => void,
     fileRef?: MutableRefObject<File | null>,
 ) {
-    const [createProduct] = useMutation<
-        CreateProductMutation,
-        CreateProductMutationVariables
-    >(CREATE_PRODUCT);
+    const [updateProduct] = useMutation<
+        UpdateProductMutation,
+        UpdateProductMutationVariables
+    >(UPDATE_PRODUCT);
     const [attachProductImage] = useMutation<
         AttachProductImageMutation,
         AttachProductImageMutationVariables
     >(ATTACH_PRODUCT_IMAGE);
 
-    const form = useForm<CreateProductValues>({
+    const form = useForm<UpdateProductValues>({
         defaultValues: DEFAULT_VALUES,
-        resolver: zodResolver(createProductSchema),
+        resolver: zodResolver(updateProductSchema),
     });
 
     const onSubmit = form.handleSubmit(async (values) => {
-        const result = await createProduct({
+        await updateProduct({
             variables: {
                 input: {
+                    id: values.id,
                     title: values.title,
                     sku: values.sku,
                     basePrice: values.basePrice,
@@ -74,18 +80,19 @@ export function useCreateProduct(
             },
         });
 
-        const id = result.data?.createProduct.id;
-        if (id && fileRef?.current) {
-            const path = await uploadFile(fileRef.current, 'product', id);
+        if (fileRef?.current && values.id) {
+            const path = await uploadFile(fileRef.current, 'product', values.id);
             await attachProductImage({
                 variables: {
-                    input: { productId: id, url: path, isPrimary: true, sortOrder: 0 },
+                    input: { productId: values.id, url: path, isPrimary: true, sortOrder: 0 },
                 },
             });
         }
 
         form.reset(DEFAULT_VALUES);
         onSuccess();
+    }, (error) => {
+        console.error(error);
     });
 
     return { form, onSubmit, isSubmitting: form.formState.isSubmitting };

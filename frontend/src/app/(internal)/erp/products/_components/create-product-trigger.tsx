@@ -5,6 +5,6 @@ import { Button } from '@/components/base';
 import { useProductPageContext } from '../_lib';
 
 export const CreateProductTrigger: FC = () => {
-    const { openCreate } = useProductPageContext();
-    return <Button onClick={openCreate}>Создать</Button>;
+    const { createModal } = useProductPageContext();
+    return <Button onClick={createModal.openCreate}>Создать</Button>;
 };

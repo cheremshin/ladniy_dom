@@ -9,19 +9,21 @@ import {
     type FC,
     type ReactNode,
 } from 'react';
+import type { CreateModalState, UpdateModalState } from '@/app/(internal)/erp/_lib';
+import type { Category } from './types';
 
 type CategoriesPageContextValue = {
-    isCreateOpen: boolean;
-    openCreate: () => void;
-    closeCreate: () => void;
+    createModal: CreateModalState;
     registerRefetch: (fn: () => Promise<void>) => void;
-    onCreateSuccess: () => void;
+    updateModal: UpdateModalState<Category>;
 };
 
 const CategoriesPageContext = createContext<CategoriesPageContextValue | null>(null);
 
 export const CategoriesPageProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const [isCreateOpen, setIsCreateOpen] = useState(false);
+    const [isUpdateOpen, setIsUpdateOpen] = useState(false);
+    const [updateModalItem, setUpdateModalItemState] = useState<Category | null>(null);
     const refetchRef = useRef<(() => Promise<void>) | null>(null);
 
     const registerRefetch = useCallback((fn: () => Promise<void>) => {
@@ -33,14 +35,29 @@ export const CategoriesPageProvider: FC<{ children: ReactNode }> = ({ children }
         await refetchRef.current?.();
     }, []);
 
+    const onUpdateSuccess = useCallback(async () => {
+        setIsUpdateOpen(false);
+        await refetchRef.current?.();
+    }, []);
+
     return (
         <CategoriesPageContext.Provider
             value={{
-                isCreateOpen,
-                openCreate: () => setIsCreateOpen(true),
-                closeCreate: () => setIsCreateOpen(false),
+                createModal: {
+                    isCreateOpen,
+                    openCreate: () => setIsCreateOpen(true),
+                    closeCreate: () => setIsCreateOpen(false),
+                    onCreateSuccess,
+                },
                 registerRefetch,
-                onCreateSuccess,
+                updateModal: {
+                    updateModalItem,
+                    setUpdateModalItem: (item: Category) => setUpdateModalItemState(item),
+                    isUpdateOpen,
+                    openUpdate: () => setIsUpdateOpen(true),
+                    closeUpdate: () => setIsUpdateOpen(false),
+                    onUpdateSuccess,
+                },
             }}
         >
             {children}

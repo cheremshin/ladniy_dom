@@ -12,7 +12,8 @@ import { useSpecificationsPageContext } from '../_lib';
 import { useCreateSpecification } from '../_lib/use-create-specification';
 
 export const CreateSpecificationModal: FC = () => {
-    const { isCreateOpen, closeCreate, onCreateSuccess, productTypeId } = useSpecificationsPageContext();
+    const { createModal, productTypeId, productTypeLabel } = useSpecificationsPageContext();
+    const { isCreateOpen, closeCreate, onCreateSuccess } = createModal;
     const { form, onSubmit, isSubmitting } = useCreateSpecification(onCreateSuccess);
     const { control, register } = form;
 
@@ -50,6 +51,7 @@ export const CreateSpecificationModal: FC = () => {
                     control={control}
                     label="Тип продукта *"
                     options={productTypeSelect.options}
+                    valueLabel={productTypeId ? (productTypeLabel ?? undefined) : undefined}
                     onOpen={productTypeSelect.onOpen}
                     onLoadMore={productTypeSelect.handleLoadMore}
                     hasNextPage={productTypeSelect.hasNextPage}

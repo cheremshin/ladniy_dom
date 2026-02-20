@@ -5,6 +5,6 @@ import { Button } from '@/components/base';
 import { useSpecificationsPageContext } from '../_lib';
 
 export const CreateSpecificationTrigger: FC = () => {
-    const { openCreate } = useSpecificationsPageContext();
-    return <Button onClick={openCreate}>Создать</Button>;
+    const { createModal } = useSpecificationsPageContext();
+    return <Button onClick={createModal.openCreate}>Создать</Button>;
 };

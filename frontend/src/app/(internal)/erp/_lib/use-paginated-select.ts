@@ -11,6 +11,7 @@ type UsePaginatedSelectParams<TData, TItem, TVariables> = {
     selectCollection: (data: TData) => PaginatedCollection<TItem>;
     mapItem: (item: TItem) => LazySelectOption;
     variables: TVariables;
+    initialOption?: LazySelectOption;
 };
 
 export function usePaginatedSelect<
@@ -22,8 +23,9 @@ export function usePaginatedSelect<
     selectCollection,
     mapItem,
     variables,
+    initialOption,
 }: UsePaginatedSelectParams<TData, TItem, TVariables>) {
-    const [options, setOptions] = useState<LazySelectOption[]>([]);
+    const [options, setOptions] = useState<LazySelectOption[]>(initialOption ? [initialOption] : []);
     const [page, setPage] = useState(1);
     const [hasNextPage, setHasNextPage] = useState(false);
 
@@ -42,7 +44,6 @@ export function usePaginatedSelect<
 
             const collection = selectCollection(data);
             const mapped = collection.items.map(mapItem);
-
             setOptions((prev) => pageNum === 1 ? mapped : [...prev, ...mapped]);
             setHasNextPage(collection.meta.hasNextPage);
         },

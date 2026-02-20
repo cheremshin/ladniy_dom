@@ -1,11 +1,9 @@
 'use client';
 
 import { useCallback, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
 import { useMutation, useLazyQuery } from '@apollo/client/react';
 
-import { useTablePagination } from '@/app/(internal)/erp/_lib';
-import type { TablePaginationMeta } from '@/app/(internal)/erp/_lib';
+import { useTablePagination, toTableMeta } from '@/app/(internal)/erp/_lib';
 import { SPECIFICATION_DEFINITIONS } from '@/shared/api/graphql/queries';
 import { SOFT_DELETE_SPECIFICATION_DEFINITION } from '@/shared/api/graphql/mutations';
 import type {
@@ -17,26 +15,15 @@ import type {
 
 import type { SpecificationDefinition } from './types';
 import { SPECIFICATIONS_PAGE_SIZE } from './constants';
-
-function toTableMeta(
-    meta: SpecificationDefinitionsQuery['specificationDefinitions']['meta'],
-): TablePaginationMeta {
-    return {
-        hasNextPage: meta.hasNextPage,
-        hasPrevPage: meta.hasPrevPage,
-        total: meta.total,
-        page: meta.page,
-        limit: meta.limit,
-        totalPages: meta.totalPages,
-    };
-}
+import { useSpecificationsPageContext } from './specifications-page.context';
 
 type UseSpecificationsTableParams = {
     productTypeId: string | null;
 };
 
 export function useSpecificationsTable({ productTypeId }: UseSpecificationsTableParams) {
-    const router = useRouter();
+    const { updateModal } = useSpecificationsPageContext();
+    const { openUpdate, setUpdateModalItem } = updateModal;
 
     const [fetchSpecifications] = useLazyQuery<
         SpecificationDefinitionsQuery,
@@ -72,8 +59,9 @@ export function useSpecificationsTable({ productTypeId }: UseSpecificationsTable
     });
 
     const handleEdit = useCallback((item: SpecificationDefinition) => {
-        router.push(`/erp/specifications/${item.id}/edit`);
-    }, [router]);
+        setUpdateModalItem(item);
+        openUpdate();
+    }, [openUpdate, setUpdateModalItem]);
 
     const handleDelete = useCallback(
         async (item: SpecificationDefinition) => {

@@ -8,6 +8,7 @@ import { CategorySelect } from './_components/category.select';
 import { ProductTypeSelect } from './_components/product-type.select';
 import { CreateProductTrigger } from './_components/create-product-trigger';
 import { CreateProductModal } from './_components/create-product-modal';
+import { UpdateProductModal } from './_components/update-product-modal';
 
 export default function Page() {
     return (
@@ -20,6 +21,7 @@ export default function Page() {
                 <ProductTypeSelect />
                 <ProductsTable />
                 <CreateProductModal />
+                <UpdateProductModal />
             </TableLayout>
         </ProductPageProvider>
     );

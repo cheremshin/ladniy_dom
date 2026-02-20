@@ -5,6 +5,6 @@ import { Button } from '@/components/base';
 import { useCategoriesPageContext } from '../_lib';
 
 export const CreateCategoryTrigger: FC = () => {
-    const { openCreate } = useCategoriesPageContext();
-    return <Button onClick={openCreate}>Создать</Button>;
+    const { createModal } = useCategoriesPageContext();
+    return <Button onClick={createModal.openCreate}>Создать</Button>;
 };

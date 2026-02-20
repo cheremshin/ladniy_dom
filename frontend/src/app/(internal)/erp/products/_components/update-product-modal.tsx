@@ -12,16 +12,17 @@ import type {
     ProductTypesQueryVariables,
 } from '@/shared/api/graphql/__generated__/types';
 import { BRANDS, CATEGORIES, PRODUCT_TYPES } from '@/shared/api/graphql/queries';
+import { mapImageUrlValueToRealUrl } from '@/shared/mappers/image-url.mapper';
 import { useProductPageContext } from '../_lib';
-import { useCreateProduct } from '../_lib/use-create-product';
+import { useUpdateProduct } from '../_lib/use-update-product';
 import { STATUS_OPTIONS } from '../_lib/constants';
 
-export const CreateProductModal: FC = () => {
-    const { createModal, categoryId, categoryLabel, productTypeId, productTypeLabel } = useProductPageContext();
-    const { isCreateOpen, closeCreate, onCreateSuccess } = createModal;
+export const UpdateProductModal: FC = () => {
+    const { updateModal } = useProductPageContext();
+    const { updateModalItem, isUpdateOpen, closeUpdate, onUpdateSuccess } = updateModal;
     const imageUpload = useImageUpload();
-    const { form, onSubmit, isSubmitting } = useCreateProduct(onCreateSuccess, imageUpload.fileRef);
-    const { control, register, watch, setValue } = form;
+    const { form, onSubmit, isSubmitting } = useUpdateProduct(onUpdateSuccess, imageUpload.fileRef);
+    const { control, register, watch } = form;
 
     const watchedCategoryId = watch('categoryId');
 
@@ -59,24 +60,39 @@ export const CreateProductModal: FC = () => {
     });
 
     useEffect(() => {
-        if (!isCreateOpen) return;
-        if (categoryId) setValue('categoryId', categoryId);
-        if (productTypeId) setValue('productTypeId', productTypeId);
-    }, [isCreateOpen, categoryId, productTypeId, setValue]);
-
-    useEffect(() => {
-        setValue('productTypeId', '');
-    }, [watchedCategoryId, setValue]);
+        if (isUpdateOpen && updateModalItem) {
+            form.setValue('id', updateModalItem.id);
+            form.setValue('title', updateModalItem.title);
+            form.setValue('sku', updateModalItem.sku);
+            form.setValue('categoryId', updateModalItem.categoryId);
+            form.setValue('productTypeId', updateModalItem.productTypeId ?? '');
+            form.setValue('brandId', updateModalItem.brandId);
+            form.setValue('basePrice', updateModalItem.basePrice);
+            form.setValue('costPrice', updateModalItem.costPrice);
+            form.setValue('discountPrice', updateModalItem.discountPrice ?? 0);
+            form.setValue('stockQuantity', updateModalItem.stockQuantity);
+            form.setValue('warrantyMonths', updateModalItem.warrantyMonths ?? 0);
+            form.setValue('status', updateModalItem.status as 'ACTIVE' | 'DISCOUNTED' | 'DRAFT' | 'OUT_OF_STOCK');
+            form.setValue('description', updateModalItem.description ?? '');
+            form.setValue('isFeatured', updateModalItem.isFeatured);
+            form.setValue('metaTitle', updateModalItem.metaTitle ?? '');
+            form.setValue('metaDescription', updateModalItem.metaDescription ?? '');
+        }
+    }, [isUpdateOpen, updateModalItem, form]);
 
     const handleClose = () => {
         form.reset();
         imageUpload.reset();
-        closeCreate();
+        closeUpdate();
     };
 
+    const existingImageUrl = updateModalItem?.primaryImage?.url
+        ? mapImageUrlValueToRealUrl(updateModalItem.primaryImage.url)
+        : null;
+
     return (
-        <Modal isOpen={isCreateOpen} onClose={handleClose} title="Создать продукт">
-            <form onSubmit={onSubmit}>
+        <Modal isOpen={isUpdateOpen} onClose={handleClose} title="Обновить продукт">
+            <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
                 <FormField name="title" control={control} label="Название *" />
                 <FormField name="sku" control={control} label="Артикул *" />
 
@@ -85,7 +101,7 @@ export const CreateProductModal: FC = () => {
                     control={control}
                     label="Категория *"
                     options={categorySelect.options}
-                    valueLabel={categoryId ? (categoryLabel ?? undefined) : undefined}
+                    valueLabel={updateModalItem?.category?.title}
                     onOpen={categorySelect.onOpen}
                     onLoadMore={categorySelect.handleLoadMore}
                     hasNextPage={categorySelect.hasNextPage}
@@ -98,7 +114,7 @@ export const CreateProductModal: FC = () => {
                     control={control}
                     label="Тип продукта *"
                     options={productTypeSelect.options}
-                    valueLabel={productTypeId ? (productTypeLabel ?? undefined) : undefined}
+                    valueLabel={updateModalItem?.productType?.title}
                     onOpen={productTypeSelect.onOpen}
                     onLoadMore={productTypeSelect.handleLoadMore}
                     hasNextPage={productTypeSelect.hasNextPage}
@@ -111,6 +127,7 @@ export const CreateProductModal: FC = () => {
                     control={control}
                     label="Бренд *"
                     options={brandSelect.options}
+                    valueLabel={updateModalItem?.brand?.title}
                     onOpen={brandSelect.onOpen}
                     onLoadMore={brandSelect.handleLoadMore}
                     hasNextPage={brandSelect.hasNextPage}
@@ -125,9 +142,9 @@ export const CreateProductModal: FC = () => {
                 <FormField name="warrantyMonths" control={control} label="Гарантия (мес.)" type="number" />
 
                 <div className="base-input">
-                    <label htmlFor="product-status">Статус</label>
+                    <label htmlFor="product-status-update">Статус</label>
                     <select
-                        id="product-status"
+                        id="product-status-update"
                         style={{ padding: '10px', borderRadius: '6px', border: '1px solid var(--color-border)', fontFamily: 'inherit', fontSize: 'inherit', width: '100%' }}
                         {...register('status')}
                     >
@@ -138,9 +155,9 @@ export const CreateProductModal: FC = () => {
                 </div>
 
                 <div className="base-input">
-                    <label htmlFor="product-description">Описание</label>
+                    <label htmlFor="product-description-update">Описание</label>
                     <textarea
-                        id="product-description"
+                        id="product-description-update"
                         rows={3}
                         style={{ padding: '10px', borderRadius: '6px', border: '1px solid var(--color-border)', fontFamily: 'inherit', fontSize: 'inherit', resize: 'vertical' }}
                         {...register('description')}
@@ -154,6 +171,7 @@ export const CreateProductModal: FC = () => {
 
                 <ImageUploadField
                     previewUrl={imageUpload.previewUrl}
+                    existingImageUrl={existingImageUrl}
                     onFileChange={imageUpload.handleFileChange}
                     label="Изображение продукта"
                 />
@@ -163,7 +181,7 @@ export const CreateProductModal: FC = () => {
                         Отмена
                     </Button>
                     <Button type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? 'Создание…' : 'Создать'}
+                        {isSubmitting ? 'Обновление…' : 'Обновить'}
                     </Button>
                 </div>
             </form>

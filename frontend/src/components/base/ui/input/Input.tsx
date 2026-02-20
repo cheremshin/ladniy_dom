@@ -23,19 +23,24 @@ export const Input: FC<InputProps> = ({
     touched,
     className,
     ...rest
-}) => (
-    <div className={clsx('base-input', className)}>
-        <label htmlFor={id}>{label}</label>
-        <input
-            id={id}
-            name={name}
-            type={type}
-            autoComplete={autoComplete}
-            value={value}
-            onChange={onChange}
-            onBlur={onBlur}
-            {...rest}
-        />
-        {touched && error && <ErrorMessage error={error} />}
-    </div>
-);
+}) => {
+    const isCheckboxOrRadio = type === 'checkbox' || type === 'radio';
+    const inputValue = isCheckboxOrRadio ? (value ?? false) : (value ?? '');
+    return (
+        <div className={clsx('base-input', className)}>
+            <label htmlFor={id}>{label}</label>
+            <input
+                id={id}
+                name={name}
+                type={type}
+                autoComplete={autoComplete}
+                value={typeof inputValue !== 'boolean' ? inputValue : undefined}
+                checked={typeof inputValue === 'boolean' ? inputValue : undefined}
+                onChange={onChange}
+                onBlur={onBlur}
+                {...rest}
+            />
+            {touched && error && <ErrorMessage error={error} />}
+        </div>
+    );
+};

@@ -37,7 +37,7 @@ export const CategorySelect: FC = () => {
             label="Категория"
             options={options}
             value={categoryId ?? ''}
-            onChange={(id) => setCategory(id || null)}
+            onChange={(id, label) => setCategory(id || null, label || null)}
             onOpen={onOpen}
             onLoadMore={handleLoadMore}
             hasNextPage={hasNextPage}

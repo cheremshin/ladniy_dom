@@ -8,6 +8,7 @@ import { CategorySelect } from './_components/category.select';
 import { ProductTypeSelect } from './_components/product-type.select';
 import { CreateSpecificationTrigger } from './_components/create-specification-trigger';
 import { CreateSpecificationModal } from './_components/create-specification-modal';
+import { UpdateSpecificationModal } from './_components/update-specification-modal';
 
 export default function Page() {
     return (
@@ -20,6 +21,7 @@ export default function Page() {
                 <ProductTypeSelect />
                 <SpecificationsTable />
                 <CreateSpecificationModal />
+                <UpdateSpecificationModal />
             </TableLayout>
         </SpecificationsPageProvider>
     );

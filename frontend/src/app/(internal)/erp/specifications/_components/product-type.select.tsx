@@ -43,7 +43,7 @@ export const ProductTypeSelect: FC = () => {
             label="Тип продукта"
             options={options}
             value={productTypeId ?? ''}
-            onChange={(id) => setProductType(id || null)}
+            onChange={(id, label) => setProductType(id || null, label || null)}
             onOpen={onOpen}
             onLoadMore={handleLoadMore}
             hasNextPage={hasNextPage}
