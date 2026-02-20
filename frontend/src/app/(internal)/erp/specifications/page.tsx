@@ -1,21 +1,26 @@
+'use client';
+
 import { TableLayout } from '@/components/dummies/erp/tableLayout';
 
 import { SpecificationsTable } from './_components/specifications.table';
 import { SpecificationsPageProvider } from './_lib';
 import { CategorySelect } from './_components/category.select';
 import { ProductTypeSelect } from './_components/product-type.select';
+import { CreateSpecificationTrigger } from './_components/create-specification-trigger';
+import { CreateSpecificationModal } from './_components/create-specification-modal';
 
 export default function Page() {
     return (
-        <TableLayout
-            tableName="Спецификации продуктов"
-            newItemUrl="/erp/specifications/new"
-        >
-            <SpecificationsPageProvider>
+        <SpecificationsPageProvider>
+            <TableLayout>
+                <TableLayout.Header title="Спецификации продуктов">
+                    <CreateSpecificationTrigger />
+                </TableLayout.Header>
                 <CategorySelect />
                 <ProductTypeSelect />
                 <SpecificationsTable />
-            </SpecificationsPageProvider>
-        </TableLayout>
+                <CreateSpecificationModal />
+            </TableLayout>
+        </SpecificationsPageProvider>
     );
 }

@@ -1,28 +1,18 @@
 'use client';
 
-import { Button } from '@/components/base';
 import { FC, ReactNode } from 'react';
 
 import './TableLayout.styles.css';
 
-type PropsT = {
-    tableName: string;
-    newItemUrl: string;
-    children: ReactNode;
-};
+const Root: FC<{ children: ReactNode }> = ({ children }) => (
+    <div className="table-layout">{children}</div>
+);
 
-export const TableLayout: FC<PropsT> = ({
-    tableName,
-    newItemUrl,
-    children,
-}) => (
-    <div className="table-layout">
-        <div className="table-layout__header">
-            <h2>{tableName}</h2>
-            <Button onClick={() => (window.location.href = newItemUrl)}>
-                Создать
-            </Button>
-        </div>
+export const Header: FC<{ title: string; children?: ReactNode }> = ({ title, children }) => (
+    <div className="table-layout__header">
+        <h2>{title}</h2>
         {children}
     </div>
 );
+
+export const TableLayout = Object.assign(Root, { Header });

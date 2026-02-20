@@ -1,11 +1,22 @@
+'use client';
+
 import { TableLayout } from '@/components/dummies/erp/tableLayout';
 
 import { BrandsTable } from './_components/brands.table';
+import { BrandsPageProvider } from './_lib';
+import { CreateBrandTrigger } from './_components/create-brand-trigger';
+import { CreateBrandModal } from './_components/create-brand-modal';
 
 export default function Page() {
     return (
-        <TableLayout tableName="Бренды" newItemUrl="/erp/brands/new">
-            <BrandsTable />
-        </TableLayout>
+        <BrandsPageProvider>
+            <TableLayout>
+                <TableLayout.Header title="Бренды">
+                    <CreateBrandTrigger />
+                </TableLayout.Header>
+                <BrandsTable />
+                <CreateBrandModal />
+            </TableLayout>
+        </BrandsPageProvider>
     );
 }

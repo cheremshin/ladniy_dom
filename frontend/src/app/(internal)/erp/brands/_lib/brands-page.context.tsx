@@ -10,23 +10,19 @@ import {
     type ReactNode,
 } from 'react';
 
-type ProductPageContextValue = {
-    categoryId: string | null;
-    productTypeId: string | null;
-    setCategory: (id: string | null) => void;
-    setProductType: (id: string | null) => void;
+type BrandsPageContextValue = {
     isCreateOpen: boolean;
     openCreate: () => void;
     closeCreate: () => void;
+    /** Таблица вызывает один раз при монтировании */
     registerRefetch: (fn: () => Promise<void>) => void;
+    /** Модалка вызывает после успешного создания */
     onCreateSuccess: () => void;
 };
 
-const ProductPageContext = createContext<ProductPageContextValue | null>(null);
+const BrandsPageContext = createContext<BrandsPageContextValue | null>(null);
 
-export const ProductPageProvider: FC<{ children: ReactNode }> = ({ children }) => {
-    const [categoryId, setCategoryId] = useState<string | null>(null);
-    const [productTypeId, setProductTypeId] = useState<string | null>(null);
+export const BrandsPageProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const refetchRef = useRef<(() => Promise<void>) | null>(null);
 
@@ -40,12 +36,8 @@ export const ProductPageProvider: FC<{ children: ReactNode }> = ({ children }) =
     }, []);
 
     return (
-        <ProductPageContext.Provider
+        <BrandsPageContext.Provider
             value={{
-                categoryId,
-                productTypeId,
-                setCategory: setCategoryId,
-                setProductType: setProductTypeId,
                 isCreateOpen,
                 openCreate: () => setIsCreateOpen(true),
                 closeCreate: () => setIsCreateOpen(false),
@@ -54,12 +46,12 @@ export const ProductPageProvider: FC<{ children: ReactNode }> = ({ children }) =
             }}
         >
             {children}
-        </ProductPageContext.Provider>
+        </BrandsPageContext.Provider>
     );
 };
 
-export function useProductPageContext() {
-    const ctx = useContext(ProductPageContext);
-    if (!ctx) throw new Error('useProductPageContext must be used inside ProductPageProvider');
+export function useBrandsPageContext() {
+    const ctx = useContext(BrandsPageContext);
+    if (!ctx) throw new Error('useBrandsPageContext must be used inside BrandsPageProvider');
     return ctx;
 }

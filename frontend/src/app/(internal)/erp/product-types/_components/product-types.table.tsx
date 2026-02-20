@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { DataTable, TableActions, TableLink } from '@/components/base';
@@ -8,7 +8,7 @@ import { useProductTypesTable, useProductTypesPageContext } from '../_lib';
 import type { ProductType } from '../_lib';
 
 export const ProductTypesTable: FC = () => {
-    const { categoryId } = useProductTypesPageContext();
+    const { categoryId, registerRefetch } = useProductTypesPageContext();
     const {
         items,
         isLoading,
@@ -17,7 +17,12 @@ export const ProductTypesTable: FC = () => {
         handleEdit,
         handleDelete,
         loadMore,
+        refetch,
     } = useProductTypesTable({ categoryId });
+
+    useEffect(() => {
+        registerRefetch(refetch);
+    }, [registerRefetch, refetch]);
 
     const columns = useMemo<ColumnDef<ProductType>[]>(
         () => [

@@ -15,9 +15,9 @@
 }
 
 .lazy-select__trigger {
+    width: 100%;
     min-width: 280px;
-    padding: 8px 12px;
-    font-size: 14px;
+    padding: 10px;
     text-align: left;
     border: 1px solid #e5e7eb;
     border-radius: 6px;

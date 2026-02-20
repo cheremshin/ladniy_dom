@@ -31,7 +31,7 @@ export function FormField<T extends FieldValues>({
                     label={label}
                     type={type}
                     autoComplete={autoComplete}
-                    value={field.value}
+                    value={field.value ?? undefined}
                     onChange={field.onChange}
                     onBlur={field.onBlur}
                     error={fieldState.error?.message}

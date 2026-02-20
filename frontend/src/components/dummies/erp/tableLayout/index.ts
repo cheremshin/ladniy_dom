@@ -1,1 +1,1 @@
-export { TableLayout } from './ui/TableLayout';
+export { TableLayout, Header } from './ui/TableLayout';

@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { DataTable, TableActions, TableLink } from '@/components/base';
@@ -8,7 +8,7 @@ import { useSpecificationsPageContext, useSpecificationsTable } from '../_lib';
 import type { SpecificationDefinition } from '../_lib';
 
 export const SpecificationsTable: FC = () => {
-    const { categoryId, productTypeId } = useSpecificationsPageContext();
+    const { categoryId, productTypeId, registerRefetch } = useSpecificationsPageContext();
     const {
         items,
         isLoading,
@@ -17,7 +17,12 @@ export const SpecificationsTable: FC = () => {
         handleEdit,
         handleDelete,
         loadMore,
+        refetch,
     } = useSpecificationsTable({ productTypeId });
+
+    useEffect(() => {
+        registerRefetch(refetch);
+    }, [registerRefetch, refetch]);
 
     const columns = useMemo<ColumnDef<SpecificationDefinition>[]>(
         () => [

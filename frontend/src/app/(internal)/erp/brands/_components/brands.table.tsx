@@ -1,10 +1,10 @@
 'use client';
 
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { DataTable, TableActions, TableLink } from '@/components/base';
-import { useBrandsTable } from '../_lib';
+import { useBrandsPageContext, useBrandsTable } from '../_lib';
 import type { Brand } from '../_lib';
 
 export const BrandsTable: FC = () => {
@@ -16,7 +16,14 @@ export const BrandsTable: FC = () => {
         handleEdit,
         handleDelete,
         loadMore,
+        refetch,
     } = useBrandsTable();
+
+    const { registerRefetch } = useBrandsPageContext();
+
+    useEffect(() => {
+        registerRefetch(refetch);
+    }, [registerRefetch, refetch]);
 
     const columns = useMemo<ColumnDef<Brand>[]>(
         () => [

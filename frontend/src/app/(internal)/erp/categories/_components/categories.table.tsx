@@ -1,10 +1,10 @@
 'use client';
 
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { DataTable, TableActions, TableLink } from '@/components/base';
-import { useCategoriesTable } from '../_lib';
+import { useCategoriesPageContext, useCategoriesTable } from '../_lib';
 import type { Category } from '../_lib';
 
 export const CategoriesTable: FC = () => {
@@ -16,7 +16,14 @@ export const CategoriesTable: FC = () => {
         handleEdit,
         handleDelete,
         loadMore,
+        refetch,
     } = useCategoriesTable();
+
+    const { registerRefetch } = useCategoriesPageContext();
+
+    useEffect(() => {
+        registerRefetch(refetch);
+    }, [registerRefetch, refetch]);
 
     const columns = useMemo<ColumnDef<Category>[]>(
         () => [

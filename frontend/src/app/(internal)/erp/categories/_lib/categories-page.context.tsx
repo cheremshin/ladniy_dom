@@ -10,11 +10,7 @@ import {
     type ReactNode,
 } from 'react';
 
-type ProductPageContextValue = {
-    categoryId: string | null;
-    productTypeId: string | null;
-    setCategory: (id: string | null) => void;
-    setProductType: (id: string | null) => void;
+type CategoriesPageContextValue = {
     isCreateOpen: boolean;
     openCreate: () => void;
     closeCreate: () => void;
@@ -22,11 +18,9 @@ type ProductPageContextValue = {
     onCreateSuccess: () => void;
 };
 
-const ProductPageContext = createContext<ProductPageContextValue | null>(null);
+const CategoriesPageContext = createContext<CategoriesPageContextValue | null>(null);
 
-export const ProductPageProvider: FC<{ children: ReactNode }> = ({ children }) => {
-    const [categoryId, setCategoryId] = useState<string | null>(null);
-    const [productTypeId, setProductTypeId] = useState<string | null>(null);
+export const CategoriesPageProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const refetchRef = useRef<(() => Promise<void>) | null>(null);
 
@@ -40,12 +34,8 @@ export const ProductPageProvider: FC<{ children: ReactNode }> = ({ children }) =
     }, []);
 
     return (
-        <ProductPageContext.Provider
+        <CategoriesPageContext.Provider
             value={{
-                categoryId,
-                productTypeId,
-                setCategory: setCategoryId,
-                setProductType: setProductTypeId,
                 isCreateOpen,
                 openCreate: () => setIsCreateOpen(true),
                 closeCreate: () => setIsCreateOpen(false),
@@ -54,12 +44,12 @@ export const ProductPageProvider: FC<{ children: ReactNode }> = ({ children }) =
             }}
         >
             {children}
-        </ProductPageContext.Provider>
+        </CategoriesPageContext.Provider>
     );
 };
 
-export function useProductPageContext() {
-    const ctx = useContext(ProductPageContext);
-    if (!ctx) throw new Error('useProductPageContext must be used inside ProductPageProvider');
+export function useCategoriesPageContext() {
+    const ctx = useContext(CategoriesPageContext);
+    if (!ctx) throw new Error('useCategoriesPageContext must be used inside CategoriesPageProvider');
     return ctx;
 }
