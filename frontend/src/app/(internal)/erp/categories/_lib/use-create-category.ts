@@ -1,6 +1,5 @@
 'use client';
 
-import type { MutableRefObject } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@apollo/client/react';
@@ -28,7 +27,6 @@ const DEFAULT_VALUES: CreateCategoryValues = {
 
 export function useCreateCategory(
     onSuccess: () => void,
-    fileRef?: MutableRefObject<File | null>,
 ) {
     const [createCategory] = useMutation<
         CreateCategoryMutation,
@@ -44,30 +42,31 @@ export function useCreateCategory(
         resolver: zodResolver(createCategorySchema),
     });
 
-    const onSubmit = form.handleSubmit(async (values) => {
-        const result = await createCategory({
-            variables: {
-                input: {
-                    title: values.title,
-                    imageUrl: values.imageUrl || null,
-                    isActive: values.isActive ?? true,
-                    parentId: values.parentId || null,
-                    sortOrder: values.sortOrder ?? 0,
+    const onSubmit = (fileInput?: File | null) =>
+        form.handleSubmit(async (values) => {
+            const result = await createCategory({
+                variables: {
+                    input: {
+                        title: values.title,
+                        imageUrl: values.imageUrl || null,
+                        isActive: values.isActive ?? true,
+                        parentId: values.parentId || null,
+                        sortOrder: values.sortOrder ?? 0,
+                    },
                 },
-            },
-        });
-
-        const id = result.data?.createCategory.id;
-        if (id && fileRef?.current) {
-            const path = await uploadFile(fileRef.current, 'category', id);
-            await updateCategory({
-                variables: { input: { id, imageUrl: path } },
             });
-        }
 
-        form.reset(DEFAULT_VALUES);
-        onSuccess();
-    });
+            const id = result.data?.createCategory.id;
+            if (fileInput && id) {
+                const path = await uploadFile(fileInput, 'category', id);
+                await updateCategory({
+                    variables: { input: { id, imageUrl: path } },
+                });
+            }
+
+            form.reset(DEFAULT_VALUES);
+            onSuccess();
+        });
 
     return { form, onSubmit, isSubmitting: form.formState.isSubmitting };
 }

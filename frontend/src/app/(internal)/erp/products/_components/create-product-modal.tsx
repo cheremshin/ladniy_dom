@@ -20,7 +20,7 @@ export const CreateProductModal: FC = () => {
     const { createModal, categoryId, categoryLabel, productTypeId, productTypeLabel } = useProductPageContext();
     const { isCreateOpen, closeCreate, onCreateSuccess } = createModal;
     const imageUpload = useImageUpload();
-    const { form, onSubmit, isSubmitting } = useCreateProduct(onCreateSuccess, imageUpload.fileRef);
+    const { form, onSubmit, isSubmitting } = useCreateProduct(onCreateSuccess);
     const { control, register, watch, setValue } = form;
 
     const watchedCategoryId = watch('categoryId');
@@ -76,7 +76,7 @@ export const CreateProductModal: FC = () => {
 
     return (
         <Modal isOpen={isCreateOpen} onClose={handleClose} title="Создать продукт">
-            <form onSubmit={onSubmit}>
+            <form onSubmit={onSubmit(imageUpload.fileRef?.current ?? null)}>
                 <FormField name="title" control={control} label="Название *" />
                 <FormField name="sku" control={control} label="Артикул *" />
 

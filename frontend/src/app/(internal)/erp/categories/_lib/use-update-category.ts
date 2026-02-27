@@ -1,6 +1,5 @@
 'use client';
 
-import type { MutableRefObject } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@apollo/client/react';
@@ -27,7 +26,6 @@ const DEFAULT_VALUES: UpdateCategoryValues = {
 
 export function useUpdateCategory(
     onSuccess: () => void,
-    fileRef?: MutableRefObject<File | null>,
 ) {
     const [updateCategory] = useMutation<
         UpdateCategoryMutation,
@@ -39,31 +37,32 @@ export function useUpdateCategory(
         resolver: zodResolver(updateCategorySchema),
     });
 
-    const onSubmit = form.handleSubmit(async (values) => {
-        let imageUrl = values.imageUrl ?? undefined;
+    const onSubmit = (fileInput?: File | null) =>
+        form.handleSubmit(async (values) => {
+            let imageUrl = values.imageUrl ?? undefined;
 
-        if (fileRef?.current) {
-            imageUrl = await uploadFile(fileRef.current, 'category', values.id);
-        }
+            if (fileInput) {
+                imageUrl = await uploadFile(fileInput, 'category', values.id);
+            }
 
-        await updateCategory({
-            variables: {
-                input: {
-                    id: values.id,
-                    title: values.title,
-                    parentId: values.parentId || undefined,
-                    sortOrder: values.sortOrder,
-                    imageUrl,
-                    isActive: values.isActive,
+            await updateCategory({
+                variables: {
+                    input: {
+                        id: values.id,
+                        title: values.title,
+                        parentId: values.parentId || undefined,
+                        sortOrder: values.sortOrder,
+                        imageUrl,
+                        isActive: values.isActive,
+                    },
                 },
-            },
-        });
+            });
 
-        form.reset(DEFAULT_VALUES);
-        onSuccess();
-    }, (error) => {
-        console.error(error);
-    });
+            form.reset(DEFAULT_VALUES);
+            onSuccess();
+        }, (error) => {
+            console.error(error);
+        });
 
     return { form, onSubmit, isSubmitting: form.formState.isSubmitting };
 }

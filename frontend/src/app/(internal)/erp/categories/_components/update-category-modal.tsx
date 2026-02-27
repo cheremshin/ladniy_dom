@@ -16,7 +16,7 @@ export const UpdateCategoryModal: FC = () => {
     const { updateModal } = useCategoriesPageContext();
     const { updateModalItem, isUpdateOpen, closeUpdate, onUpdateSuccess } = updateModal;
     const imageUpload = useImageUpload();
-    const { form, onSubmit, isSubmitting } = useUpdateCategory(onUpdateSuccess, imageUpload.fileRef);
+    const { form, onSubmit, isSubmitting } = useUpdateCategory(onUpdateSuccess);
     const { control, register } = form;
 
     const parentSelect = usePaginatedSelect<
@@ -53,7 +53,7 @@ export const UpdateCategoryModal: FC = () => {
 
     return (
         <Modal isOpen={isUpdateOpen} onClose={handleClose} title="Обновить категорию">
-            <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
+            <form onSubmit={onSubmit(imageUpload.fileRef?.current ?? null)} style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
                 <FormField name="title" control={control} label="Название *" />
                 <FormLazySelectField
                     name="parentId"
