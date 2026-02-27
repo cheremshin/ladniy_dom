@@ -1,0 +1,17 @@
+.main-page {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.main-cover {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+}
+
+.featured-products {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
