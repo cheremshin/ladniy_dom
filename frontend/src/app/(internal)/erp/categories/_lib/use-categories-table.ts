@@ -5,12 +5,12 @@ import { useMutation, useLazyQuery } from '@apollo/client/react';
 
 import { useTablePagination, toTableMeta } from '@/app/(internal)/erp/_lib';
 import { CATEGORIES } from '@/shared/api/graphql/queries';
-import { SOFT_DELETE_CATEGORY } from '@/shared/api/graphql/mutations/category';
+import { HARD_DELETE_CATEGORY } from '@/shared/api/graphql/mutations/category';
 import type {
     CategoriesQuery,
     CategoriesQueryVariables,
-    SoftDeleteCategoryMutation,
-    SoftDeleteCategoryMutationVariables,
+    HardDeleteCategoryMutation,
+    HardDeleteCategoryMutationVariables,
 } from '@/shared/api/graphql/__generated__/types';
 
 import type { Category } from './types';
@@ -24,11 +24,12 @@ export function useCategoriesTable() {
     const [fetchCategories] = useLazyQuery<
         CategoriesQuery,
         CategoriesQueryVariables
-    >(CATEGORIES);
+    >(CATEGORIES, { fetchPolicy: 'network-only' });
+
     const [deleteCategory] = useMutation<
-        SoftDeleteCategoryMutation,
-        SoftDeleteCategoryMutationVariables
-    >(SOFT_DELETE_CATEGORY);
+        HardDeleteCategoryMutation,
+        HardDeleteCategoryMutationVariables
+    >(HARD_DELETE_CATEGORY, { refetchQueries: [CATEGORIES] });
 
     const fetchPage = useCallback(async (page: number, limit: number) => {
         const result = await fetchCategories({

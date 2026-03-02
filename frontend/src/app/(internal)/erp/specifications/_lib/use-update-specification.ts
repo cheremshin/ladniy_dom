@@ -11,6 +11,7 @@ import type {
     UpdateSpecificationDefinitionMutation,
     UpdateSpecificationDefinitionMutationVariables,
 } from '@/shared/api/graphql/__generated__/types';
+import { SPECIFICATION_DEFINITIONS } from '@/shared/api/graphql/queries';
 
 export type UpdateSpecificationValues = z.infer<typeof updateSpecificationDefinitionSchema>;
 
@@ -28,7 +29,7 @@ export function useUpdateSpecification(onSuccess: () => void) {
     const [updateSpecificationDefinition] = useMutation<
         UpdateSpecificationDefinitionMutation,
         UpdateSpecificationDefinitionMutationVariables
-    >(UPDATE_SPECIFICATION_DEFINITION);
+    >(UPDATE_SPECIFICATION_DEFINITION, { refetchQueries: [SPECIFICATION_DEFINITIONS] });
 
     const form = useForm<UpdateSpecificationValues>({
         defaultValues: DEFAULT_VALUES,

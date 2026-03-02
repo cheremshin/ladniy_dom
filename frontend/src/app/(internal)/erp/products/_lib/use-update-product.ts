@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { Resolver, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@apollo/client/react';
 import { z } from 'zod';
@@ -14,6 +14,7 @@ import type {
     AttachProductImageMutation,
     AttachProductImageMutationVariables,
 } from '@/shared/api/graphql/__generated__/types';
+import { PRODUCTS } from '@/shared/api/graphql/queries';
 
 const updateProductSchema = createDynamicUpdateProductSchema([]);
 export type UpdateProductValues = z.infer<typeof updateProductSchema>;
@@ -43,15 +44,16 @@ export function useUpdateProduct(
     const [updateProduct] = useMutation<
         UpdateProductMutation,
         UpdateProductMutationVariables
-    >(UPDATE_PRODUCT);
+    >(UPDATE_PRODUCT, { refetchQueries: [PRODUCTS] });
+
     const [attachProductImage] = useMutation<
         AttachProductImageMutation,
         AttachProductImageMutationVariables
-    >(ATTACH_PRODUCT_IMAGE);
+    >(ATTACH_PRODUCT_IMAGE, { refetchQueries: [PRODUCTS] });
 
     const form = useForm<UpdateProductValues>({
         defaultValues: DEFAULT_VALUES,
-        resolver: zodResolver(updateProductSchema),
+        resolver: zodResolver(updateProductSchema) as Resolver<UpdateProductValues>,
     });
 
     const onSubmit = (fileInput?: File | null) =>

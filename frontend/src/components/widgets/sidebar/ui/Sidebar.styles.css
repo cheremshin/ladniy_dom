@@ -3,6 +3,7 @@
     min-width: 300px;
     max-width: 300px;
     height: calc(100vh - 120px);
+    top: 120px;
 }
 
 .admin-sidebar__card {

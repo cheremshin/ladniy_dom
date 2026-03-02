@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { Resolver, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@apollo/client/react';
 import { z } from 'zod';
@@ -14,6 +14,7 @@ import type {
     AttachProductImageMutation,
     AttachProductImageMutationVariables,
 } from '@/shared/api/graphql/__generated__/types';
+import { PRODUCTS } from '@/shared/api/graphql/queries';
 
 const createProductSchema = createDynamicCreateProductSchema([]);
 export type CreateProductValues = z.infer<typeof createProductSchema>;
@@ -38,7 +39,8 @@ export function useCreateProduct(
     const [createProduct] = useMutation<
         CreateProductMutation,
         CreateProductMutationVariables
-    >(CREATE_PRODUCT);
+    >(CREATE_PRODUCT, { refetchQueries: [PRODUCTS] });
+
     const [attachProductImage] = useMutation<
         AttachProductImageMutation,
         AttachProductImageMutationVariables
@@ -46,7 +48,7 @@ export function useCreateProduct(
 
     const form = useForm<CreateProductValues>({
         defaultValues: DEFAULT_VALUES,
-        resolver: zodResolver(createProductSchema),
+        resolver: zodResolver(createProductSchema) as Resolver<CreateProductValues>,
     });
 
     const onSubmit = (fileInput?: File | null) =>
@@ -85,6 +87,8 @@ export function useCreateProduct(
 
             form.reset(DEFAULT_VALUES);
             onSuccess();
+        }, (error, event) => {
+            console.error('Failed create product', error, event);
         });
 
     return { form, onSubmit, isSubmitting: form.formState.isSubmitting };

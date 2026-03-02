@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { Resolver, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@apollo/client/react';
 import { z } from 'zod';
@@ -11,6 +11,7 @@ import type {
     UpdateBrandMutation,
     UpdateBrandMutationVariables,
 } from '@/shared/api/graphql/__generated__/types';
+import { BRANDS } from '@/shared/api/graphql/queries';
 
 export type UpdateBrandValues = z.infer<typeof updateBrandSchema>;
 
@@ -28,11 +29,11 @@ export function useUpdateBrand(onSuccess: () => void) {
     const [updateBrand] = useMutation<
         UpdateBrandMutation,
         UpdateBrandMutationVariables
-    >(UPDATE_BRAND);
+    >(UPDATE_BRAND, { refetchQueries: [BRANDS] });
 
     const form = useForm<UpdateBrandValues>({
         defaultValues: DEFAULT_VALUES,
-        resolver: zodResolver(updateBrandSchema),
+        resolver: zodResolver(updateBrandSchema) as Resolver<UpdateBrandValues>,
     });
 
     const onSubmit = form.handleSubmit(async (values) => {

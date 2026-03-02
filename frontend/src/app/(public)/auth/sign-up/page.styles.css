@@ -1,7 +1,5 @@
 .sign-up-page {
     width: 100%;
-    height: calc(100% - 100px);
-    margin: 0 0;
     display: flex;
     justify-content: center;
     align-items: center;

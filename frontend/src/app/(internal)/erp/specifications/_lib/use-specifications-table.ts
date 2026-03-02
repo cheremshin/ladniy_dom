@@ -5,12 +5,12 @@ import { useMutation, useLazyQuery } from '@apollo/client/react';
 
 import { useTablePagination, toTableMeta } from '@/app/(internal)/erp/_lib';
 import { SPECIFICATION_DEFINITIONS } from '@/shared/api/graphql/queries';
-import { SOFT_DELETE_SPECIFICATION_DEFINITION } from '@/shared/api/graphql/mutations';
+import { HARD_DELETE_SPECIFICATION_DEFINITION } from '@/shared/api/graphql/mutations';
 import type {
     SpecificationDefinitionsQuery,
     SpecificationDefinitionsQueryVariables,
-    SoftDeleteSpecificationDefinitionMutation,
-    SoftDeleteSpecificationDefinitionMutationVariables,
+    HardDeleteSpecificationDefinitionMutation,
+    HardDeleteSpecificationDefinitionMutationVariables,
 } from '@/shared/api/graphql/__generated__/types';
 
 import type { SpecificationDefinition } from './types';
@@ -28,12 +28,12 @@ export function useSpecificationsTable({ productTypeId }: UseSpecificationsTable
     const [fetchSpecifications] = useLazyQuery<
         SpecificationDefinitionsQuery,
         SpecificationDefinitionsQueryVariables
-    >(SPECIFICATION_DEFINITIONS);
+    >(SPECIFICATION_DEFINITIONS, { fetchPolicy: 'network-only' });
 
     const [deleteSpecification] = useMutation<
-        SoftDeleteSpecificationDefinitionMutation,
-        SoftDeleteSpecificationDefinitionMutationVariables
-    >(SOFT_DELETE_SPECIFICATION_DEFINITION);
+        HardDeleteSpecificationDefinitionMutation,
+        HardDeleteSpecificationDefinitionMutationVariables
+    >(HARD_DELETE_SPECIFICATION_DEFINITION, { refetchQueries: [SPECIFICATION_DEFINITIONS] });
 
     const fetchPage = useCallback(async (page: number, limit: number) => {
         const result = await fetchSpecifications({

@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { Resolver, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@apollo/client/react';
 import { z } from 'zod';
@@ -14,6 +14,7 @@ import type {
     UpdateCategoryMutation,
     UpdateCategoryMutationVariables,
 } from '@/shared/api/graphql/__generated__/types';
+import { CATEGORIES } from '@/shared/api/graphql/queries';
 
 export type CreateCategoryValues = z.infer<typeof createCategorySchema>;
 
@@ -31,15 +32,16 @@ export function useCreateCategory(
     const [createCategory] = useMutation<
         CreateCategoryMutation,
         CreateCategoryMutationVariables
-    >(CREATE_CATEGORY);
+    >(CREATE_CATEGORY, { refetchQueries: [CATEGORIES] });
+
     const [updateCategory] = useMutation<
         UpdateCategoryMutation,
         UpdateCategoryMutationVariables
-    >(UPDATE_CATEGORY);
+    >(UPDATE_CATEGORY, { refetchQueries: [CATEGORIES] });
 
     const form = useForm<CreateCategoryValues>({
         defaultValues: DEFAULT_VALUES,
-        resolver: zodResolver(createCategorySchema),
+        resolver: zodResolver(createCategorySchema) as Resolver<CreateCategoryValues>,
     });
 
     const onSubmit = (fileInput?: File | null) =>

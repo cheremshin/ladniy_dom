@@ -5,12 +5,12 @@ import { useMutation, useLazyQuery } from '@apollo/client/react';
 
 import { useTablePagination, toTableMeta } from '@/app/(internal)/erp/_lib';
 import { BRANDS } from '@/shared/api/graphql/queries';
-import { SOFT_DELETE_BRAND } from '@/shared/api/graphql/mutations/brand';
+import { HARD_DELETE_BRAND } from '@/shared/api/graphql/mutations/brand';
 import type {
     BrandsQuery,
     BrandsQueryVariables,
-    SoftDeleteBrandMutation,
-    SoftDeleteBrandMutationVariables,
+    HardDeleteBrandMutation,
+    HardDeleteBrandMutationVariables,
 } from '@/shared/api/graphql/__generated__/types';
 
 import type { Brand } from './types';
@@ -21,11 +21,11 @@ export function useBrandsTable() {
     const { updateModal } = useBrandsPageContext();
     const { openUpdate, setUpdateModalItem } = updateModal;
 
-    const [fetchBrands] = useLazyQuery<BrandsQuery, BrandsQueryVariables>(BRANDS);
+    const [fetchBrands] = useLazyQuery<BrandsQuery, BrandsQueryVariables>(BRANDS, { fetchPolicy: 'network-only' });
     const [deleteBrand] = useMutation<
-        SoftDeleteBrandMutation,
-        SoftDeleteBrandMutationVariables
-    >(SOFT_DELETE_BRAND);
+        HardDeleteBrandMutation,
+        HardDeleteBrandMutationVariables
+    >(HARD_DELETE_BRAND);
 
     const fetchPage = useCallback(async (page: number, limit: number) => {
         const result = await fetchBrands({

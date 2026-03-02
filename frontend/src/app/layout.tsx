@@ -17,8 +17,10 @@ export default async function RootLayout({ children }: Readonly<LayoutProps<'/'>
         <html lang="ru">
             <body>
                 <CoreProviders user={user}>
-                    <Header user={user} />
-                    {children}
+                    <div className="app-layout">
+                        <Header user={user} />
+                        {children}
+                    </div>
                 </CoreProviders>
             </body>
         </html>
