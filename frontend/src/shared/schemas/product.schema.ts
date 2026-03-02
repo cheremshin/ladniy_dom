@@ -1,42 +1,43 @@
 import { z } from 'zod';
+import { numberSchema, optionalNumberSchema } from './preprocess.utils';
 
 export const productStatusSchema = z.enum(['ACTIVE', 'DISCOUNTED', 'DRAFT', 'OUT_OF_STOCK']);
 
 const createProductBaseSchema = z.object({
     title: z.string().min(1, { message: 'Title is required' }),
-    basePrice: z.number({ message: 'Base price must be a number' }),
+    basePrice: numberSchema({ message: 'Base price must be a number' }),
     brandId: z.string().min(1, { message: 'Brand ID is required' }),
     categoryId: z.string().min(1, { message: 'Category ID is required' }),
-    costPrice: z.number({ message: 'Cost price must be a number' }),
+    costPrice: numberSchema({ message: 'Cost price must be a number' }),
     productTypeId: z.string().min(1, { message: 'Product Type ID is required' }),
     sku: z.string().min(1, { message: 'SKU is required' }),
     description: z.string().optional(),
-    discountPrice: z.number().optional(),
+    discountPrice: optionalNumberSchema(),
     isFeatured: z.boolean().optional(),
     metaDescription: z.string().optional(),
     metaTitle: z.string().optional(),
     status: productStatusSchema.optional(),
-    stockQuantity: z.number().int().optional(),
-    warrantyMonths: z.number().int().optional(),
+    stockQuantity: optionalNumberSchema(),
+    warrantyMonths: optionalNumberSchema(),
 });
 
 const updateProductBaseSchema = z.object({
     id: z.string().min(1, { message: 'ID is required' }),
     title: z.string().min(1, { message: 'Title is required' }).optional(),
-    basePrice: z.number({ message: 'Base price must be a number' }).optional(),
+    basePrice: optionalNumberSchema({ message: 'Base price must be a number' }),
     brandId: z.string().min(1, { message: 'Brand ID is required' }).optional(),
     categoryId: z.string().min(1, { message: 'Category ID is required' }).optional(),
-    costPrice: z.number({ message: 'Cost price must be a number' }).optional(),
+    costPrice: optionalNumberSchema({ message: 'Cost price must be a number' }),
     productTypeId: z.string().min(1, { message: 'Product Type ID is required' }).optional(),
     sku: z.string().min(1, { message: 'SKU is required' }).optional(),
     description: z.string().optional(),
-    discountPrice: z.number().optional(),
+    discountPrice: optionalNumberSchema(),
     isFeatured: z.boolean().optional(),
     metaDescription: z.string().optional(),
     metaTitle: z.string().optional(),
     status: productStatusSchema.optional(),
-    stockQuantity: z.number().int().optional(),
-    warrantyMonths: z.number().int().optional(),
+    stockQuantity: optionalNumberSchema(),
+    warrantyMonths: optionalNumberSchema(),
 });
 
 const createSpecificationValueSchema = (allowedKeys: string[]) => {

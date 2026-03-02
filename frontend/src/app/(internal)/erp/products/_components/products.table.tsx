@@ -30,7 +30,7 @@ export const ProductsTable: FC = () => {
                 accessorKey: 'title',
                 header: 'Название',
                 cell: ({ row }) => (
-                    <TableLink href={`/erp/products/${row.original.id}`}>
+                    <TableLink href={`/product/${row.original.slug}`}>
                         {row.original.title}
                     </TableLink>
                 ),

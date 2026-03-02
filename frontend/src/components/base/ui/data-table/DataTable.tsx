@@ -32,6 +32,7 @@ export function DataTable<TData>({
     emptyMessage = 'No data available',
     pagination,
 }: DataTableProps<TData>) {
+    // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({
         data,
         columns,

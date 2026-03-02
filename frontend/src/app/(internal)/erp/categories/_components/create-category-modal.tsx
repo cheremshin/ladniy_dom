@@ -15,7 +15,7 @@ export const CreateCategoryModal: FC = () => {
     const { createModal } = useCategoriesPageContext();
     const { isCreateOpen, closeCreate, onCreateSuccess } = createModal;
     const imageUpload = useImageUpload();
-    const { form, onSubmit, isSubmitting } = useCreateCategory(onCreateSuccess, imageUpload.fileRef);
+    const { form, onSubmit, isSubmitting } = useCreateCategory(onCreateSuccess);
     const { control, register } = form;
 
     const parentSelect = usePaginatedSelect<
@@ -37,7 +37,7 @@ export const CreateCategoryModal: FC = () => {
 
     return (
         <Modal isOpen={isCreateOpen} onClose={handleClose} title="Создать категорию">
-            <form onSubmit={onSubmit}>
+            <form onSubmit={onSubmit(imageUpload.fileRef?.current ?? null)}>
                 <FormField name="title" control={control} label="Название *" />
                 <FormLazySelectField
                     name="parentId"

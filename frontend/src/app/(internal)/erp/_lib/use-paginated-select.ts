@@ -4,7 +4,7 @@ import type { LazySelectOption } from '@/components/base';
 import { PaginatedCollection } from '@/shared/entities';
 import { DocumentNode, OperationVariables } from '@apollo/client';
 import { useLazyQuery } from '@apollo/client/react';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 type UsePaginatedSelectParams<TData, TItem, TVariables> = {
     query: DocumentNode;
@@ -25,9 +25,14 @@ export function usePaginatedSelect<
     variables,
     initialOption,
 }: UsePaginatedSelectParams<TData, TItem, TVariables>) {
+    const variablesRef = useRef(variables);
     const [options, setOptions] = useState<LazySelectOption[]>(initialOption ? [initialOption] : []);
     const [page, setPage] = useState(1);
     const [hasNextPage, setHasNextPage] = useState(false);
+
+    useEffect(() => {
+        variablesRef.current = variables;
+    }, [variables]);
 
     const [fetch, { loading: isLoading }] = useLazyQuery<TData, TVariables>(query);
 
@@ -36,18 +41,18 @@ export function usePaginatedSelect<
             const { data } = await fetch({
                 variables: {
                     page: pageNum,
-                    ...variables,
+                    ...variablesRef.current,
                 },
-            });
+            }) ?? {};
 
             if (!data) return;
 
             const collection = selectCollection(data);
-            const mapped = collection.items.map(mapItem);
+            const mapped = collection?.items.map(mapItem) ?? [];
             setOptions((prev) => pageNum === 1 ? mapped : [...prev, ...mapped]);
-            setHasNextPage(collection.meta.hasNextPage);
+            setHasNextPage(collection?.meta?.hasNextPage ?? false);
         },
-        [fetch, selectCollection, mapItem, variables],
+        [fetch, selectCollection, mapItem],
     );
 
     const onOpen = useCallback(() => {

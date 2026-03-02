@@ -95,6 +95,8 @@ export class CreateProductInput {
     stockQuantity: number = 0;
 
     @Field(() => Boolean, { defaultValue: false })
+    @IsOptional()
+    @IsBoolean({ message: 'isFeatured must be a boolean' })
     isFeatured: boolean = false;
 
     @Field(() => Int, { defaultValue: 0 })

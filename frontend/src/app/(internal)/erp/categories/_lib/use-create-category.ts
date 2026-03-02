@@ -1,7 +1,6 @@
 'use client';
 
-import type { MutableRefObject } from 'react';
-import { useForm } from 'react-hook-form';
+import { Resolver, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@apollo/client/react';
 import { z } from 'zod';
@@ -15,6 +14,7 @@ import type {
     UpdateCategoryMutation,
     UpdateCategoryMutationVariables,
 } from '@/shared/api/graphql/__generated__/types';
+import { CATEGORIES } from '@/shared/api/graphql/queries';
 
 export type CreateCategoryValues = z.infer<typeof createCategorySchema>;
 
@@ -28,46 +28,47 @@ const DEFAULT_VALUES: CreateCategoryValues = {
 
 export function useCreateCategory(
     onSuccess: () => void,
-    fileRef?: MutableRefObject<File | null>,
 ) {
     const [createCategory] = useMutation<
         CreateCategoryMutation,
         CreateCategoryMutationVariables
-    >(CREATE_CATEGORY);
+    >(CREATE_CATEGORY, { refetchQueries: [CATEGORIES] });
+
     const [updateCategory] = useMutation<
         UpdateCategoryMutation,
         UpdateCategoryMutationVariables
-    >(UPDATE_CATEGORY);
+    >(UPDATE_CATEGORY, { refetchQueries: [CATEGORIES] });
 
     const form = useForm<CreateCategoryValues>({
         defaultValues: DEFAULT_VALUES,
-        resolver: zodResolver(createCategorySchema),
+        resolver: zodResolver(createCategorySchema) as Resolver<CreateCategoryValues>,
     });
 
-    const onSubmit = form.handleSubmit(async (values) => {
-        const result = await createCategory({
-            variables: {
-                input: {
-                    title: values.title,
-                    imageUrl: values.imageUrl || null,
-                    isActive: values.isActive ?? true,
-                    parentId: values.parentId || null,
-                    sortOrder: values.sortOrder ?? 0,
+    const onSubmit = (fileInput?: File | null) =>
+        form.handleSubmit(async (values) => {
+            const result = await createCategory({
+                variables: {
+                    input: {
+                        title: values.title,
+                        imageUrl: values.imageUrl || null,
+                        isActive: values.isActive ?? true,
+                        parentId: values.parentId || null,
+                        sortOrder: values.sortOrder ?? 0,
+                    },
                 },
-            },
-        });
-
-        const id = result.data?.createCategory.id;
-        if (id && fileRef?.current) {
-            const path = await uploadFile(fileRef.current, 'category', id);
-            await updateCategory({
-                variables: { input: { id, imageUrl: path } },
             });
-        }
 
-        form.reset(DEFAULT_VALUES);
-        onSuccess();
-    });
+            const id = result.data?.createCategory.id;
+            if (fileInput && id) {
+                const path = await uploadFile(fileInput, 'category', id);
+                await updateCategory({
+                    variables: { input: { id, imageUrl: path } },
+                });
+            }
+
+            form.reset(DEFAULT_VALUES);
+            onSuccess();
+        });
 
     return { form, onSubmit, isSubmitting: form.formState.isSubmitting };
 }

@@ -11,6 +11,7 @@ import type {
     CreateProductTypeMutation,
     CreateProductTypeMutationVariables,
 } from '@/shared/api/graphql/__generated__/types';
+import { PRODUCT_TYPES } from '@/shared/api/graphql/queries';
 
 export type CreateProductTypeValues = z.infer<typeof createProductTypeSchema>;
 
@@ -24,7 +25,7 @@ export function useCreateProductType(onSuccess: () => void) {
     const [createProductType] = useMutation<
         CreateProductTypeMutation,
         CreateProductTypeMutationVariables
-    >(CREATE_PRODUCT_TYPE);
+    >(CREATE_PRODUCT_TYPE, { refetchQueries: [PRODUCT_TYPES] });
 
     const form = useForm<CreateProductTypeValues>({
         defaultValues: DEFAULT_VALUES,

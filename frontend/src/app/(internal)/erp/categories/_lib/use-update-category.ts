@@ -1,7 +1,6 @@
 'use client';
 
-import type { MutableRefObject } from 'react';
-import { useForm } from 'react-hook-form';
+import { Resolver, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@apollo/client/react';
 import { z } from 'zod';
@@ -13,6 +12,7 @@ import type {
     UpdateCategoryMutation,
     UpdateCategoryMutationVariables,
 } from '@/shared/api/graphql/__generated__/types';
+import { CATEGORIES } from '@/shared/api/graphql/queries';
 
 export type UpdateCategoryValues = z.infer<typeof updateCategorySchema>;
 
@@ -27,43 +27,43 @@ const DEFAULT_VALUES: UpdateCategoryValues = {
 
 export function useUpdateCategory(
     onSuccess: () => void,
-    fileRef?: MutableRefObject<File | null>,
 ) {
     const [updateCategory] = useMutation<
         UpdateCategoryMutation,
         UpdateCategoryMutationVariables
-    >(UPDATE_CATEGORY);
+    >(UPDATE_CATEGORY, { refetchQueries: [CATEGORIES] });
 
     const form = useForm<UpdateCategoryValues>({
         defaultValues: DEFAULT_VALUES,
-        resolver: zodResolver(updateCategorySchema),
+        resolver: zodResolver(updateCategorySchema) as Resolver<UpdateCategoryValues>,
     });
 
-    const onSubmit = form.handleSubmit(async (values) => {
-        let imageUrl = values.imageUrl ?? undefined;
+    const onSubmit = (fileInput?: File | null) =>
+        form.handleSubmit(async (values) => {
+            let imageUrl = values.imageUrl ?? undefined;
 
-        if (fileRef?.current) {
-            imageUrl = await uploadFile(fileRef.current, 'category', values.id);
-        }
+            if (fileInput) {
+                imageUrl = await uploadFile(fileInput, 'category', values.id);
+            }
 
-        await updateCategory({
-            variables: {
-                input: {
-                    id: values.id,
-                    title: values.title,
-                    parentId: values.parentId || undefined,
-                    sortOrder: values.sortOrder,
-                    imageUrl,
-                    isActive: values.isActive,
+            await updateCategory({
+                variables: {
+                    input: {
+                        id: values.id,
+                        title: values.title,
+                        parentId: values.parentId ?? null,
+                        sortOrder: values.sortOrder,
+                        imageUrl,
+                        isActive: values.isActive,
+                    },
                 },
-            },
-        });
+            });
 
-        form.reset(DEFAULT_VALUES);
-        onSuccess();
-    }, (error) => {
-        console.error(error);
-    });
+            form.reset(DEFAULT_VALUES);
+            onSuccess();
+        }, (error) => {
+            console.error(error);
+        });
 
     return { form, onSubmit, isSubmitting: form.formState.isSubmitting };
 }

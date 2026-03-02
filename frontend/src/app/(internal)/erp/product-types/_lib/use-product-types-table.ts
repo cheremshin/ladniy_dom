@@ -5,12 +5,12 @@ import { useMutation, useLazyQuery } from '@apollo/client/react';
 
 import { useTablePagination, toTableMeta } from '@/app/(internal)/erp/_lib';
 import { PRODUCT_TYPES } from '@/shared/api/graphql/queries';
-import { SOFT_DELETE_PRODUCT_TYPE } from '@/shared/api/graphql/mutations';
+import { HARD_DELETE_PRODUCT_TYPE } from '@/shared/api/graphql/mutations';
 import type {
+    HardDeleteProductTypeMutation,
+    HardDeleteProductTypeMutationVariables,
     ProductTypesQuery,
     ProductTypesQueryVariables,
-    SoftDeleteProductTypeMutation,
-    SoftDeleteProductTypeMutationVariables,
 } from '@/shared/api/graphql/__generated__/types';
 
 import type { ProductType } from './types';
@@ -28,12 +28,12 @@ export function useProductTypesTable({ categoryId }: UseProductTypesTableParams)
     const [fetchProductTypes] = useLazyQuery<
         ProductTypesQuery,
         ProductTypesQueryVariables
-    >(PRODUCT_TYPES);
+    >(PRODUCT_TYPES, { fetchPolicy: 'network-only' });
 
     const [deleteProductType] = useMutation<
-        SoftDeleteProductTypeMutation,
-        SoftDeleteProductTypeMutationVariables
-    >(SOFT_DELETE_PRODUCT_TYPE);
+        HardDeleteProductTypeMutation,
+        HardDeleteProductTypeMutationVariables
+    >(HARD_DELETE_PRODUCT_TYPE, { refetchQueries: [PRODUCT_TYPES] });
 
     const fetchPage = useCallback(async (page: number, limit: number) => {
         const result = await fetchProductTypes({

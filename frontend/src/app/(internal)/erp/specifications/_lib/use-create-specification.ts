@@ -11,6 +11,7 @@ import type {
     CreateSpecificationDefinitionMutation,
     CreateSpecificationDefinitionMutationVariables,
 } from '@/shared/api/graphql/__generated__/types';
+import { SPECIFICATION_DEFINITIONS } from '@/shared/api/graphql/queries';
 
 export type CreateSpecificationValues = z.infer<typeof createSpecificationDefinitionSchema>;
 
@@ -28,7 +29,7 @@ export function useCreateSpecification(onSuccess: () => void) {
     const [createSpecification] = useMutation<
         CreateSpecificationDefinitionMutation,
         CreateSpecificationDefinitionMutationVariables
-    >(CREATE_SPECIFICATION_DEFINITION);
+    >(CREATE_SPECIFICATION_DEFINITION, { refetchQueries: [SPECIFICATION_DEFINITIONS] });
 
     const form = useForm<CreateSpecificationValues>({
         defaultValues: DEFAULT_VALUES,

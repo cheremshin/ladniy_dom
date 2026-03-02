@@ -2,7 +2,6 @@ header {
     position: relative;
     height: 100px;
     padding: 0 calc(var(--spacing) * 8);
-    margin: 0px auto;
     background: var(--color-background-main);
     display: flex;
     align-items: center;

@@ -1,7 +1,6 @@
 'use client';
 
-import type { MutableRefObject } from 'react';
-import { useForm } from 'react-hook-form';
+import { Resolver, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@apollo/client/react';
 import { z } from 'zod';
@@ -15,6 +14,7 @@ import type {
     AttachProductImageMutation,
     AttachProductImageMutationVariables,
 } from '@/shared/api/graphql/__generated__/types';
+import { PRODUCTS } from '@/shared/api/graphql/queries';
 
 const updateProductSchema = createDynamicUpdateProductSchema([]);
 export type UpdateProductValues = z.infer<typeof updateProductSchema>;
@@ -40,60 +40,61 @@ const DEFAULT_VALUES: UpdateProductValues = {
 
 export function useUpdateProduct(
     onSuccess: () => void,
-    fileRef?: MutableRefObject<File | null>,
 ) {
     const [updateProduct] = useMutation<
         UpdateProductMutation,
         UpdateProductMutationVariables
-    >(UPDATE_PRODUCT);
+    >(UPDATE_PRODUCT, { refetchQueries: [PRODUCTS] });
+
     const [attachProductImage] = useMutation<
         AttachProductImageMutation,
         AttachProductImageMutationVariables
-    >(ATTACH_PRODUCT_IMAGE);
+    >(ATTACH_PRODUCT_IMAGE, { refetchQueries: [PRODUCTS] });
 
     const form = useForm<UpdateProductValues>({
         defaultValues: DEFAULT_VALUES,
-        resolver: zodResolver(updateProductSchema),
+        resolver: zodResolver(updateProductSchema) as Resolver<UpdateProductValues>,
     });
 
-    const onSubmit = form.handleSubmit(async (values) => {
-        await updateProduct({
-            variables: {
-                input: {
-                    id: values.id,
-                    title: values.title,
-                    sku: values.sku,
-                    basePrice: values.basePrice,
-                    costPrice: values.costPrice,
-                    brandId: values.brandId,
-                    categoryId: values.categoryId,
-                    productTypeId: values.productTypeId,
-                    description: values.description || undefined,
-                    status: values.status,
-                    isFeatured: values.isFeatured ?? false,
-                    stockQuantity: values.stockQuantity ?? 0,
-                    discountPrice: values.discountPrice,
-                    warrantyMonths: values.warrantyMonths,
-                    metaTitle: values.metaTitle,
-                    metaDescription: values.metaDescription,
-                },
-            },
-        });
-
-        if (fileRef?.current && values.id) {
-            const path = await uploadFile(fileRef.current, 'product', values.id);
-            await attachProductImage({
+    const onSubmit = (fileInput?: File | null) =>
+        form.handleSubmit(async (values) => {
+            await updateProduct({
                 variables: {
-                    input: { productId: values.id, url: path, isPrimary: true, sortOrder: 0 },
+                    input: {
+                        id: values.id,
+                        title: values.title,
+                        sku: values.sku,
+                        basePrice: values.basePrice,
+                        costPrice: values.costPrice,
+                        brandId: values.brandId,
+                        categoryId: values.categoryId,
+                        productTypeId: values.productTypeId,
+                        description: values.description || undefined,
+                        status: values.status,
+                        isFeatured: values.isFeatured ?? false,
+                        stockQuantity: values.stockQuantity ?? 0,
+                        discountPrice: values.discountPrice,
+                        warrantyMonths: values.warrantyMonths,
+                        metaTitle: values.metaTitle,
+                        metaDescription: values.metaDescription,
+                    },
                 },
             });
-        }
 
-        form.reset(DEFAULT_VALUES);
-        onSuccess();
-    }, (error) => {
-        console.error(error);
-    });
+            if (fileInput && values.id) {
+                const path = await uploadFile(fileInput, 'product', values.id);
+                await attachProductImage({
+                    variables: {
+                        input: { productId: values.id, url: path, isPrimary: true, sortOrder: 0 },
+                    },
+                });
+            }
+
+            form.reset(DEFAULT_VALUES);
+            onSuccess();
+        }, (error) => {
+            console.error(error);
+        });
 
     return { form, onSubmit, isSubmitting: form.formState.isSubmitting };
 }
