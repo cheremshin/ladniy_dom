@@ -190,13 +190,14 @@ export class CategoriesService {
                 }
             }
 
-            console.log(data);
-
-            const { parentId, ...rest } = data;
+            const { title, parentId, ...rest } = data;
 
             const updateData: Partial<typeof categories.$inferInsert> = {
                 ...rest,
-                ...(slug !== undefined && { slug }),
+                ...(title !== undefined && {
+                    title: title.trim(),
+                    slug,
+                }),
                 ...(parentId !== undefined && { parentId }),
             };
 

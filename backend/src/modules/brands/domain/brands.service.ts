@@ -118,9 +118,14 @@ export class BrandsService {
                 slug = generateSlug(data.title.trim());
             }
 
+            const { title, ...rest } = data;
+
             const updateData: Partial<typeof brands.$inferInsert> = {
-                ...data,
-                ...(slug !== undefined && { slug }),
+                ...rest,
+                ...(title !== undefined && {
+                    title: title.trim(),
+                    slug,
+                }),
             };
 
             const updatePatch = Object.fromEntries(

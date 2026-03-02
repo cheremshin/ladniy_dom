@@ -256,15 +256,18 @@ export class ProductsService {
             const shouldUpdateSpecifications = specifications !== undefined || productTypeChanged;
 
             const updateData: Partial<typeof products.$inferInsert> = {
-                ...rest,
+                ...(title !== undefined && {
+                    title: title.trim(),
+                    slug: generateSlug(title.trim()),
+                }),
                 ...(basePrice !== undefined && { basePrice: String(basePrice) }),
                 ...(discountPrice !== undefined && {
                     discountPrice: discountPrice === null ? null : String(discountPrice),
                 }),
                 ...(costPrice !== undefined && { costPrice: String(costPrice) }),
-                ...(title !== undefined && { slug: generateSlug(title.trim()) }),
                 ...(data.sku !== undefined && { sku: data.sku.trim() }),
                 ...(shouldUpdateSpecifications && { specifications: validatedSpecifications }),
+                ...rest,
             };
 
             const updatePatch = Object.fromEntries(

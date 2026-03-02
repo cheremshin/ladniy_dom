@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './modules/app.module';
 import * as dotenv from 'dotenv';
-import { ValidationPipe } from '@nestjs/common';
+import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs';
 import { Request, Response, NextFunction } from 'express';
 
@@ -32,6 +32,10 @@ async function bootstrap() {
             whitelist: true,
             forbidNonWhitelisted: true,
             disableErrorMessages: process.env.NODE_ENV === 'production',
+            exceptionFactory: (errors) => {
+                console.error('Validation failed:', JSON.stringify(errors, null, 2));
+                return new BadRequestException(errors);
+            },
         }),
     );
 

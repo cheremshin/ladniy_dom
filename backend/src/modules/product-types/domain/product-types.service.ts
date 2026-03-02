@@ -128,9 +128,14 @@ export class ProductTypesService {
                 await this.categoriesService.findOne(data.categoryId);
             }
 
+            const { title, ...rest } = data;
+
             const updateData: Partial<typeof productTypes.$inferInsert> = {
-                ...data,
-                ...(slug !== undefined && { slug }),
+                ...rest,
+                ...(title !== undefined && {
+                    title: title.trim(),
+                    slug,
+                }),
             };
 
             const updatePatch = Object.fromEntries(
